@@ -54,58 +54,52 @@ class _PEditProfileState extends State<PEditProfile> {
         ),
         centerTitle: true,
       ),
-      body: formBuilder == null
-          ? const Center(
-              child: CircularProgressIndicator(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(20),
+              decoration: const BoxDecoration(
                 color: AppColors.primaryColor,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(16),
+                  bottomRight: Radius.circular(16),
+                ),
               ),
-            )
-          : SingleChildScrollView(
               child: Column(
                 children: [
-                  Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(20),
-                    decoration: const BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(16),
-                        bottomRight: Radius.circular(16),
+                  Stack(
+                    children: [
+                      Container(
+                        height: 100,
+                        width: 100,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/1.jpg"),
+                          ),
+                        ),
                       ),
-                    ),
-                    child: Column(
-                      children: [
-                        Stack(
-                          children: [
-                            Container(
-                              height: 100,
-                              width: 100,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image: AssetImage("assets/images/1.jpg"),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
-                  BlocBuilder<FormBuilderBloc, FormBuilderState>(
-                    builder: (context, state) {
-                      return Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: formBuilder.buildForm(context),
-                      );
-                    },
+                  const SizedBox(
+                    height: 12,
                   ),
                 ],
               ),
             ),
+            BlocBuilder<FormBuilderBloc, FormBuilderState>(
+              builder: (context, state) {
+                return Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: formBuilder.buildForm(context),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

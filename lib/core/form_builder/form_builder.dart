@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
-import 'package:hyella_telehealth/core/form_builder/form_widgets/base_input_builder.dart';
 import 'package:hyella_telehealth/core/form_builder/form_widgets/checkbox_field_builder.dart';
 import 'package:hyella_telehealth/core/form_builder/form_widgets/radio_field_builder.dart';
 import 'package:hyella_telehealth/core/form_builder/form_widgets/text_input_field_builder.dart';
@@ -60,14 +59,14 @@ final class FormBuilder {
             key: field!.name!,
             field: field,
             context: context,
-            initialValue: initialValues?[field.name!],
+            initialValue: initialValues[field.name!],
           ).widget;
         case "checkbox":
           return CheckboxFieldBuilder(
             key: field!.name!,
             field: field,
             context: context,
-            initialValue: initialValues?[field.name!],
+            initialValue: initialValues[field.name!],
           ).widget;
 
         case "radio":
@@ -75,7 +74,7 @@ final class FormBuilder {
             key: field!.name!,
             context: context,
             field: field,
-            initialValue: initialValues?[field.name!],
+            initialValue: initialValues[field.name!],
           ).widget;
         case "date-5":
         case "select":

@@ -198,7 +198,7 @@ class Cards {
 
   Map<String, dynamic> toJson() => {
         "title": title,
-        "data": data.map((x) => x?.toJson()).toList(),
+        "data": data.map((x) => x.toJson()).toList(),
       };
 
   @override
@@ -299,7 +299,7 @@ class Home {
 
   Map<String, dynamic> toJson() => {
         "title": title,
-        "data": data.map((x) => x?.toJson()).toList(),
+        "data": data.map((x) => x.toJson()).toList(),
       };
 
   @override
@@ -424,7 +424,7 @@ class More {
         "html_content": htmlContent,
         "html_src": htmlSrc,
         "html_img": htmlImg,
-        "data": data.map((x) => x?.toJson()).toList(),
+        "data": data.map((x) => x.toJson()).toList(),
       };
 
   @override
