@@ -1,24 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
 import 'package:hyella_telehealth/core/form_builder/form_widgets/base_input_builder.dart';
 import 'package:hyella_telehealth/core/form_builder/form_widgets/checkbox_field_builder.dart';
+import 'package:hyella_telehealth/core/form_builder/form_widgets/radio_field_builder.dart';
 import 'package:hyella_telehealth/core/form_builder/form_widgets/text_input_field_builder.dart';
 import 'package:hyella_telehealth/data/repository/entities/endpoint_entity.dart';
+import 'package:hyella_telehealth/logic/bloc/form_builder_bloc.dart';
 
 final class FormBuilder {
   final EndpointForms formObject;
   BuildContext context;
-  late final List<BaseInputBuilder?> formFields;
+  late final List<Widget?> formFields;
   final formKey = GlobalKey<FormState>();
   List<Widget>? beforeFormFieldsWidget;
   List<Widget>? afterFormFieldsWidgets;
-  void Function(Map<String, dynamic> formData) onSubmit;
+  void Function(String url, Map<String, dynamic> formData) onSubmit;
+  Map<String, dynamic> initialValues;
 
-  FormBuilder(
-    this.context, {
-    required this.formObject,
-    required this.onSubmit,
-  }) {
+  FormBuilder(this.context,
+      {required this.formObject,
+      required this.onSubmit,
+      this.initialValues = const {}}) {
+    Map<String, EndpointFormFields> formFieldData = {};
+    for (var field in formObject.fields!) {
+      formFieldData[field!.name!] = field;
+    }
+
+    context
+        .read<FormBuilderBloc>()
+        .add(RegisterFormField(formData: formFieldData));
+    if (initialValues.isNotEmpty) {
+      initialValues.entries.map((entry) {
+        if (formFieldData.containsKey(entry.key)) {
+          context.read<FormBuilderBloc>().state.formData[entry.key]?.value =
+              entry.value;
+        }
+      });
+    }
     initFields();
   }
 
@@ -26,67 +45,65 @@ final class FormBuilder {
     formFields = buildFieldTypes();
   }
 
-  List<BaseInputBuilder?> buildFieldTypes() {
-    final fields = formObject.fields!;
+  List<Widget> buildFieldTypes() {
+    return formObject.fields!.map((field) {
+      switch (field?.formField) {
+        case "text":
+        case "textarea":
+        case "decimal":
+        case "number":
+        case "password":
+        case "email":
+        case "old-password":
+        case 'confirm_password':
+          return TextInputFieldBuilder(
+            key: field!.name!,
+            field: field,
+            context: context,
+            initialValue: initialValues?[field.name!],
+          ).widget;
+        case "checkbox":
+          return CheckboxFieldBuilder(
+            key: field!.name!,
+            field: field,
+            context: context,
+            initialValue: initialValues?[field.name!],
+          ).widget;
 
-    if (fields.isNotEmpty) {
-      var returned = List.generate(formObject.fields!.length, (i) {
-        var e = fields[i];
-
-        if (e?.formField != null && e?.name != null) {
-          switch (e!.formField) {
-            case "text":
-            case "textarea":
-            case "password":
-            case "email":
-              return TextInputFieldBuilder(
-                key: e.name!,
-                field: e,
-              );
-            case "checkbox":
-              return CheckboxFieldBuilder(key: e.name!, field: e);
-            case "date-5":
-            case "select":
-            case "multi-select":
-            case "date-5time":
-            case "time":
-            case "tel":
-            case "email":
-            case "decimal":
-            case "number":
-            case "calculated":
-            case "file":
-            case "picture":
-            case "radio":
-            case "html":
-            case "color":
-            case "old-password":
-            case 'confirm_password':
-            default:
-          }
-        }
-      });
-      return returned;
-    }
-    return [];
-  }
-
-  List<Widget>? get fieldWidgets {
-    if (formFields.isNotEmpty) {
-      return [
-        for (var field in formFields) field!.widget,
-      ];
-    }
-    return null;
+        case "radio":
+          return RadioFieldBuilder(
+            key: field!.name!,
+            context: context,
+            field: field,
+            initialValue: initialValues?[field.name!],
+          ).widget;
+        case "date-5":
+        case "select":
+        case "multi-select":
+        case "date-5time":
+        case "time":
+        case "tel":
+        case "calculated":
+        case "file":
+        case "picture":
+        case "html":
+        case "color":
+        default:
+          return Text("Unsupported form field");
+      }
+    }).toList();
   }
 
   Map<String, dynamic>? get formData {
-    var form = formKey.currentState!;
-    if (form.validate()) {
-      form.save();
-    }
+    var cachedData = context.read<FormBuilderBloc>().state.formData;
+    Map<String, dynamic> returnData = {};
+    cachedData.entries.forEach((cd) {
+      if (cd.value.value != null) {
+        returnData[cd.key] = cd.value.value;
+      }
+    });
 
-    return {for (var field in formFields) field!.key: field.value};
+    return returnData;
   }
 
   void beforeFormFields(List<Widget> widgets) {
@@ -97,23 +114,24 @@ final class FormBuilder {
     afterFormFieldsWidgets = widgets;
   }
 
-  Widget buildForm() {
-    for (var field in formFields) {
-      print(field?.widget);
-    }
+  Widget buildForm(context) {
     return Form(
       key: formKey,
       child: Column(
         children: [
           ...?beforeFormFieldsWidget,
-          ...?fieldWidgets,
+          // ...?fieldWidgets,
+          ...buildFieldTypes(),
           ...?afterFormFieldsWidgets,
           InkWell(
             onTap: () {
               var form = formKey.currentState!;
               if (form.validate()) {
-                form.save();
-                onSubmit(formData!);
+                // form.save();
+                var url =
+                    "action=${formObject.action}&nwp_request=${formObject.nwpRequest}";
+                print("validated");
+                onSubmit(url, formData!);
               }
             },
             child: Container(

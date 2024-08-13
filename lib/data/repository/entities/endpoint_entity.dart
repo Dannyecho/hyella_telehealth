@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class EndPointEntityDataFormsResetPasswordFields extends EndpointFormFields {
 /*
@@ -142,6 +142,8 @@ class EndPointEntityDataFormsProfileUpdateFields extends EndpointFormFields {
   String? formField;
   int? requiredField;
   String? validationMessage;
+  dynamic value;
+  List<FormFieldOption?>? formFieldOptions;
 
   EndPointEntityDataFormsProfileUpdateFields({
     this.name,
@@ -149,6 +151,8 @@ class EndPointEntityDataFormsProfileUpdateFields extends EndpointFormFields {
     this.formField,
     this.requiredField,
     this.validationMessage,
+    this.value,
+    this.formFieldOptions,
   });
   EndPointEntityDataFormsProfileUpdateFields.fromJson(
       Map<String, dynamic> json) {
@@ -157,6 +161,11 @@ class EndPointEntityDataFormsProfileUpdateFields extends EndpointFormFields {
     formField = json['form_field']?.toString();
     requiredField = json['required_field']?.toInt();
     validationMessage = json['validation_message']?.toString();
+    value = json['value']?.toString();
+    formFieldOptions = (json['form_field_options'] as Map?)
+        ?.entries
+        .map((entry) => FormFieldOption(key: entry.key, value: entry.value))
+        .toList();
   }
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
@@ -165,8 +174,34 @@ class EndPointEntityDataFormsProfileUpdateFields extends EndpointFormFields {
     data['form_field'] = formField;
     data['required_field'] = requiredField;
     data['validation_message'] = validationMessage;
+    data['value'] = value;
     return data;
   }
+}
+
+class FormFieldOption {
+  final String key;
+  final String value;
+  FormFieldOption({required this.key, required this.value});
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'key': key,
+      'value': value,
+    };
+  }
+
+  factory FormFieldOption.fromMap(Map<String, dynamic> map) {
+    return FormFieldOption(
+      key: map['key'] as String,
+      value: map['value'] as String,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory FormFieldOption.fromJson(String source) =>
+      FormFieldOption.fromMap(json.decode(source) as Map<String, dynamic>);
 }
 
 class EndPointEntityDataFormsProfileUpdate extends EndpointForms {
@@ -372,7 +407,9 @@ class EndPointEntityDataFormsSignUpFields extends EndpointFormFields {
   String? fieldLabel;
   String? formField;
   int? requiredField;
+  dynamic value;
   String? validationMessage;
+  List<FormFieldOption?>? formFieldOptions;
 
   EndPointEntityDataFormsSignUpFields({
     this.name,
@@ -380,6 +417,8 @@ class EndPointEntityDataFormsSignUpFields extends EndpointFormFields {
     this.formField,
     this.requiredField,
     this.validationMessage,
+    this.value,
+    List<FormFieldOption?>? formFieldOptions,
   });
   EndPointEntityDataFormsSignUpFields.fromJson(Map<String, dynamic> json) {
     name = json['name']?.toString();
@@ -387,6 +426,11 @@ class EndPointEntityDataFormsSignUpFields extends EndpointFormFields {
     formField = json['form_field']?.toString();
     requiredField = json['required_field']?.toInt();
     validationMessage = json['validation_message']?.toString();
+    value = json['value']?.toString();
+    formFieldOptions = (json['form_field_options'] as Map?)
+        ?.entries
+        .map((entry) => FormFieldOption(key: entry.key, value: entry.value))
+        .toList();
   }
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
@@ -395,6 +439,8 @@ class EndPointEntityDataFormsSignUpFields extends EndpointFormFields {
     data['form_field'] = formField;
     data['required_field'] = requiredField;
     data['validation_message'] = validationMessage;
+    data['value'] = value;
+    // data['form_field_option'] = formFieldOptions;
     return data;
   }
 }
@@ -1048,13 +1094,17 @@ abstract class EndpointFormFields {
   String? fieldLabel;
   String? formField;
   int? requiredField;
+  dynamic value;
   String? validationMessage;
+  List<FormFieldOption?>? formFieldOptions;
   EndpointFormFields({
     this.name,
     this.fieldLabel,
     this.formField,
     this.requiredField,
     this.validationMessage,
+    this.value,
+    this.formFieldOptions,
   });
 
   Map<String, dynamic> toJson();

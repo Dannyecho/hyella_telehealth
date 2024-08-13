@@ -12,7 +12,7 @@ class AuthApi {
     String uri = 'nwp_request=$requestType&token=$token&public_key=$publicKey';
     var response = await HttpUtil().post(uri, data: request.toMap())
         as Map<String, dynamic>;
-    var a = LoginResponseEntity.fromJson(response);
+
     return LoginResponseEntity.fromJson(response);
   }
 }

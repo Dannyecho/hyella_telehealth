@@ -8,6 +8,7 @@ import 'package:hyella_telehealth/logic/bloc/sign_in_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/web_view_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/welcome_bloc.dart';
 import 'package:hyella_telehealth/presentation/pages/home_page.dart';
+import 'package:hyella_telehealth/presentation/pages/register_page.dart';
 import 'package:hyella_telehealth/presentation/pages/sign_in_page.dart';
 import 'package:hyella_telehealth/presentation/pages/welcome_page.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/p_edit_profile.dart';
@@ -25,6 +26,8 @@ class AppRoute {
   static const String settings = 'settings';
   static const String webView = 'webView';
 
+  static final AppBloc _appBloc = AppBloc();
+
   static Route? onGenerateRoute(RouteSettings rSettings) {
     switch (rSettings.name) {
       case home:
@@ -32,7 +35,7 @@ class AppRoute {
           builder: (context) => MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => AppBloc(),
+                create: (context) => _appBloc,
               ),
               BlocProvider(
                 create: (context) => AppScreenBloc(),
@@ -54,10 +57,8 @@ class AppRoute {
       case editProfile:
         return MaterialPageRoute(
           builder: (context) => BlocProvider.value(
-            value: BlocProvider.of<AppBloc>(context),
-            child: Builder(builder: (context) {
-              return PEditProfile();
-            }),
+            value: _appBloc,
+            child: const PEditProfile(),
           ),
         );
       case webView:
@@ -70,6 +71,8 @@ class AppRoute {
                     url: arguements['url'],
                   ),
                 ));
+      case register:
+        return MaterialPageRoute(builder: (context) => const RegisterPage());
       case signIn:
       default:
         return MaterialPageRoute(
@@ -98,4 +101,8 @@ class AppRoute {
   }
 
   AppRoute._();
+
+  static dispose() {
+    _appBloc.close();
+  }
 }
