@@ -275,11 +275,11 @@ class Home {
   });
 
   final String? title;
-  final List<HomeDatum> data;
+  final List<Service> data;
 
   Home copyWith({
     String? title,
-    List<HomeDatum>? data,
+    List<Service>? data,
   }) {
     return Home(
       title: title ?? this.title,
@@ -292,8 +292,7 @@ class Home {
       title: json["title"],
       data: json["data"] == null
           ? []
-          : List<HomeDatum>.from(
-              json["data"]!.map((x) => HomeDatum.fromJson(x))),
+          : List<Service>.from(json["data"]!.map((x) => Service.fromJson(x))),
     );
   }
 
@@ -308,8 +307,8 @@ class Home {
   }
 }
 
-class HomeDatum {
-  HomeDatum({
+class Service {
+  Service({
     required this.key,
     required this.icon,
     required this.title,
@@ -327,7 +326,7 @@ class HomeDatum {
   final String? appointmentLabel;
   final String? picture;
 
-  HomeDatum copyWith({
+  Service copyWith({
     String? key,
     String? icon,
     String? title,
@@ -336,7 +335,7 @@ class HomeDatum {
     String? appointmentLabel,
     String? picture,
   }) {
-    return HomeDatum(
+    return Service(
       key: key ?? this.key,
       icon: icon ?? this.icon,
       title: title ?? this.title,
@@ -347,8 +346,8 @@ class HomeDatum {
     );
   }
 
-  factory HomeDatum.fromJson(Map<String, dynamic> json) {
-    return HomeDatum(
+  factory Service.fromJson(Map<String, dynamic> json) {
+    return Service(
       key: json["key"],
       icon: json["icon"],
       title: json["title"],

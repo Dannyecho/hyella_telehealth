@@ -4,6 +4,7 @@ import 'package:hyella_telehealth/core/constants/app_colors.dart';
 import 'package:hyella_telehealth/core/utils/app_util.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
+import 'package:hyella_telehealth/presentation/route/app_route.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/widgets/p_home_widgets.dart';
 
 class PHome extends StatefulWidget {
@@ -81,7 +82,10 @@ class _PHomeState extends State<PHome> {
                     (context, index) {
                       var service = appServices.data[index + 1];
                       return InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoute.service,
+                              arguments: service);
+                        },
                         child: Container(
                           alignment: Alignment.center,
                           padding: const EdgeInsets.all(10),

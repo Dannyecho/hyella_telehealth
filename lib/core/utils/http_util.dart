@@ -7,7 +7,9 @@ import 'package:hyella_telehealth/core/global.dart';
 class HttpUtil {
   late final Dio _dio;
   late final BaseOptions base_options;
-  late final BaseOptions clientID;
+  late final String clientID;
+  // late final String userID;
+  // late final BaseOptions clientID;
   static HttpUtil _instance = HttpUtil._Internal();
   factory HttpUtil() {
     return _instance;
@@ -32,8 +34,13 @@ class HttpUtil {
     _dio.options.baseUrl = url;
   }
 
+  get getBaseUrl {
+    _dio.options.baseUrl;
+  }
+
   set setClientID(String id) {
-    _dio.options.baseUrl = id;
+    _dio.options.baseUrl += '&cid=$id';
+    clientID = id;
   }
 
   post(path,
@@ -43,13 +50,18 @@ class HttpUtil {
     Options requestOptions = options ?? Options();
     requestOptions.headers = requestOptions.headers ?? {};
     var authorization = getAuthorizationHeader();
+    String? pidParam = '&pid=';
+    String? cidParam = '&cid=';
+    pidParam += Global.storageService.getUserToken() ?? '';
+    cidParam += Global.storageService.getClientId() ?? '';
 
     if (authorization != null) {
       requestOptions.headers!.addAll(authorization);
     }
 
+    // print(path + pidParam + cidParam + '--------------Path');
     Response response = await _dio.post(
-      path,
+      path + pidParam + cidParam,
       data: data,
       queryParameters: queryParameters,
     );

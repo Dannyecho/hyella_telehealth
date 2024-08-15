@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
+import 'package:hyella_telehealth/data/repository/entities/endpoint_entity.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/presentation/widgets/toast_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +37,17 @@ class StorageService {
     return _prefs.getString(AppConstants.STORAGE_USER_TOKEN_KEY) == null
         ? false
         : true;
+  }
+
+  EndPointEntityDataClient? getAppClient() {
+    try {
+      EndPointEntityData? entityData = EndPointEntityData.fromJson(
+          jsonDecode(_prefs.getString(AppConstants.ENDPOINT_ENTITY_KEY)!));
+      return entityData.client;
+    } catch (e) {
+      print("Unable to retieve app client");
+    }
+    return null;
   }
 
   Data? getAppData() {
@@ -75,6 +87,10 @@ class StorageService {
 
   String? getUserToken() {
     return _prefs.getString(AppConstants.STORAGE_USER_TOKEN_KEY);
+  }
+
+  String? getClientId() {
+    return _prefs.getString(AppConstants.STORAGE_CLIENT_ID);
   }
 
   Future<void> remove(String key) {

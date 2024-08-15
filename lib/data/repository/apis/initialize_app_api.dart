@@ -1,3 +1,5 @@
+import 'package:hyella_telehealth/core/constants/app_constants.dart';
+import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/core/utils/http_util.dart';
 import 'package:hyella_telehealth/data/repository/entities/endpoint_entity.dart';
 
@@ -16,6 +18,12 @@ class InitializeAppApi {
 
   Future<EndPointEntity> fetchAppResource() async {
     var response = await HttpUtil().post(initialRequestUrl.toString());
+    if (response is Map &&
+        response.containsKey('data') &&
+        response['data'] != null) {
+      Global.storageService
+          .setString(AppConstants.ENDPOINT_ENTITY_KEY, response.toString());
+    }
     return EndPointEntity.fromJson(response);
   }
 }

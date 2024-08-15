@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
 import 'package:hyella_telehealth/core/global.dart';
+import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/appointment_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/appointment_step_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/sign_in_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/web_view_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/welcome_bloc.dart';
 import 'package:hyella_telehealth/presentation/pages/home_page.dart';
 import 'package:hyella_telehealth/presentation/pages/register_page.dart';
+import 'package:hyella_telehealth/presentation/pages/schedule_appointment.dart';
 import 'package:hyella_telehealth/presentation/pages/sign_in_page.dart';
 import 'package:hyella_telehealth/presentation/pages/welcome_page.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/p_edit_profile.dart';
@@ -25,6 +29,7 @@ class AppRoute {
   static const String editProfile = 'editProfile';
   static const String settings = 'settings';
   static const String webView = 'webView';
+  static const String service = 'service';
 
   static final AppBloc _appBloc = AppBloc();
 
@@ -69,6 +74,22 @@ class AppRoute {
                   child: WebViewerScreen(
                     title: arguements['title'],
                     url: arguements['url'],
+                  ),
+                ));
+      case service:
+        var arguements = rSettings.arguments as Service;
+        return MaterialPageRoute(
+            builder: (context) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => AppointmentBloc(),
+                    ),
+                    BlocProvider(
+                      create: (context) => AppointmentStepBloc(),
+                    ),
+                  ],
+                  child: ScheduleAppointment(
+                    service: arguements,
                   ),
                 ));
       case register:

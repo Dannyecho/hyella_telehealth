@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hyella_telehealth/core/constants/app_constants.dart';
+import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/core/utils/http_util.dart';
 import 'package:hyella_telehealth/data/repository/apis/initialize_app_api.dart';
 import 'package:hyella_telehealth/data/repository/entities/endpoint_entity.dart';
@@ -40,6 +42,8 @@ class _SplashScreenState extends State<SplashScreen> {
       if (result.data != null && result.data?.endPoint1 != null) {
         HttpUtil().setBaseUrl =
             "${result.data!.endPoint1!}?cid=${result.data!.client!.id!}&";
+        Global.storageService.setString(
+            AppConstants.STORAGE_CLIENT_ID, result.data?.client?.id ?? '');
 
         if (context.mounted) {
           context
