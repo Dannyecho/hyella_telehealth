@@ -4,9 +4,14 @@ import 'dart:ui';
 
 import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/material.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
 
 class AppUtil {
+  static double deviceWidth(BuildContext context) {
+    return MediaQuery.of(context).size.width;
+  }
+
   static String generateMd5(String input) {
     return md5.convert(utf8.encode(input)).toString();
   }

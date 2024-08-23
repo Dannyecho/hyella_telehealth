@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
 import 'package:hyella_telehealth/core/global.dart';
-import 'package:hyella_telehealth/core/utils/http_util.dart';
 import 'package:hyella_telehealth/data/repository/apis/auth_api.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_request_entity.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
@@ -85,7 +83,7 @@ class SignInController {
           EasyLoading.dismiss();
           Navigator.of(context).popAndPushNamed(
             AppRoute.home,
-            arguments: user,
+            // arguments: user,
           );
         }
       } catch (e) {

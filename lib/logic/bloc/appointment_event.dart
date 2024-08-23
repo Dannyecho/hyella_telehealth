@@ -45,4 +45,11 @@ class SetAppointmentComment extends AppointmentEvent {
   });
 }
 
+class SetRescheduleAppointment extends AppointmentEvent {
+  ScheduleEntityData schedule;
+  SetRescheduleAppointment({
+    required this.schedule,
+  });
+}
+
 class ResetTime extends AppointmentEvent {}

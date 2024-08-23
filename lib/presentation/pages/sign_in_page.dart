@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/logic/bloc/endpoint_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/sign_in_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/sign_in_event.dart';
@@ -92,10 +93,10 @@ class _SignInPageState extends State<SignInPage> {
                           builder: (context, state) {
                             return CheckboxListTile(
                                 contentPadding: const EdgeInsets.all(0),
-                                title: const Text(
+                                title: Text(
                                   "I'm a health provider",
-                                  style: const TextStyle(
-                                    color: AppColors.primaryColor,
+                                  style: TextStyle(
+                                    color: AppColors2.color1,
                                   ),
                                 ),
                                 value: state.isStaff,

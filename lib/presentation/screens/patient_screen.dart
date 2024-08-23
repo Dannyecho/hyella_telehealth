@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/presentation/screens/widgets/patient_screen_widgets.dart';
 
@@ -21,13 +22,13 @@ class _PatientScreenState extends State<PatientScreen> {
             body: buildScreen(context, state.index),
             bottomNavigationBar: Container(
               height: 60,
-              decoration: const BoxDecoration(
-                  color: AppColors.primaryColor,
-                  borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                  color: AppColors2.color1,
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(8),
                     topRight: Radius.circular(8),
                   ),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: AppColors.lightText,
                       blurRadius: 1,
@@ -44,7 +45,7 @@ class _PatientScreenState extends State<PatientScreen> {
                 type: BottomNavigationBarType.fixed,
                 showUnselectedLabels: true,
                 showSelectedLabels: true,
-                selectedItemColor: AppColors.primaryColor,
+                selectedItemColor: AppColors2.color1,
                 unselectedItemColor: AppColors.lightText2,
                 selectedFontSize: 12,
                 items: buttonNavigatigationBarItem(),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hyella_telehealth/core/constants/app_colors.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/form_builder/form_builder.dart';
 import 'package:hyella_telehealth/data/repository/entities/endpoint_entity.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
@@ -60,9 +60,9 @@ class _PEditProfileState extends State<PEditProfile> {
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(20),
-              decoration: const BoxDecoration(
-                color: AppColors.primaryColor,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: AppColors2.color1,
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(16),
                   bottomRight: Radius.circular(16),
                 ),

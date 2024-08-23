@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/form_builder/form_widgets/checkbox_field_builder.dart';
 import 'package:hyella_telehealth/core/form_builder/form_widgets/radio_field_builder.dart';
 import 'package:hyella_telehealth/core/form_builder/form_widgets/text_input_field_builder.dart';
@@ -138,8 +139,8 @@ final class FormBuilder {
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               margin: const EdgeInsets.only(top: 60),
-              decoration: const BoxDecoration(
-                color: AppColors.primaryColor,
+              decoration: BoxDecoration(
+                color: AppColors2.color1,
                 borderRadius: BorderRadius.all(Radius.circular(16)),
               ),
               child: Text(

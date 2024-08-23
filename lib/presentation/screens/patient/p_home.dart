@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/utils/app_util.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
@@ -42,53 +43,51 @@ class _PHomeState extends State<PHome> {
       child: Column(
         children: [
           Container(
-            height: 420,
+            height: 410,
             padding: const EdgeInsets.only(
               top: 60,
               left: 20,
               right: 20,
-              bottom: 10,
+              bottom: 0,
             ),
-            decoration: const BoxDecoration(
-              color: AppColors.primaryColor,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(12),
-                bottomRight: Radius.circular(12),
+            decoration: BoxDecoration(
+              color: AppColors2.color1,
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
               ),
             ),
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      pHomeHeader(appUser),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20, bottom: 10),
-                        child: Text(
-                          appServices.title!,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                pHomeHeader(appUser),
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    appServices.title!,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                 ),
-                SliverGrid(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
+                SizedBox(
+                  height: 190,
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(0),
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
                       var service = appServices.data[index + 1];
                       return InkWell(
                         onTap: () {
                           Navigator.pushNamed(context, AppRoute.service,
-                              arguments: service);
+                              arguments: {'service': service});
                         },
                         child: Container(
                           alignment: Alignment.center,
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.only(
+                              bottom: 10, left: 10, right: 10, top: 5),
                           decoration: BoxDecoration(
                               color: const Color.fromARGB(30, 255, 255, 255),
                               borderRadius: BorderRadius.circular(3)),
@@ -98,20 +97,20 @@ class _PHomeState extends State<PHome> {
                             children: [
                               Image.network(
                                 service.picture!,
-                                width: 20,
-                                height: 20,
+                                width: 40,
+                                height: 30,
                               ),
                               const SizedBox(
                                 height: 8,
                               ),
                               Text(
                                 AppUtil.capitalizeEachWord(service.title!),
-                                maxLines: 3,
+                                maxLines: 2,
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 8,
-                                  overflow: TextOverflow.ellipsis,
+                                  fontSize: 10,
+                                  overflow: TextOverflow.fade,
                                 ),
                               )
                             ],
@@ -119,41 +118,51 @@ class _PHomeState extends State<PHome> {
                         ),
                       );
                     },
-                    childCount: appServices.data.length - 1,
-                  ),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    mainAxisSpacing: 3,
-                    crossAxisSpacing: 3,
-                    childAspectRatio: 1,
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: InkWell(
-                    onTap: () {},
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 20),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "See all",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Icon(
-                            Icons.arrow_drop_down_sharp,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
+                    itemCount: appServices.data.length - 1,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                      mainAxisSpacing: 6,
+                      crossAxisSpacing: 6,
+                      childAspectRatio: 1,
                     ),
                   ),
-                )
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoute.services,
+                        arguments: appServices.data);
+                  },
+                  child: Container(
+                    height: 32,
+                    alignment: Alignment.bottomCenter,
+                    margin: const EdgeInsets.only(top: 20),
+                    child: const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "See all",
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_drop_down_sharp,
+                          color: Colors.white,
+                          size: 10,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
           SizedBox(
-            height: 400,
+            height: 300,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: ListView.builder(
@@ -177,8 +186,8 @@ class _PHomeState extends State<PHome> {
                       leading: Image.network(card.picture!),
                       title: Text(
                         card.title!,
-                        style: const TextStyle(
-                          color: AppColors.primaryColor,
+                        style: TextStyle(
+                          color: AppColors2.color1,
                         ),
                       ),
                       subtitle: Text(

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 
 Widget reuseableText(
   String textString, {
-  Color color = AppColors.primaryColor,
+  Color color = Colors.black,
   double fontSize = 14,
   FontWeight fontWeight = FontWeight.normal,
 }) {

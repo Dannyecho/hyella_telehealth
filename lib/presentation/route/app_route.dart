@@ -3,16 +3,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
 import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
-import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/appointment_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/appointment_step_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/emr_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/lab_result_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/services_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/sign_in_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/web_view_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/welcome_bloc.dart';
+import 'package:hyella_telehealth/presentation/pages/emr_page.dart';
 import 'package:hyella_telehealth/presentation/pages/home_page.dart';
+import 'package:hyella_telehealth/presentation/pages/lab_result_page.dart';
 import 'package:hyella_telehealth/presentation/pages/register_page.dart';
 import 'package:hyella_telehealth/presentation/pages/schedule_appointment.dart';
+import 'package:hyella_telehealth/presentation/pages/services_page.dart';
 import 'package:hyella_telehealth/presentation/pages/sign_in_page.dart';
 import 'package:hyella_telehealth/presentation/pages/welcome_page.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/p_edit_profile.dart';
@@ -30,23 +36,47 @@ class AppRoute {
   static const String settings = 'settings';
   static const String webView = 'webView';
   static const String service = 'service';
-
-  static final AppBloc _appBloc = AppBloc();
+  static const String services = 'services';
+  static const String emr = 'emr';
+  static const String labResult = 'labResult';
 
   static Route? onGenerateRoute(RouteSettings rSettings) {
     switch (rSettings.name) {
+      case emr:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => EmrBloc(),
+            child: const EmrPage(),
+          ),
+        );
+      case labResult:
+        String? arguments = rSettings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => LabResultBloc(),
+            child: LabResultPage(
+              title: arguments,
+            ),
+          ),
+        );
       case home:
+        var arguments = rSettings.arguments is int ? rSettings.arguments : 0;
         return MaterialPageRoute(
           builder: (context) => MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => _appBloc,
-              ),
-              BlocProvider(
                 create: (context) => AppScreenBloc(),
               ),
+              BlocProvider(
+                create: (context) => ServicesBloc(),
+              ),
+              BlocProvider(
+                create: (context) => ScheduleBloc(),
+              ),
             ],
-            child: const HomePage(),
+            child: HomePage(
+              currentScreen: arguments as int,
+            ),
           ),
         );
       case splash:
@@ -61,10 +91,7 @@ class AppRoute {
                 ));
       case editProfile:
         return MaterialPageRoute(
-          builder: (context) => BlocProvider.value(
-            value: _appBloc,
-            child: const PEditProfile(),
-          ),
+          builder: (context) => const PEditProfile(),
         );
       case webView:
         var arguements = rSettings.arguments as Map<String, dynamic>;
@@ -76,8 +103,13 @@ class AppRoute {
                     url: arguements['url'],
                   ),
                 ));
+      case services:
+        var arguements = rSettings.arguments as List<Service>;
+        return MaterialPageRoute(
+          builder: (context) => ServicesPage(services: arguements),
+        );
       case service:
-        var arguements = rSettings.arguments as Service;
+        var arguements = rSettings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
             builder: (context) => MultiBlocProvider(
                   providers: [
@@ -89,7 +121,10 @@ class AppRoute {
                     ),
                   ],
                   child: ScheduleAppointment(
-                    service: arguements,
+                    service: arguements['service'],
+                    rescheduling: arguements.containsKey('rescheduling')
+                        ? arguements['rescheduling']
+                        : null,
                   ),
                 ));
       case register:
@@ -122,8 +157,4 @@ class AppRoute {
   }
 
   AppRoute._();
-
-  static dispose() {
-    _appBloc.close();
-  }
 }

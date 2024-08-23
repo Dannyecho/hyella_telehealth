@@ -2,6 +2,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
 import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/logic/bloc/welcome_bloc.dart';
@@ -85,8 +86,8 @@ class _WelcomePageState extends State<WelcomePage> {
                             AppConstants.STORAGE_DEVICE_FOR_THE_FIRST_TIME,
                             true,
                           );
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              AppRoute.signIn, (route) => false);
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, AppRoute.signIn, (route) => false);
                         },
                       ),
                     ],
@@ -96,12 +97,12 @@ class _WelcomePageState extends State<WelcomePage> {
                     child: DotsIndicator(
                       dotsCount: 3,
                       position: state.slideIndex,
-                      decorator: const DotsDecorator(
+                      decorator: DotsDecorator(
                           color: Colors.grey,
-                          size: Size.square(8),
-                          activeColor: AppColors.primaryColor,
-                          activeSize: Size(18, 8),
-                          activeShape: RoundedRectangleBorder(
+                          size: const Size.square(8),
+                          activeColor: AppColors2.color1,
+                          activeSize: const Size(18, 8),
+                          activeShape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                           )),
                     ),

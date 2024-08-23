@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class AppHttpResponse {
   final int type;
-  final String msg;
+  final dynamic msg;
   final data;
   AppHttpResponse({
     required this.type,
@@ -20,7 +20,7 @@ class AppHttpResponse {
   factory AppHttpResponse.fromMap(Map<String, dynamic> map) {
     return AppHttpResponse(
       type: map['type'] as int,
-      msg: map['msg'] as String,
+      msg: map['msg'],
     );
   }
 

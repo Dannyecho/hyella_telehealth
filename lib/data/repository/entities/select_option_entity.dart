@@ -33,4 +33,14 @@ class SelectOptionEntity {
     super.toString();
     return value;
   }
+
+  @override
+  bool operator ==(covariant SelectOptionEntity other) {
+    if (identical(this, other)) return true;
+
+    return other.name == name && other.value == value;
+  }
+
+  @override
+  int get hashCode => name.hashCode ^ value.hashCode;
 }

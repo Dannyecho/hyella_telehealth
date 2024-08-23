@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/data/repository/entities/appointment_specialty_fields.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
+import 'package:hyella_telehealth/data/repository/entities/schedule_entity.dart';
 import 'package:hyella_telehealth/data/repository/entities/select_option_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/appointment_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/appointment_step_bloc.dart';
@@ -15,8 +17,11 @@ import 'package:hyella_telehealth/presentation/widgets/toast_info.dart';
 import 'package:intl/intl.dart';
 
 class ScheduleAppointment extends StatefulWidget {
-  const ScheduleAppointment({super.key, required this.service});
+  const ScheduleAppointment(
+      {super.key, required this.service, this.rescheduling});
   final Service service;
+  final ScheduleEntityData? rescheduling;
+
   @override
   State<ScheduleAppointment> createState() => _ScheduleAppointmentState();
 }
@@ -39,6 +44,11 @@ class _ScheduleAppointmentState extends State<ScheduleAppointment> {
   @override
   void initState() {
     super.initState();
+    /*  if (widget.rescheduling != null) {
+      context
+          .read<AppointmentBloc>()
+          .add(SetRescheduleAppointment(schedule: widget.rescheduling!));
+    } */
     context
         .read<AppointmentStepBloc>()
         .add(GetSpecialistData(service: widget.service.key!));
@@ -87,6 +97,9 @@ class _ScheduleAppointmentState extends State<ScheduleAppointment> {
       body: SafeArea(
         child: BlocBuilder<AppointmentStepBloc, AppointmentStepState>(
           builder: (context, state) {
+            _appointmentBloc = context.watch<AppointmentBloc>();
+            _appointmentStepBloc = context.read<AppointmentStepBloc>();
+
             _doctorList = state.doctor;
             _departmentList = state.department;
             _locationList = state.location;
@@ -95,8 +108,6 @@ class _ScheduleAppointmentState extends State<ScheduleAppointment> {
             // _specialtyFields = state.specialtyFields;
             _locationListFields = state.locationFields;
             _timeSlotListFields = state.timeSlotFields;
-            _appointmentBloc = context.watch<AppointmentBloc>();
-            _appointmentStepBloc = context.read<AppointmentStepBloc>();
 
             _initialDepartment = _appointmentBloc.state.department;
             _initialTime = _appointmentBloc.state.time;
@@ -125,7 +136,6 @@ class _ScheduleAppointmentState extends State<ScheduleAppointment> {
                                     doctorID: value.name,
                                     dependentID: _appointmentBloc
                                         .state.department?.value));
-                                print('changing value to: $value');
                               },
                             ),
                             const Divider(
@@ -280,8 +290,8 @@ class _ScheduleAppointmentState extends State<ScheduleAppointment> {
                     onStepContinue: () async {
                       if (state.isLastStep) {
                         EasyLoading.show(
-                          indicator: const CircularProgressIndicator(
-                            color: AppColors.primaryColor,
+                          indicator: CircularProgressIndicator(
+                            color: AppColors2.color1,
                           ),
                           dismissOnTap: true,
                           maskType: EasyLoadingMaskType.clear,

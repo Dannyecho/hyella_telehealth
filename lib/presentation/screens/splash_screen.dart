@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
 import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/core/utils/http_util.dart';
@@ -23,10 +24,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () => getAppResources());
+    Future.delayed(const Duration(seconds: 0), () => getAppResources(context));
   }
 
-  void getAppResources({connectionWasLost = false}) async {
+  void getAppResources(BuildContext context,
+      {connectionWasLost = false}) async {
     try {
       /* if (connectionWasLost) {
         toastInfo(
@@ -44,15 +46,16 @@ class _SplashScreenState extends State<SplashScreen> {
             "${result.data!.endPoint1!}?cid=${result.data!.client!.id!}&";
         Global.storageService.setString(
             AppConstants.STORAGE_CLIENT_ID, result.data?.client?.id ?? '');
+        AppColors2.instance.registerInstance(result.data!.client!);
 
         if (context.mounted) {
           context
               .read<EndpointBloc>()
               .add(TriggerEndpoint(endPointEntity: result));
-          Navigator.pushNamedAndRemoveUntil(
+          Navigator.pushReplacementNamed(
             context,
             AppRoute.initialRoute,
-            (e) => false,
+            // (e) => true,
           );
         }
       } else {
@@ -64,7 +67,8 @@ class _SplashScreenState extends State<SplashScreen> {
         backgroundColor: Colors.red[400]!,
         length: Toast.LENGTH_LONG,
       );
-      Future.delayed(Duration(seconds: 10), () => getAppResources());
+      Future.delayed(
+          const Duration(seconds: 6), () => getAppResources(context));
     }
   }
 

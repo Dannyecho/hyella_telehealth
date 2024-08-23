@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
 import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
 
 class PProfile extends StatefulWidget {
@@ -34,6 +36,11 @@ class _PProfileState extends State<PProfile> {
           style: TextStyle(fontSize: 16),
         ),
         centerTitle: true,
+        leading: IconButton(
+            onPressed: () {
+              context.read<AppScreenBloc>().add(SwitchScreen(index: 0));
+            },
+            icon: const Icon(Icons.arrow_back)),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -41,9 +48,9 @@ class _PProfileState extends State<PProfile> {
             Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(20),
-              decoration: const BoxDecoration(
-                color: AppColors.primaryColor,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: AppColors2.color1,
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(16),
                   bottomRight: Radius.circular(16),
                 ),
@@ -80,8 +87,8 @@ class _PProfileState extends State<PProfile> {
                               'assets/svg/pencil.svg',
                               width: 10,
                               height: 10,
-                              colorFilter: const ColorFilter.mode(
-                                  AppColors.primaryColor, BlendMode.srcIn),
+                              colorFilter: ColorFilter.mode(
+                                  AppColors2.color1, BlendMode.srcIn),
                             ),
                           ),
                         ),
@@ -154,15 +161,15 @@ class _PProfileState extends State<PProfile> {
                         vertical: 0,
                         horizontal: 20,
                       ),
-                      leading: const Icon(
+                      leading: Icon(
                         Icons.logout,
                         size: 28,
-                        color: AppColors.primaryColor,
+                        color: AppColors2.color1,
                       ),
-                      title: const Text(
+                      title: Text(
                         'Logout',
                         style: TextStyle(
-                          color: AppColors.primaryColor,
+                          color: AppColors2.color1,
                         ),
                       ),
                       trailing: Container(
@@ -200,8 +207,8 @@ class _PProfileState extends State<PProfile> {
                     ),
                     title: Text(
                       moreDataItem.title!,
-                      style: const TextStyle(
-                        color: AppColors.primaryColor,
+                      style: TextStyle(
+                        color: AppColors2.color1,
                       ),
                     ),
                     trailing: Container(

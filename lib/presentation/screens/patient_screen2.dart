@@ -1,0 +1,174 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
+import 'package:hyella_telehealth/presentation/screens/widgets/patient_screen_widgets.dart';
+
+class PatientScreen2 extends StatefulWidget {
+  final int? index;
+  const PatientScreen2({super.key, this.index});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _PatientScreen2State createState() => _PatientScreen2State();
+}
+
+class _PatientScreen2State extends State<PatientScreen2> {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppScreenBloc, AppScreenState>(
+      builder: (context, state) {
+        return PopScope(
+          canPop: context.read<AppScreenBloc>().state.index == 0 ? true : false,
+          onPopInvoked: (didPop) {
+            context.read<AppScreenBloc>().add(SwitchScreen(index: 0));
+          },
+          child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              floatingActionButton: FloatingActionButton(
+                elevation: 8,
+                backgroundColor: Theme.of(context).primaryColor,
+                child: const Icon(
+                  Icons.medical_services,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  context.read<AppScreenBloc>().add(SwitchScreen(index: 4));
+                },
+              ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
+              bottomNavigationBar: BottomAppBar(
+                elevation: 8,
+                color: Colors.white,
+                shadowColor: Colors.lightBlueAccent,
+                shape: const CircularNotchedRectangle(),
+                notchMargin: 10,
+                child: SizedBox(
+                  height: 60,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          MaterialButton(
+                            minWidth: 40,
+                            onPressed: () {
+                              context
+                                  .read<AppScreenBloc>()
+                                  .add(SwitchScreen(index: 0));
+                            },
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.home_filled,
+                                  color: state.index == 0
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.blueGrey,
+                                ),
+                                Text(
+                                  "Home",
+                                  style: TextStyle(
+                                    color: state.index == 0
+                                        ? Theme.of(context).primaryColor
+                                        : Colors.blueGrey,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          MaterialButton(
+                            minWidth: 40,
+                            onPressed: () {
+                              context
+                                  .read<AppScreenBloc>()
+                                  .add(SwitchScreen(index: 1));
+                            },
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.comment,
+                                  color: state.index == 1
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.blueGrey,
+                                ),
+                                Text(
+                                  "Chats",
+                                  style: TextStyle(
+                                    color: state.index == 1
+                                        ? Theme.of(context).primaryColor
+                                        : Colors.blueGrey,
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          MaterialButton(
+                            minWidth: 40,
+                            onPressed: () {
+                              context
+                                  .read<AppScreenBloc>()
+                                  .add(SwitchScreen(index: 2));
+                            },
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.schedule_rounded,
+                                  color: state.index == 2
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.blueGrey,
+                                ),
+                                Text(
+                                  'Schedule',
+                                  style: TextStyle(
+                                    color: state.index == 2
+                                        ? Theme.of(context).primaryColor
+                                        : Colors.blueGrey,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          MaterialButton(
+                            minWidth: 40,
+                            onPressed: () {
+                              context
+                                  .read<AppScreenBloc>()
+                                  .add(SwitchScreen(index: 3));
+                            },
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.more,
+                                  color: state.index == 3
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.blueGrey,
+                                ),
+                                Text(
+                                  "More",
+                                  style: TextStyle(
+                                    color: state.index == 3
+                                        ? Theme.of(context).primaryColor
+                                        : Colors.blueGrey,
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              body: buildScreen2(context, state.index)),
+        );
+      },
+    );
+  }
+}

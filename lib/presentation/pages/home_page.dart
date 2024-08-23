@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hyella_telehealth/core/constants/app_colors.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
 import 'package:hyella_telehealth/presentation/screens/doctor_screen.dart';
-import 'package:hyella_telehealth/presentation/screens/patient_screen.dart';
+import 'package:hyella_telehealth/presentation/screens/patient_screen2.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  int? currentScreen = 0;
+  HomePage({super.key, this.currentScreen});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -36,16 +38,18 @@ class _HomePageState extends State<HomePage> {
     // Global.storageService.remove(AppConstants.STORAGE_USER_TOKEN_KEY);
     return BlocBuilder<AppBloc, AppBlocState>(builder: (context, state) {
       if (state.appData == null) {
-        return const Center(
+        return Center(
           child: CircularProgressIndicator(
-            color: AppColors.primaryColor,
+            color: AppColors2.color1,
           ),
         );
       }
       if (state.appData!.user!.isPatient == 0) {
         return const DoctorScreen();
       }
-      return const PatientScreen();
+      return PatientScreen2(
+        index: widget.currentScreen ?? 0,
+      );
     });
   }
 }

@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hyella_telehealth/core/constants/app_colors.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/logic/bloc/web_view_bloc.dart';
+import 'package:hyella_telehealth/presentation/route/app_route.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+enum WebViewScreenType {
+  appointment,
+  regular,
+}
 
 class WebViewerScreen extends StatefulWidget {
   final String? title;
   final String? url;
-  const WebViewerScreen({super.key, required this.title, required this.url});
+  final WebViewScreenType webViewScreenType;
+  const WebViewerScreen({
+    super.key,
+    required this.title,
+    required this.url,
+    this.webViewScreenType = WebViewScreenType.regular,
+  });
 
   @override
   State<WebViewerScreen> createState() => _WebViewerScreenState();
@@ -57,6 +69,18 @@ class _WebViewerScreenState extends State<WebViewerScreen> {
             if (request.url.startsWith('https://www.youtube.com/')) {
               debugPrint('blocking navigation to ${request.url}');
               return NavigationDecision.prevent;
+            }
+            if (widget.webViewScreenType == WebViewScreenType.appointment &&
+                request.url.contains("status=completed")) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Appointment Booked Successfully!"),
+                  backgroundColor: Colors.green,
+                ),
+              );
+              Navigator.pushNamedAndRemoveUntil(
+                  context, AppRoute.home, (predicate) => false,
+                  arguments: 2);
             }
             debugPrint('allowing navigation to ${request.url}');
             return NavigationDecision.navigate;
@@ -119,9 +143,9 @@ class _WebViewerScreenState extends State<WebViewerScreen> {
       body: BlocBuilder<WebViewBloc, WebViewState>(
         builder: (context, state) {
           if (state.onPageFinished == false) {
-            return const Center(
+            return Center(
                 child: CircularProgressIndicator(
-              color: AppColors.primaryColor,
+              color: AppColors2.color1,
             ));
           }
           return WebViewWidget(controller: _controller);

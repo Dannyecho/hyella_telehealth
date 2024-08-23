@@ -63,7 +63,7 @@ Widget loginAndRegisterButton({
       margin: const EdgeInsets.only(bottom: 16),
       alignment: Alignment.center,
       decoration: BoxDecoration(
-          color: type == 'login' ? AppColors.primaryColor : Colors.white,
+          color: type == 'login' ? AppColors2.color1 : Colors.white,
           borderRadius: const BorderRadius.all(
             Radius.circular(16),
           ),
@@ -84,7 +84,7 @@ Widget loginAndRegisterButton({
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.normal,
-          color: type == 'login' ? Colors.white : AppColors.primaryColor,
+          color: type == 'login' ? Colors.white : AppColors2.color1,
         ),
       ),
     ),
@@ -104,8 +104,8 @@ AppBar buildAppBar({required String title}) {
     title: Text(
       title,
       textAlign: TextAlign.center,
-      style: const TextStyle(
-        color: AppColors.primaryColor,
+      style: TextStyle(
+        color: AppColors2.color1,
         fontSize: 16.0,
         fontWeight: FontWeight.normal,
       ),

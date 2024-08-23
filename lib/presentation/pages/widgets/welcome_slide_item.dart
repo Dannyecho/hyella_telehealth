@@ -58,9 +58,9 @@ final class WelcomeSlideItem extends StatelessWidget {
               alignment: Alignment.center,
               height: 50,
               width: double.infinity,
-              decoration: const BoxDecoration(
-                  color: AppColors.primaryColor,
-                  borderRadius: BorderRadius.all(Radius.circular(24))),
+              decoration: BoxDecoration(
+                  color: AppColors2.color1,
+                  borderRadius: const BorderRadius.all(Radius.circular(24))),
               child: Text(
                 buttonTitle,
                 style: const TextStyle(
