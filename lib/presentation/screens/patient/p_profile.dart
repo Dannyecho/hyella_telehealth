@@ -1,7 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hyella_telehealth/core/constants/app_colors.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
 import 'package:hyella_telehealth/core/global.dart';
@@ -114,8 +114,8 @@ class _PProfileState extends State<PProfile> {
               child: ListView.separated(
                 itemCount: moreData.data.length + 1,
                 separatorBuilder: (context, index) => const Divider(
-                  color: AppColors.lightText,
-                ),
+                    // color: AppColors2.color3,
+                    ),
                 itemBuilder: (context, index) {
                   if (index == moreData.data.length) {
                     return ListTile(
@@ -172,10 +172,10 @@ class _PProfileState extends State<PProfile> {
                           color: AppColors2.color1,
                         ),
                       ),
-                      trailing: Container(
+                      /* trailing: Container(
                         padding: const EdgeInsets.all(6),
-                        decoration: const BoxDecoration(
-                          color: AppColors.lightText,
+                        decoration: BoxDecoration(
+                          color: AppColors2.color1,
                           shape: BoxShape.circle,
                         ),
                         child: SvgPicture.asset(
@@ -183,7 +183,7 @@ class _PProfileState extends State<PProfile> {
                           width: 12,
                           height: 12,
                         ),
-                      ),
+                      ), */
                     );
                   }
                   var moreDataItem = moreData.data[index];
@@ -200,18 +200,22 @@ class _PProfileState extends State<PProfile> {
                       vertical: 0,
                       horizontal: 20,
                     ),
-                    leading: Image.network(
-                      moreDataItem.icon!,
+                    leading: CachedNetworkImage(
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                              CircularProgressIndicator(
+                                  value: downloadProgress.progress),
+                      imageUrl: moreDataItem.icon!,
                       width: 30,
                       height: 30,
                     ),
                     title: Text(
                       moreDataItem.title!,
-                      style: TextStyle(
-                        color: AppColors2.color1,
+                      style: const TextStyle(
+                        color: Colors.black,
                       ),
                     ),
-                    trailing: Container(
+                    /* trailing: Container(
                       padding: const EdgeInsets.all(6),
                       decoration: const BoxDecoration(
                         color: AppColors.lightText,
@@ -222,7 +226,7 @@ class _PProfileState extends State<PProfile> {
                         width: 12,
                         height: 12,
                       ),
-                    ),
+                    ), */
                   );
                 },
               ),

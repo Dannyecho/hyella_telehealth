@@ -6,6 +6,7 @@ import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/web_view_bloc.dart';
+import 'package:hyella_telehealth/presentation/pages/chat_contact_page.dart';
 import 'package:hyella_telehealth/presentation/pages/services_page.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/p_home.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/p_home2.dart';
@@ -36,7 +37,7 @@ Widget buildScreen2(BuildContext context, int index) {
   Home appServices = appData.menu!.home!;
   List<Widget> _screens = [
     PHome2(),
-    Center(child: Text('Chat')),
+    const ChatContactPage(),
     Schedule(),
     const PProfile(),
     ServicesPage(

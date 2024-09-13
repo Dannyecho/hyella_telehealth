@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
@@ -95,8 +96,12 @@ class _PHomeState extends State<PHome> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Image.network(
-                                service.picture!,
+                              CachedNetworkImage(
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) =>
+                                        CircularProgressIndicator(
+                                            value: downloadProgress.progress),
+                                imageUrl: service.picture!,
                                 width: 40,
                                 height: 30,
                               ),
@@ -183,7 +188,12 @@ class _PHomeState extends State<PHome> {
                       ],
                     ),
                     child: ListTile(
-                      leading: Image.network(card.picture!),
+                      leading: CachedNetworkImage(
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) =>
+                                  CircularProgressIndicator(
+                                      value: downloadProgress.progress),
+                          imageUrl: card.picture!),
                       title: Text(
                         card.title!,
                         style: TextStyle(

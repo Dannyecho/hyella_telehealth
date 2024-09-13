@@ -20,11 +20,14 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       var response = await ScheduleApi().fetchUpComingSchedules();
       if (response['type'] == 'error') {
         toastInfo(msg: response['msg'], backgroundColor: Colors.red);
-        emit(ScheduleLoaded());
+        emit(ScheduleLoaded(
+          hasError: true,
+        ));
       } else {
         scheduleEntity = ScheduleEntity.fromJson(response['data']);
         upcoming = scheduleEntity.appList?.upcoming?.values.toList();
         emit(ScheduleLoaded(
+            hasError: false,
             upComingSchedules: upcoming,
             completedSchedules: completed,
             cancelledSchedules: cancelled));
@@ -40,14 +43,28 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         var response = await ScheduleApi().fetchCompletedSchedules();
         if (response['type'] == 'error') {
           toastInfo(msg: response['msg'], backgroundColor: Colors.red);
-          emit(ScheduleLoaded());
-        } else {
-          scheduleEntity = ScheduleEntity.fromJson(response['data']);
-          completed = scheduleEntity.appList?.completed?.values.toList();
           emit(ScheduleLoaded(
-              upComingSchedules: upcoming,
-              completedSchedules: completed,
-              cancelledSchedules: cancelled));
+            hasError: true,
+          ));
+        } else {
+          try {
+            scheduleEntity = ScheduleEntity.fromJson(response['data']);
+            completed = scheduleEntity.appList?.completed?.values.toList();
+            emit(
+              ScheduleLoaded(
+                hasError: false,
+                upComingSchedules: upcoming,
+                completedSchedules: completed,
+                cancelledSchedules: cancelled,
+              ),
+            );
+          } catch (e) {
+            emit(
+              ScheduleLoaded(
+                hasError: true,
+              ),
+            );
+          }
         }
       },
     );
@@ -58,11 +75,14 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
         var response = await ScheduleApi().fetchCancelledSchedules();
         if (response['type'] == 'error') {
           toastInfo(msg: response['msg'], backgroundColor: Colors.red);
-          emit(ScheduleLoaded());
+          emit(ScheduleLoaded(
+            hasError: true,
+          ));
         } else {
           scheduleEntity = ScheduleEntity.fromJson(response['data']);
           cancelled = scheduleEntity.appList?.cancelled?.values.toList();
           emit(ScheduleLoaded(
+              hasError: false,
               upComingSchedules: upcoming,
               completedSchedules: completed,
               cancelledSchedules: cancelled));

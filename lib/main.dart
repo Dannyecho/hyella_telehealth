@@ -5,6 +5,7 @@ import 'package:hyella_telehealth/core/constants/app_colors.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/chat_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/endpoint_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/form_builder_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
@@ -35,6 +36,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (context) => AppBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ChatBloc(),
         ),
       ],
       child: MaterialApp(

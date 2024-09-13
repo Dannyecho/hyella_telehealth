@@ -34,9 +34,9 @@ final class WelcomeSlideItem extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
-                color: AppColors.primaryText,
+                color: AppColors2.color1,
               ),
             ),
             Text(

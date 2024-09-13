@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
@@ -358,14 +359,18 @@ class _PHome2State extends State<PHome2> {
                             SizedBox(
                               height: 60,
                               width: 60,
-                              child:
-                                  appData!.menu!.cards!.data[index].picture !=
-                                          null
-                                      ? Image.network(
-                                          appData!.menu!.cards!.data[index]
-                                              .picture!,
-                                        )
-                                      : const SizedBox(),
+                              child: appData!
+                                          .menu!.cards!.data[index].picture !=
+                                      null
+                                  ? CachedNetworkImage(
+                                      progressIndicatorBuilder: (context, url,
+                                              downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                      imageUrl: appData!
+                                          .menu!.cards!.data[index].picture!,
+                                    )
+                                  : const SizedBox(),
                             ),
                             const SizedBox(
                               width: 20,
@@ -476,7 +481,10 @@ class _PHome2State extends State<PHome2> {
                           Container(
                             height: 60,
                             width: 60,
-                            child: Image.network(e.picture!),
+                            child: CachedNetworkImage(progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                              CircularProgressIndicator(
+                                  value: downloadProgress.progress),imageUrl:e.picture!),
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 color: Theme.of(context).primaryColor,

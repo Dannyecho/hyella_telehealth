@@ -4,7 +4,6 @@ import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
-import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
 import 'package:hyella_telehealth/presentation/screens/doctor_screen.dart';
 import 'package:hyella_telehealth/presentation/screens/patient_screen2.dart';

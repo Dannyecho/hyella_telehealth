@@ -6,21 +6,26 @@ abstract class ScheduleState {}
 final class ScheduleLoading extends ScheduleState {}
 
 final class ScheduleLoaded extends ScheduleState {
+  final bool hasError;
   final List<ScheduleEntityData>? upComingSchedules;
   final List<ScheduleEntityData>? completedSchedules;
   final List<ScheduleEntityData>? cancelledSchedules;
 
-  ScheduleLoaded(
-      {this.upComingSchedules,
-      this.completedSchedules,
-      this.cancelledSchedules});
+  ScheduleLoaded({
+    required this.hasError,
+    this.upComingSchedules,
+    this.completedSchedules,
+    this.cancelledSchedules,
+  });
 
   ScheduleLoaded copyWith({
+    bool? hasError,
     List<ScheduleEntityData>? upComingSchedules,
     List<ScheduleEntityData>? completedSchedules,
     List<ScheduleEntityData>? cancelledSchedules,
   }) {
     return ScheduleLoaded(
+      hasError: hasError ?? this.hasError,
       upComingSchedules: upComingSchedules ?? this.upComingSchedules,
       completedSchedules: completedSchedules ?? this.completedSchedules,
       cancelledSchedules: cancelledSchedules ?? this.cancelledSchedules,

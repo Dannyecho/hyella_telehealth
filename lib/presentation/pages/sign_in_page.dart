@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
@@ -23,6 +24,8 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   String userType = 'user_mgt_login';
   bool isStaff = false;
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passWordFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,9 @@ class _SignInPageState extends State<SignInPage> {
       color: Colors.white,
       child: SafeArea(
           child: Scaffold(
-        appBar: buildAppBar(title: "Log In"),
+        appBar: buildAppBar(
+          title: "Sign In",
+        ),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -53,23 +58,30 @@ class _SignInPageState extends State<SignInPage> {
                       height: 20,
                     ),
                     Center(
-                      child: Image.network(context
-                          .read<EndpointBloc>()
-                          .state
-                          .endPointEntity!
-                          .data!
-                          .client!
-                          .logo!),
+                      child: CachedNetworkImage(
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) =>
+                                  CircularProgressIndicator(
+                                      value: downloadProgress.progress),
+                          imageUrl: context
+                              .read<EndpointBloc>()
+                              .state
+                              .endPointEntity!
+                              .data!
+                              .client!
+                              .logo!),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        reuseableText('Email'),
-                        buildTextField(
+                    Form(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          reuseableText('Email'),
+                          buildTextField(
+                            focusNode: _emailFocusNode,
                             type: 'text',
                             hintText: 'Enter your email address',
                             icon: 'user',
@@ -77,56 +89,71 @@ class _SignInPageState extends State<SignInPage> {
                               context.read<SignInBloc>().add(
                                     EmailEvent(email: value),
                                   );
-                            }),
-                        reuseableText('Password'),
-                        buildTextField(
-                          type: 'password',
-                          hintText: 'Enter your password',
-                          icon: 'lock',
-                          onChange: (value) {
-                            context.read<SignInBloc>().add(
-                                  PasswordEvent(password: value),
-                                );
-                          },
-                        ),
-                        BlocBuilder<SignInBloc, SignInState>(
-                          builder: (context, state) {
-                            return CheckboxListTile(
-                                contentPadding: const EdgeInsets.all(0),
-                                title: Text(
-                                  "I'm a health provider",
-                                  style: TextStyle(
-                                    color: AppColors2.color1,
-                                  ),
-                                ),
-                                value: state.isStaff,
-                                onChanged: (value) {
-                                  context
-                                      .read<SignInBloc>()
-                                      .add(IsStaffEvent(isStaff: value!));
-                                });
-                          },
-                        ),
-                        const SizedBox(
-                          height: 100,
-                        ),
-                        forgotPassword(),
-                        loginAndRegisterButton(
-                            text: "Login",
-                            type: 'login',
-                            onTap: () {
+                            },
+                            onSubmitted: (value) {
+                              if (value.isNotEmpty) {
+                                _passWordFocusNode.requestFocus();
+                              } else {
+                                _emailFocusNode.requestFocus();
+                              }
+                            },
+                          ),
+                          reuseableText('Password'),
+                          buildTextField(
+                            focusNode: _passWordFocusNode,
+                            type: 'password',
+                            hintText: 'Enter your password',
+                            icon: 'lock',
+                            onChange: (value) {
+                              context.read<SignInBloc>().add(
+                                    PasswordEvent(password: value),
+                                  );
+                            },
+                            onSubmitted: (p0) {
                               final signInController =
                                   SignInController(context);
                               signInController.handleSignIn();
-                            }),
-                        loginAndRegisterButton(
-                            text: "Register",
-                            type: 'register',
-                            onTap: () {
-                              Navigator.of(context)
-                                  .pushNamed(AppRoute.register);
-                            }),
-                      ],
+                            },
+                          ),
+                          BlocBuilder<SignInBloc, SignInState>(
+                            builder: (context, state) {
+                              return CheckboxListTile(
+                                  contentPadding: const EdgeInsets.all(0),
+                                  title: Text(
+                                    "I'm a health provider",
+                                    style: TextStyle(
+                                      color: AppColors2.color1,
+                                    ),
+                                  ),
+                                  value: state.isStaff,
+                                  onChanged: (value) {
+                                    context
+                                        .read<SignInBloc>()
+                                        .add(IsStaffEvent(isStaff: value!));
+                                  });
+                            },
+                          ),
+                          const SizedBox(
+                            height: 100,
+                          ),
+                          forgotPassword(),
+                          loginAndRegisterButton(
+                              text: "Login",
+                              type: 'login',
+                              onTap: () {
+                                final signInController =
+                                    SignInController(context);
+                                signInController.handleSignIn();
+                              }),
+                          loginAndRegisterButton(
+                              text: "Register",
+                              type: 'register',
+                              onTap: () {
+                                Navigator.of(context)
+                                    .pushNamed(AppRoute.register);
+                              }),
+                        ],
+                      ),
                     ),
                     // const Spacer(),
                   ],

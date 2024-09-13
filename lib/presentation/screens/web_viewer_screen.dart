@@ -31,6 +31,7 @@ class _WebViewerScreenState extends State<WebViewerScreen> {
   void initState() {
     super.initState();
     final WebViewController controller = WebViewController();
+    context.read<WebViewBloc>().add(WebViewSetTitle(title: widget.title));
     // #enddocregion platform_features
 
     controller
@@ -46,8 +47,16 @@ class _WebViewerScreenState extends State<WebViewerScreen> {
             context.read<WebViewBloc>().add(WebViewPageStarted());
             debugPrint('Page started loading: $url');
           },
-          onPageFinished: (String url) {
+          onPageFinished: (String url) async {
             context.read<WebViewBloc>().add(WebViewPageCompleted());
+            context
+                .read<WebViewBloc>()
+                .add(WebViewSetTitle(title: await controller.getTitle()));
+            if (url.contains('&status=completed')) {
+              context.read<WebViewBloc>().add(WebViewSetCanGoHome(value: true));
+              print(
+                  "============Completed Status: ${context.read<WebViewBloc>().state.canGoHome}");
+            }
             debugPrint('Page finished loading: $url');
           },
           onWebResourceError: (WebResourceError error) {
@@ -115,7 +124,15 @@ class _WebViewerScreenState extends State<WebViewerScreen> {
     _controller = controller;
   }
 
-  Future<bool> _onBackPressed() async {
+  Future<bool> _onBackPressed(BuildContext context) async {
+    if (context.read<WebViewBloc>().state.canGoHome) {
+      print("IN CAN GO HOME ------------");
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoute.initialRoute,
+        (predicate) => false,
+      );
+    }
     if (await _controller.canGoBack()) {
       await _controller.goBack();
       return Future.value(false);
@@ -127,30 +144,29 @@ class _WebViewerScreenState extends State<WebViewerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.title!,
-          style: const TextStyle(
-            fontSize: 16,
+    return BlocBuilder<WebViewBloc, WebViewState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              state.pageTitle,
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => _onBackPressed(context),
+            ),
           ),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => _onBackPressed(),
-        ),
-      ),
-      body: BlocBuilder<WebViewBloc, WebViewState>(
-        builder: (context, state) {
-          if (state.onPageFinished == false) {
-            return Center(
-                child: CircularProgressIndicator(
-              color: AppColors2.color1,
-            ));
-          }
-          return WebViewWidget(controller: _controller);
-        },
-      ),
+          body: state.onPageFinished == false
+              ? Center(
+                  child: CircularProgressIndicator(
+                  color: AppColors2.color1,
+                ))
+              : WebViewWidget(controller: _controller),
+        );
+      },
     );
   }
 }

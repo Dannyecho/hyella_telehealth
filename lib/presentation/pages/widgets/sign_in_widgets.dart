@@ -107,7 +107,7 @@ AppBar buildAppBar({required String title}) {
       style: TextStyle(
         color: AppColors2.color1,
         fontSize: 16.0,
-        fontWeight: FontWeight.normal,
+        fontWeight: FontWeight.bold,
       ),
     ),
   );

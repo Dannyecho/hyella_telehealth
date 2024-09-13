@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
@@ -110,8 +111,12 @@ class _ServicesPageState extends State<ServicesPage> {
                                     vertical: 0,
                                     horizontal: 0,
                                   ),
-                                  leading: Image.network(
-                                    itemService.picture!,
+                                  leading: CachedNetworkImage(
+                                    progressIndicatorBuilder: (context, url,
+                                            downloadProgress) =>
+                                        CircularProgressIndicator(
+                                            value: downloadProgress.progress),
+                                    imageUrl: itemService.picture!,
                                     width: 30,
                                     height: 30,
                                     color: AppColors2.color1,

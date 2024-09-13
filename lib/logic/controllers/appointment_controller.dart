@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:hyella_telehealth/core/constants/app_colors.dart';
 import 'package:hyella_telehealth/data/repository/apis/schedule_appointment_api.dart';
 import 'package:hyella_telehealth/data/repository/entities/appointment_booking_confirmation_entity.dart';
 

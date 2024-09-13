@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
-import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 
 Widget reuseableText(
   String textString, {
@@ -25,6 +24,8 @@ Widget buildTextField({
   String? hintText,
   String? icon,
   required void Function(String) onChange,
+  void Function(String)? onSubmitted,
+  FocusNode? focusNode,
 }) {
   return Container(
     margin: const EdgeInsets.only(bottom: 20),
@@ -48,9 +49,10 @@ Widget buildTextField({
           child: Image.asset("assets/icons/$icon.png"),
         ),
         Expanded(
-          child: TextField(
+          child: TextFormField(
+            focusNode: focusNode,
             onChanged: (value) => onChange(value),
-            keyboardType: TextInputType.multiline,
+            keyboardType: TextInputType.text,
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: "$hintText",
@@ -58,6 +60,7 @@ Widget buildTextField({
                 color: AppColors.lightText2,
               ),
             ),
+            onFieldSubmitted: onSubmitted,
             autocorrect: false,
             obscureText: type == 'password' ? true : false,
           ),
