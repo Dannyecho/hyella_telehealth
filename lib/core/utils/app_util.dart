@@ -6,6 +6,7 @@ import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
+import 'package:hyella_telehealth/data/repository/entities/chat_entity.dart';
 
 class AppUtil {
   static double deviceWidth(BuildContext context) {
@@ -57,6 +58,15 @@ class AppUtil {
 
   static String capitalizeEachWord(String input) {
     return input.split(' ').map((word) => word.capitalize()).join(' ');
+  }
+
+  static String stripGetChat(String input, String key) {
+    input = input.replaceAll(key, '');
+    for (var delimitter in ChatDelimiters.all) {
+      input = input.replaceAll(delimitter.toString(), '');
+    }
+
+    return input;
   }
 }
 

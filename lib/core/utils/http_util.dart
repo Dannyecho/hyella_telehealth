@@ -82,4 +82,40 @@ class HttpUtil {
     }
     return null;
   }
+
+  sendFiles(path, Map<String, dynamic> files,
+      {Map<String, dynamic>? queryParameters, Options? options}) async {
+    Options requestOptions = options ?? Options();
+    requestOptions.headers = requestOptions.headers ?? {};
+    var authorization = getAuthorizationHeader();
+    String? pidParam = '&pid=';
+    String? cidParam = '&cid=';
+    pidParam += Global.storageService.getUserToken() ?? '';
+    cidParam += Global.storageService.getClientId() ?? '';
+    List formFiles = [];
+
+    files.forEach((key, value) {
+      formFiles.add(MultipartFile.fromFile(value, filename: key));
+    });
+
+    if (authorization != null) {
+      requestOptions.headers!.addAll(authorization);
+    }
+
+    if (queryParameters != null) {
+      queryParameters['files'] = files;
+    } else {
+      queryParameters = {'files': files};
+    }
+
+    final formData = FormData.fromMap(queryParameters);
+
+    final Response response = await _dio.post(
+      path + pidParam + cidParam,
+      data: formData,
+      queryParameters: queryParameters,
+    );
+
+    return parseFormData(response.data);
+  }
 }

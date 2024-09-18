@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
 import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/core/utils/http_util.dart';
@@ -22,7 +24,7 @@ class InitializeAppApi {
         response.containsKey('data') &&
         response['data'] != null) {
       Global.storageService
-          .setString(AppConstants.ENDPOINT_ENTITY_KEY, response.toString());
+          .setString(AppConstants.ENDPOINT_ENTITY_KEY, jsonEncode(response));
     }
     return EndPointEntity.fromJson(response);
   }

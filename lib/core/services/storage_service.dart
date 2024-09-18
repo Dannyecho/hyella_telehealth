@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
 import 'package:hyella_telehealth/data/repository/entities/endpoint_entity.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
@@ -46,6 +47,18 @@ class StorageService {
       return entityData.client;
     } catch (e) {
       print("Unable to retieve app client");
+    }
+    return null;
+  }
+
+  EndPointEntityData? getEndpoints() {
+    try {
+      var endpoint = _prefs.getString(AppConstants.ENDPOINT_ENTITY_KEY)!;
+      var entity = EndPointEntity.fromJson(jsonDecode(endpoint));
+
+      return entity.data;
+    } catch (e) {
+      print("Unable to retieve app enpoints");
     }
     return null;
   }

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:hyella_telehealth/core/constants/app_colors.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
-import 'package:hyella_telehealth/logic/bloc/chat_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/chat_contact_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/endpoint_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/form_builder_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
+
+// Global key to access the scaffold messenger
+final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 
 void main() async {
   print("===============In Main===============");
@@ -38,12 +41,13 @@ class _MyAppState extends State<MyApp> {
           create: (context) => AppBloc(),
         ),
         BlocProvider(
-          create: (context) => ChatBloc(),
+          create: (context) => ChatContactBloc(),
         ),
       ],
       child: MaterialApp(
         title: 'HYELLA TeleHealth',
         builder: EasyLoading.init(),
+        scaffoldMessengerKey: scaffoldMessengerKey,
         theme: ThemeData(
           appBarTheme: AppBarTheme(
             backgroundColor: AppColors2.color1,

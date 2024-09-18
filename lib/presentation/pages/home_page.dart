@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
       return;
     }
     context.read<AppBloc>().add(SetAppDataEvent(appData: appData));
+    context.read<AppBloc>().add(SetUserEvent(user: appData.user!));
   }
 
   @override

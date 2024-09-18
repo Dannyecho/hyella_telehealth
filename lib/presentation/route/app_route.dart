@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
 import 'package:hyella_telehealth/core/global.dart';
+import 'package:hyella_telehealth/data/repository/entities/chat_entity.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/appointment_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/appointment_step_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/chat_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/emr_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/lab_result_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
@@ -13,6 +15,7 @@ import 'package:hyella_telehealth/logic/bloc/services_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/sign_in_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/web_view_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/welcome_bloc.dart';
+import 'package:hyella_telehealth/presentation/pages/chat_page.dart';
 import 'package:hyella_telehealth/presentation/pages/emr_page.dart';
 import 'package:hyella_telehealth/presentation/pages/home_page.dart';
 import 'package:hyella_telehealth/presentation/pages/lab_result_page.dart';
@@ -39,9 +42,20 @@ class AppRoute {
   static const String services = 'services';
   static const String emr = 'emr';
   static const String labResult = 'labResult';
+  static const String chat = 'chat';
 
   static Route? onGenerateRoute(RouteSettings rSettings) {
     switch (rSettings.name) {
+      case chat:
+        var arguments = rSettings.arguments as ChatPageData;
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => ChatBloc(),
+            child: ChatPage(
+              data: arguments,
+            ),
+          ),
+        );
       case emr:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(

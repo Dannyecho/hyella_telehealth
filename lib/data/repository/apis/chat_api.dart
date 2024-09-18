@@ -1,117 +1,90 @@
-import 'package:flutter/material.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
 import 'package:hyella_telehealth/core/utils/app_util.dart';
 import 'package:hyella_telehealth/core/utils/http_util.dart';
-import 'package:hyella_telehealth/data/repository/entities/appointment_booking_confirmation_entity.dart';
-import 'package:hyella_telehealth/data/repository/entities/appointment_invoice_entity.dart';
-import 'package:hyella_telehealth/data/repository/entities/appointment_specialty_fields.dart';
+import 'package:hyella_telehealth/data/repository/entities/chat_entity.dart';
+import 'package:hyella_telehealth/data/repository/entities/upload_file_response_entity.dart';
 import 'package:hyella_telehealth/presentation/widgets/toast_info.dart';
-import 'package:intl/intl.dart';
 
 class ChatApi {
-  Future<AppointmentSpecialtyFields?> getPatientPreviousChats(
-      String recieverId) async {
+  Future<ChatListResponseEntity> getConversations(
+      String recieverId, bool isDoctor) async {
+    try {
+      String publicKey = AppUtil.generateMd5ForApiAuth("app_list_of_doctors");
+      String uri = "&token=${AppConstants.token}&public_key=$publicKey";
+      if (isDoctor) {
+        uri += "&nwp_request=msgs_get_convo&patient_id=$recieverId";
+      } else {
+        uri += "&nwp_request=msg_get_convo&doctor_id=$recieverId";
+      }
+
+      var response = await HttpUtil().post(uri);
+      return ChatListResponseEntity.fromMap(response);
+    } catch (e) {
+      return ChatListResponseEntity(
+        type: 0,
+        msg: "Unable to get data at the moment, please try again later",
+        data: null,
+      );
+    }
+  }
+
+  Future<ChatListResponseEntity> sensTextMessageToServer(
+      String recieverId, bool isDoctor) async {
+    try {
+      String publicKey = AppUtil.generateMd5ForApiAuth("app_list_of_doctors");
+      String uri = "&token=${AppConstants.token}&public_key=$publicKey";
+      if (isDoctor) {
+        uri += "&nwp_request=msgs_get_convo&patient_id=$recieverId";
+      } else {
+        uri += "&nwp_request=msg_get_convo&doctor_id=$recieverId";
+      }
+
+      var response = await HttpUtil().post(uri);
+      return ChatListResponseEntity.fromMap(response);
+    } catch (e) {
+      return ChatListResponseEntity(
+        type: 0,
+        msg: "Unable to get data at the moment, please try again later",
+        data: null,
+      );
+    }
+  }
+
+  Future<UploadFIleResponseEntity> sendChatFiles(
+      {required Map<String, dynamic> files, receiverId}) async {
+    try {
+      String publicKey = AppUtil.generateMd5ForApiAuth("file_upload");
+      String uri =
+          "&nwp_request=file_upload&token=${AppConstants.token}&public_key=$publicKey";
+      Map<String, String> params = {
+        'expiry_in_minutes': "30",
+        'readonly': '1',
+        'source': 'chat',
+        'receiver_id': receiverId ?? "",
+        'attachment_name': ''
+      };
+
+      var response =
+          await HttpUtil().sendFiles(uri, files, queryParameters: params);
+      return UploadFIleResponseEntity.fromJson(response);
+    } catch (e) {
+      return UploadFIleResponseEntity(
+        type: 0,
+        msg: 'An error occured',
+        data: null,
+      );
+    }
+  }
+
+  deleteChat(chatKey) async {
     try {
       String publicKey = AppUtil.generateMd5ForApiAuth("app_list_of_doctors");
       String uri =
-          "&nwp_request=app_list_of_doctors&token=${AppConstants.token}&public_key=$publicKey&doctor_id=$recieverId";
-
+          "&nwp_request=msg_del&token=${AppConstants.token}&public_key=$publicKey&chat_key=$chatKey";
       var response = await HttpUtil().post(uri);
-      if (response is Map && response.containsKey('data')) {
-        return AppointmentSpecialtyFields.fromJson(response["data"]);
-      }
+      return print("Deleting $chatKey response: $response===============");
     } catch (e) {
-      print("Error retrieving doctor list from api");
+      toastInfo(msg: "Error deleting chat");
     }
-    return null;
-  }
-
-  Future<AppointmentSpecialtyFields?> getVenueAndLocation(
-      {required String specialty,
-      required String doctorId,
-      required String dependentId}) async {
-    try {
-      String publicKey =
-          AppUtil.generateMd5ForApiAuth("get_venue_and_location");
-      String uri =
-          "&nwp_request=app_list_of_doctors2&token=${AppConstants.token}&public_key=$publicKey&specialty_key=$specialty&doctor_id=$doctorId&dependent_id=$dependentId&";
-
-      var response = await HttpUtil().post(uri);
-      if (response is Map && response.containsKey('data')) {
-        return AppointmentSpecialtyFields.fromJson(response["data"]);
-      }
-    } catch (e) {
-      print("Error retrieving doctor list from api");
-    }
-    return null;
-  }
-
-  Future<AppointmentSpecialtyFields?> getDateTimeSlot({
-    required String specialty,
-    required String doctorId,
-    required String dependentId,
-    required String location,
-    required DateTime date,
-  }) async {
-    try {
-      String publicKey = AppUtil.generateMd5ForApiAuth("get_date_time_slot");
-      String formattedDate = DateFormat("yyyy-MM-dd").format(date);
-      String uri =
-          "&nwp_request=app_list_of_doctors3&token=${AppConstants.token}&public_key=$publicKey&specialty_key=$specialty&doctor_id=$doctorId&dependent_id=$dependentId&date=$formattedDate&location_id=$location";
-
-      print(uri);
-      var response = await HttpUtil().post(uri);
-      if (response is Map && response.containsKey('data')) {
-        return AppointmentSpecialtyFields.fromJson(response["data"]);
-      }
-    } catch (e) {
-      print("Error retrieving doctor list from api");
-    }
-    return null;
-  }
-
-  Future<AppointmentInvoiceEntity?> getAppointmentInvoice({
-    required String specialty,
-    required String doctorId,
-    required String dependentId,
-    required String location,
-    required DateTime date,
-    required String timeslot,
-  }) async {
-    try {
-      String publicKey = AppUtil.generateMd5ForApiAuth("get_date_time_slot");
-      String formattedDate = DateFormat("yyyy-MM-dd").format(date);
-      String uri =
-          "&nwp_request=app_list_of_doctors4&token=${AppConstants.token}&public_key=$publicKey&specialty_key=$specialty&doctor_id=$doctorId&dependent_id=$dependentId&date=$formattedDate&location_id=$location&time=$timeslot";
-
-      var response = await HttpUtil().post(uri);
-      if (response is Map && response.containsKey('data')) {
-        return AppointmentInvoiceEntity.fromJson(response["data"]);
-      }
-    } catch (e) {
-      print("Error retrieving doctor list from api");
-    }
-    return null;
-  }
-
-  Future<AppointmentBookingConfirmationEntity?>? bookAppointment(
-      {doctorId, ref}) async {
-    try {
-      String publicKey = AppUtil.generateMd5ForApiAuth("book_appointment");
-      String uri =
-          "&appointment_ref=$ref&nwp_request=app_list_save&token=${AppConstants.token}&public_key=$publicKey&default=default&action=nwp_health&todo=execute&nwp_action=tele_health_connect&nwp_todo=process_request&development_mode_off=1";
-
-      var response = await HttpUtil().post(uri);
-      if (response is Map<String, dynamic> && response.containsKey('data')) {
-        var a = AppointmentBookingConfirmationEntity.fromJson(response['data']);
-        return a;
-      }
-      return null;
-    } catch (e) {
-      toastInfo(
-          msg: "Error occured while booking appointment. Please, try again",
-          backgroundColor: Colors.red);
-    }
-    return null;
   }
 }
