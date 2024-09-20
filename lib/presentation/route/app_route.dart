@@ -10,7 +10,6 @@ import 'package:hyella_telehealth/logic/bloc/appointment_step_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/chat_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/emr_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/lab_result_bloc.dart';
-import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/services_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/sign_in_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/web_view_bloc.dart';
@@ -83,9 +82,6 @@ class AppRoute {
               ),
               BlocProvider(
                 create: (context) => ServicesBloc(),
-              ),
-              BlocProvider(
-                create: (context) => ScheduleBloc(),
               ),
             ],
             child: HomePage(

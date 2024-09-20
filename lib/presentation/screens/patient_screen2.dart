@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/chat_contact_bloc.dart';
 import 'package:hyella_telehealth/presentation/screens/widgets/patient_screen_widgets.dart';
 
 class PatientScreen2 extends StatefulWidget {
@@ -13,6 +14,12 @@ class PatientScreen2 extends StatefulWidget {
 }
 
 class _PatientScreen2State extends State<PatientScreen2> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppScreenBloc, AppScreenState>(
@@ -38,6 +45,7 @@ class _PatientScreen2State extends State<PatientScreen2> {
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerDocked,
               bottomNavigationBar: BottomAppBar(
+                height: 70,
                 elevation: 8,
                 color: Colors.white,
                 shadowColor: Colors.lightBlueAccent,
@@ -84,21 +92,69 @@ class _PatientScreen2State extends State<PatientScreen2> {
                                   .read<AppScreenBloc>()
                                   .add(SwitchScreen(index: 1));
                             },
-                            child: Column(
+                            child: Stack(
                               children: [
-                                Icon(
-                                  Icons.comment,
-                                  color: state.index == 1
-                                      ? Theme.of(context).primaryColor
-                                      : Colors.blueGrey,
+                                Column(
+                                  children: [
+                                    Icon(
+                                      Icons.comment,
+                                      color: state.index == 1
+                                          ? Theme.of(context).primaryColor
+                                          : Colors.blueGrey,
+                                    ),
+                                    Text(
+                                      "Chats",
+                                      style: TextStyle(
+                                        color: state.index == 1
+                                            ? Theme.of(context).primaryColor
+                                            : Colors.blueGrey,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  "Chats",
-                                  style: TextStyle(
-                                    color: state.index == 1
-                                        ? Theme.of(context).primaryColor
-                                        : Colors.blueGrey,
-                                  ),
+                                BlocBuilder<ChatContactBloc, ChatContactState>(
+                                  builder: (context, state) {
+                                    if (state is ChatContactListLoading) {
+                                      return const Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: SizedBox(
+                                          width: 16,
+                                          height: 16,
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      );
+                                    }
+
+                                    int newMessages = 0;
+                                    if (state is ChatContactListLoaded &&
+                                        state.hasError == false) {
+                                      newMessages = state
+                                          .contactListData!.msgContacts!
+                                          .where((element) =>
+                                              element.unreadMessages! > 0)
+                                          .length;
+                                    }
+                                    if (newMessages > 0) {
+                                      return Positioned(
+                                        right: 0,
+                                        top: 0,
+                                        child: CircleAvatar(
+                                          radius: 8,
+                                          backgroundColor: Colors.blue,
+                                          child: Text(
+                                            newMessages.toString(),
+                                            style: const TextStyle(
+                                              fontSize: 8,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    print("Contact List is 0==========");
+                                    return Container();
+                                  },
                                 )
                               ],
                             ),

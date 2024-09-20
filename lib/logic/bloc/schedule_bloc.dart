@@ -26,11 +26,14 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       } else {
         scheduleEntity = ScheduleEntity.fromJson(response['data']);
         upcoming = scheduleEntity.appList?.upcoming?.values.toList();
-        emit(ScheduleLoaded(
+        emit(
+          ScheduleLoaded(
             hasError: false,
             upComingSchedules: upcoming,
             completedSchedules: completed,
-            cancelledSchedules: cancelled));
+            cancelledSchedules: cancelled,
+          ),
+        );
 
         add(LoadCompletedScheduleEvent());
         add(LoadCancelledScheduleEvent());

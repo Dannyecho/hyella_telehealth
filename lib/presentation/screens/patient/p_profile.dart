@@ -68,10 +68,29 @@ class _PProfileState extends State<PProfile> {
                           width: 100,
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            image: DecorationImage(
+                            /* image: DecorationImage(
                               image: AssetImage("assets/images/1.jpg"),
-                            ),
+                            ), */
                           ),
+                          child:
+                              userDetails.dp == null || userDetails.dp!.isEmpty
+                                  ? CircleAvatar(
+                                      radius: 20,
+                                      backgroundColor: Colors.white,
+                                      child: Icon(
+                                        Icons.person,
+                                        color: Colors.grey[300],
+                                        size: 90,
+                                      ),
+                                    )
+                                  : CachedNetworkImage(
+                                      imageUrl: userDetails.dp!,
+                                      progressIndicatorBuilder:
+                                          (context, url, progress) =>
+                                              CircularProgressIndicator(
+                                        value: progress.progress,
+                                      ),
+                                    ),
                         ),
                         Positioned(
                           bottom: 0,

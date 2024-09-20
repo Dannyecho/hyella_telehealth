@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
 import 'package:hyella_telehealth/core/utils/app_util.dart';
 import 'package:hyella_telehealth/core/utils/http_util.dart';
@@ -28,19 +29,30 @@ class ChatApi {
     }
   }
 
-  Future<ChatListResponseEntity> sensTextMessageToServer(
-      String recieverId, bool isDoctor) async {
+  Future<ChatListResponseEntity> sendTextMessageToServer(
+      String message, String chatKey, String receiverId, bool isDoctor) async {
     try {
-      String publicKey = AppUtil.generateMd5ForApiAuth("app_list_of_doctors");
+      String publicKey = AppUtil.generateMd5ForApiAuth("msg_save_msg");
       String uri = "&token=${AppConstants.token}&public_key=$publicKey";
       if (isDoctor) {
-        uri += "&nwp_request=msgs_get_convo&patient_id=$recieverId";
+        uri += "&nwp_request=msg_save_d_msg";
       } else {
-        uri += "&nwp_request=msg_get_convo&doctor_id=$recieverId";
+        uri += "&nwp_request=msg_save_msg";
+      }
+      /* print(
+          {"message": message, "chat_key": chatKey, "receiver_id": receiverId}); */
+
+      var response = await HttpUtil().post(uri, data: {
+        "message": message,
+        "chat_key": chatKey,
+        "receiver_id": receiverId
+      });
+
+      if (kDebugMode) {
+        print(response);
       }
 
-      var response = await HttpUtil().post(uri);
-      return ChatListResponseEntity.fromMap(response);
+      return ChatListResponseEntity(data: null, type: 0, msg: '');
     } catch (e) {
       return ChatListResponseEntity(
         type: 0,

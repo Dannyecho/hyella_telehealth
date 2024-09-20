@@ -72,4 +72,11 @@ class TypingMessageEvent extends ChatEvent {
   });
 }
 
+class AddNewMessageEvent extends ChatEvent {
+  final String key;
+  final String message;
+
+  AddNewMessageEvent({required this.key, required this.message});
+}
+
 class ClearAllMsgEvent extends ChatEvent {}

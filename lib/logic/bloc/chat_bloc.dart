@@ -96,10 +96,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           toastInfo(msg: chatListResponseEntity.msg);
           return;
         }
+
+        // scrollToBottom();
+        scrollToBottomWithInset(100);
         emit(state.copyWith(
           conversations: chatListResponseEntity.data,
           hasError: false,
         ));
+        // scrollToBottomWithInset(100);
       },
     );
 
@@ -177,6 +181,23 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         emit(state.copyWith(selectedFiles: selectedFiles));
       },
     );
+
+    on<AddNewMessageEvent>(
+      (event, emit) {
+        var msgObj = MsgConversation(
+            id: '',
+            key: event.key,
+            date: DateTime.now().millisecondsSinceEpoch,
+            source: state.chatPageData!.pid,
+            message: event.message,
+            read: false);
+        var newConversations = state.conversations;
+        newConversations!.add(msgObj);
+
+        emit(state.copyWith(conversations: newConversations));
+        scrollToBottomWithInset(0);
+      },
+    );
   }
 
   String get chatKey =>
@@ -198,13 +219,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
       // show loader
       // sendingMessage = true;
-
       if (selectedFiles != null && selectedFiles.isNotEmpty) {
         await sendFileMessage(
-            receiverId: receiverId,
-            isDoctor: isDoctor,
-            selectedFiles: selectedFiles,
-            type: CustomChatType.file);
+          receiverId: receiverId,
+          isDoctor: isDoctor,
+          selectedFiles: selectedFiles,
+          type: CustomChatType.file,
+        );
       }
 
       if (selectedImages != null && selectedImages.isNotEmpty) {
@@ -215,11 +236,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
             type: CustomChatType.image);
       }
 
-      var messageBody =
-          "${message.trim()}${CustomChatType.text.getExtension()}${ChatDelimiters.chatKeyDelimeter}$chatKey";
-
       // Send Text Message if not empty
       if (message.trim().isNotEmpty) {
+        String cKey = chatKey;
+        var messageBody =
+            "${message.trim()}${CustomChatType.text.getExtension()}${ChatDelimiters.chatKeyDelimeter}$cKey";
+        var sendToServer = ChatApi()
+            .sendTextMessageToServer(messageBody, cKey, receiverId, isDoctor);
+
+        add(AddNewMessageEvent(key: cKey, message: message));
+
         var msg = ChatMessage.createTxtSendMessage(
           targetId: receiverId,
           content: message,
@@ -243,7 +269,17 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         ChatClient.getInstance.chatManager.removeMessageEvent(chatKey);
         agoraChatClient.chatManager.sendMessage(msg);
       }
-    } catch (e) {}
+    } catch (e) {
+      toastInfo(msg: "Error on sending message");
+    }
+  }
+
+  void scrollToBottom() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 20),
+      curve: Curves.easeInOut,
+    );
   }
 
   Future<void> sendFileMessage(
@@ -291,14 +327,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   void scrollToBottomWithInset(double insets) {
+    print("Scrolling with inset...");
     Future.delayed(
-      const Duration(milliseconds: 300),
+      const Duration(milliseconds: 500),
       (() {
         scrollController.jumpTo(
           scrollController.position.maxScrollExtent + insets,
         );
       }),
     );
+    print("Scrolling with inset ended....");
   }
 
   void setupListeners() {

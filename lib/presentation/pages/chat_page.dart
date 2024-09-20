@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/data/repository/entities/chat_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/chat_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/chat_contact_bloc.dart';
 import 'package:hyella_telehealth/presentation/pages/widgets/chat_item.dart';
 import 'package:hyella_telehealth/presentation/pages/widgets/chat_widgets.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
@@ -36,10 +37,20 @@ class _ChatPageState extends State<ChatPage> {
     context.read<ChatBloc>().add(LeaveChatEvent());
   }
 
+  void setReadReceipt(BuildContext context) {
+    context.read<ChatContactBloc>().add(
+          SetReadCountToZeroEvent(
+            chatKey: widget.data.key!,
+            receiverId: widget.data.receiverId!,
+            isDoctor: widget.data.isDoctor!,
+          ),
+        );
+    // context.read<ChatBloc>().scrollToBottomWithInset(100);
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(widget.data.receiverId);
-
+    // print(widget.data.receiverId);
     return Scaffold(
         backgroundColor: const Color.fromARGB(255, 92, 75, 75).withOpacity(.5),
         appBar: AppBar(
@@ -127,6 +138,8 @@ class _ChatPageState extends State<ChatPage> {
                             state.groupedByDateCoversations.keys.toList();
                         List groupMsgValues =
                             state.groupedByDateCoversations.values.toList();
+                        setReadReceipt(context);
+
                         return Column(
                           children: [
                             Expanded(

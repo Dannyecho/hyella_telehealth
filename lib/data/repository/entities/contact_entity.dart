@@ -107,7 +107,7 @@ class MsgContact {
   final String? fcmToken;
   final String? channelName;
   final String? picture;
-  final int? unreadMessages;
+  int? unreadMessages;
   final String? subTitle;
   final String? lastMessage;
 

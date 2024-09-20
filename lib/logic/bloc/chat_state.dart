@@ -75,7 +75,7 @@ class ChatState {
       }
     }
 
-    print(returnVal);
+    // print(returnVal);
     return returnVal;
   }
 }

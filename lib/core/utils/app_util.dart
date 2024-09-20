@@ -66,7 +66,7 @@ class AppUtil {
       input = input.replaceAll(delimitter.toString(), '');
     }
 
-    return input;
+    return input.trim();
   }
 }
 

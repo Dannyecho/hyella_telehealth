@@ -29,7 +29,7 @@ class LabResultEntity {
 
   Map<String, dynamic> toJson() => {
         "key": key,
-        "data": data.map((x) => x?.toJson()).toList(),
+        "data": data.map((x) => x.toJson()).toList(),
       };
 
   @override

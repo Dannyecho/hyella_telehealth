@@ -7,6 +7,7 @@ import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/chat_contact_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/endpoint_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/form_builder_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
 
 // Global key to access the scaffold messenger
@@ -16,6 +17,7 @@ final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
 void main() async {
   print("===============In Main===============");
   await Global.init();
+
   runApp(const MyApp());
 }
 
@@ -27,6 +29,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -41,7 +48,12 @@ class _MyAppState extends State<MyApp> {
           create: (context) => AppBloc(),
         ),
         BlocProvider(
+          create: (context) => ScheduleBloc(),
+          lazy: false,
+        ),
+        BlocProvider(
           create: (context) => ChatContactBloc(),
+          lazy: false,
         ),
       ],
       child: MaterialApp(

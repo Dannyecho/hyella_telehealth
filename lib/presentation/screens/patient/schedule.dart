@@ -4,7 +4,6 @@ import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/utils/app_util.dart';
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
-import 'package:hyella_telehealth/presentation/route/app_route.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/widgets/cancelled_schedules.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/widgets/completed_schedules.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/widgets/shedule_shimmer.dart';
@@ -27,7 +26,9 @@ class _ScheduleState extends State<Schedule>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    context.read<ScheduleBloc>().add(LoadUpComingScheduleEvent());
+    if (context.read<ScheduleBloc>().state is! ScheduleLoaded) {
+      context.read<ScheduleBloc>().add(LoadUpComingScheduleEvent());
+    }
   }
 
   @override

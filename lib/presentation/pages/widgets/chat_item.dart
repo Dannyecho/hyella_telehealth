@@ -5,7 +5,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:custom_clippers/custom_clippers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hyella_telehealth/core/utils/app_util.dart';
 import 'package:hyella_telehealth/data/repository/entities/chat_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/chat_bloc.dart';
 import 'package:image_preview/preview.dart';
@@ -42,152 +41,160 @@ class _ChatItemState extends State<ChatItem> {
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.of(context).size.width;
     final chatBloc = context.read<ChatBloc>();
+    double chatBoxWidth =
+        widget.chatModel.message!.trim().length.toDouble() * 50.0;
+
+    if (chatBoxWidth > deviceWidth * .6 ||
+        widget.chatModel.chatType != CustomChatType.text) {
+      chatBoxWidth = deviceWidth * .6;
+    }
+    /*  print(widget.chatModel.message);
+    print(widget.chatModel.message!.length);
+    print(chatBoxWidth); */
+
     return Container(
       alignment: (widget.chatModel.source == widget.pid)
           ? Alignment.centerRight
           : Alignment.centerLeft,
       margin: EdgeInsets.only(top: widget.newLine ? 15 : 5, bottom: 5),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minWidth: 10,
-          maxWidth: deviceWidth * .6,
-        ),
-        child: ClipPath(
-          clipper: (widget.chatModel.source == widget.pid)
-              ? UpperNipMessageClipperTwo(MessageType.send)
-              : UpperNipMessageClipperTwo(MessageType.receive),
-          child: Container(
-            padding: (widget.chatModel.source == widget.pid)
-                ? const EdgeInsets.only(left: 6, top: 6, bottom: 6, right: 20)
-                : const EdgeInsets.only(left: 20, top: 6, bottom: 6, right: 6),
-            decoration: BoxDecoration(
-              color: !(widget.chatModel.source == widget.pid)
-                  ? Colors.white
-                  : Colors.green[100],
-              boxShadow: const [BoxShadow(blurRadius: 3, color: Colors.grey)],
-              borderRadius: BorderRadius.circular(
-                10,
-              ),
+      child: ClipPath(
+        clipper: (widget.chatModel.source == widget.pid)
+            ? UpperNipMessageClipperTwo(MessageType.send)
+            : UpperNipMessageClipperTwo(MessageType.receive),
+        child: Container(
+          // width: chatBoxWidth,
+          constraints: BoxConstraints(
+            minWidth: 80,
+            maxWidth: chatBoxWidth,
+          ),
+          padding: (widget.chatModel.source == widget.pid)
+              ? const EdgeInsets.only(left: 6, top: 6, bottom: 6, right: 20)
+              : const EdgeInsets.only(left: 20, top: 6, bottom: 6, right: 6),
+          decoration: BoxDecoration(
+            color: !(widget.chatModel.source == widget.pid)
+                ? Colors.white
+                : Colors.green[100],
+            boxShadow: const [BoxShadow(blurRadius: 3, color: Colors.grey)],
+            borderRadius: BorderRadius.circular(
+              10,
             ),
-            child: widget.chatModel.isDeleted!
-                ? const Text(
-                    "This message is deleted",
-                    style: TextStyle(fontSize: 14, color: Colors.black54),
-                  )
-                : GestureDetector(
-                    onLongPress: () {
-                      showModalBottomSheet(
-                        context: context,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
-                          ),
+          ),
+          child: widget.chatModel.isDeleted!
+              ? const Text(
+                  "This message is deleted",
+                  style: TextStyle(fontSize: 14, color: Colors.black54),
+                )
+              : GestureDetector(
+                  onLongPress: () {
+                    showModalBottomSheet(
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
                         ),
-                        builder: (context) => Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ListTile(
-                              onTap: () {
-                                chatBloc.add(DeleteChatEvent(
-                                    chatKey: widget.chatModel.key!));
-                                Navigator.pop(context);
-                              },
-                              title: const Text(
-                                "Delete",
-                                style:
-                                    TextStyle(fontSize: 12, color: Colors.red),
-                              ),
-                              trailing: const Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        SizedBox(
-                          width: deviceWidth * .8,
-                          child: FutureBuilder<Widget>(
-                            future: showChat(context, widget.chatModel),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Shimmer(
-                                  gradient: const LinearGradient(
-                                    colors: [Colors.black45, Colors.white],
-                                  ),
-                                  child: Container(
-                                    color: Colors.white,
-                                    width: deviceWidth * .7,
-                                  ),
-                                );
-                              } else if (snapshot.hasData) {
-                                return snapshot.data!;
-                              }
-
-                              return const SizedBox();
+                      ),
+                      builder: (context) => Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            onTap: () {
+                              chatBloc.add(DeleteChatEvent(
+                                  chatKey: widget.chatModel.key!));
+                              Navigator.pop(context);
                             },
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Container(
-                              alignment: Alignment.bottomRight,
-                              child: Text(
-                                dateFormat.format(
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                    widget.chatModel.date!,
-                                  ),
+                            title: const Text(
+                              "Delete",
+                              style: TextStyle(fontSize: 12, color: Colors.red),
+                            ),
+                            trailing: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        width: deviceWidth * .8,
+                        child: FutureBuilder<Widget>(
+                          future: showChat(context, widget.chatModel),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Shimmer(
+                                gradient: const LinearGradient(
+                                  colors: [Colors.black45, Colors.white],
                                 ),
-                                style: const TextStyle(
-                                  fontSize: 10,
+                                child: Container(
+                                  color: Colors.white,
+                                  width: deviceWidth * .7,
                                 ),
+                              );
+                            } else if (snapshot.hasData) {
+                              return snapshot.data!;
+                            }
+
+                            return const SizedBox();
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            alignment: Alignment.bottomRight,
+                            child: Text(
+                              dateFormat.format(
+                                DateTime.fromMillisecondsSinceEpoch(
+                                  widget.chatModel.date!,
+                                ),
+                              ),
+                              style: const TextStyle(
+                                fontSize: 10,
                               ),
                             ),
-                            const SizedBox(width: 5),
-                            widget.chatModel.read!
-                                ? SizedBox(
-                                    width: 20,
-                                    child: Stack(
-                                      children: [
-                                        Icon(
+                          ),
+                          const SizedBox(width: 5),
+                          widget.chatModel.read!
+                              ? SizedBox(
+                                  width: 20,
+                                  child: Stack(
+                                    children: [
+                                      Icon(
+                                        Icons.check,
+                                        size: 16,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      Positioned(
+                                        top: 1,
+                                        left: 5,
+                                        child: Icon(
                                           Icons.check,
                                           size: 16,
                                           color: Theme.of(context).primaryColor,
                                         ),
-                                        Positioned(
-                                          top: 1,
-                                          left: 5,
-                                          child: Icon(
-                                            Icons.check,
-                                            size: 16,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                : const Icon(
-                                    Icons.check,
-                                    size: 16,
-                                    color: Colors.black45,
-                                  )
-                          ],
-                        ),
-                      ],
-                    ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : const Icon(
+                                  Icons.check,
+                                  size: 16,
+                                  color: Colors.black45,
+                                )
+                        ],
+                      ),
+                    ],
                   ),
-          ),
+                ),
         ),
       ),
     );
@@ -197,7 +204,7 @@ class _ChatItemState extends State<ChatItem> {
       BuildContext context, MsgConversation chatModel) async {
     if (chatModel.chatType == CustomChatType.text) {
       return Text(
-        AppUtil.stripGetChat(chatModel.message!, chatModel.key!),
+        chatModel.message!,
         style: const TextStyle(
           fontSize: 14,
         ),
@@ -238,7 +245,6 @@ class _ChatItemState extends State<ChatItem> {
         filePath: downloadPath,
       ).preview();
     }
-    print("Sizedbox chat");
     return const SizedBox();
   }
 }

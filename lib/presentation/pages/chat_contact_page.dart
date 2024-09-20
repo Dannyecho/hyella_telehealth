@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/data/repository/entities/chat_entity.dart';
 import 'package:hyella_telehealth/data/repository/entities/contact_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
@@ -28,6 +27,7 @@ class _ChatContactPageState extends State<ChatContactPage> {
       contactList = state.contactListData!.msgContacts;
       return;
     }
+
     context.read<ChatContactBloc>().add(LoadContactListEvent());
   }
 
