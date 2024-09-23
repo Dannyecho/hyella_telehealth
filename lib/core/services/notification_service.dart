@@ -12,7 +12,6 @@ import 'package:hyella_telehealth/firebase_options.dart';
 import 'package:hyella_telehealth/logic/bloc/chat_contact_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
-import 'package:hyella_telehealth/presentation/widgets/toast_info.dart';
 
 class NotificationService {
   static final _instance = NotificationService._internal();
@@ -23,7 +22,7 @@ class NotificationService {
     return _instance;
   }
 
-  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  // final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   AndroidNotificationChannel channel = const AndroidNotificationChannel(

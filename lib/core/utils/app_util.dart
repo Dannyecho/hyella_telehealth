@@ -75,9 +75,6 @@ class AppUtil {
     EndPointEntityData? endpoint = Global.storageService.getEndpoints();
     String? clientID = Global.storageService.getClientId();
 
-    print(clientID);
-    print(endpoint!.privateKey!);
-
     return generateMd5(clientID! + endpoint!.privateKey! + token);
   }
 }
