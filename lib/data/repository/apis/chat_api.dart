@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:hyella_telehealth/core/constants/app_constants.dart';
 import 'package:hyella_telehealth/core/utils/app_util.dart';
 import 'package:hyella_telehealth/core/utils/http_util.dart';
 import 'package:hyella_telehealth/data/repository/entities/chat_entity.dart';
