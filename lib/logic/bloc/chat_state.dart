@@ -5,7 +5,7 @@ class ChatState {
   final String userId;
   final String token;
   final List<MsgConversation>? conversations;
-  final ChatClient? agoraChatClient;
+  // final ChatClient? agoraChatClient;
   final bool isJoined;
   final ChatPageData? chatPageData;
   final String? msgContent;
@@ -21,7 +21,7 @@ class ChatState {
     required this.token,
     required this.isJoined,
     this.chatPageData,
-    this.agoraChatClient,
+    // this.agoraChatClient,
     this.conversations,
     this.msgContent,
     required this.selectedImages,
@@ -33,7 +33,7 @@ class ChatState {
     String? appKey,
     String? userId,
     String? token,
-    ChatClient? agoraChatClient,
+    // ChatClient? agoraChatClient,
     bool? isJoined,
     bool? hasError,
     List<MsgConversation>? conversations,
@@ -50,7 +50,7 @@ class ChatState {
       token: token ?? this.token,
       isJoined: isJoined ?? this.isJoined,
       chatPageData: chatPageData ?? this.chatPageData,
-      agoraChatClient: agoraChatClient ?? this.agoraChatClient,
+      // agoraChatClient: agoraChatClient ?? this.agoraChatClient,
       conversations: conversations ?? this.conversations,
       msgContent: msgContent ?? this.msgContent,
       selectedImages: selectedImages ?? this.selectedImages,

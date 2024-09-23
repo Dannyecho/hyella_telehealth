@@ -80,7 +80,7 @@ class _WebViewerScreenState extends State<WebViewerScreen> {
               return NavigationDecision.prevent;
             }
             if (widget.webViewScreenType == WebViewScreenType.appointment &&
-                request.url.contains("status=completed")) {
+                request.url.contains("&nwp_mobile_reload_chat=1")) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text("Appointment Booked Successfully!"),
@@ -89,7 +89,7 @@ class _WebViewerScreenState extends State<WebViewerScreen> {
               );
               Navigator.pushNamedAndRemoveUntil(
                   context, AppRoute.home, (predicate) => false,
-                  arguments: 2);
+                  arguments: 0);
             }
             debugPrint('allowing navigation to ${request.url}');
             return NavigationDecision.navigate;

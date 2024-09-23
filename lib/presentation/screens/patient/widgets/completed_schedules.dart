@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/data/repository/entities/schedule_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
 
@@ -79,6 +80,7 @@ class _CompletedScheduleState extends State<CompletedSchedule> {
                             ),
                             elevation: 3,
                             shadowColor: Colors.black38,
+                            color: (AppColors2.color3 as Color).withOpacity(.4),
                             child: Padding(
                               padding: const EdgeInsets.all(20.0),
                               child: Column(
@@ -91,20 +93,34 @@ class _CompletedScheduleState extends State<CompletedSchedule> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            schedule.title!,
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .6,
+                                            child: Text(
+                                              schedule.title!,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
                                           ),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          Text(
-                                            schedule.subTitle ?? "",
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.black45),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .6,
+                                            child: Text(
+                                              schedule.subTitle ?? "",
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.black45),
+                                            ),
                                           )
                                         ],
                                       ),

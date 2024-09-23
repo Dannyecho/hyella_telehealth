@@ -11,7 +11,7 @@ class ChatApi {
       String recieverId, bool isDoctor) async {
     try {
       String publicKey = AppUtil.generateMd5ForApiAuth("app_list_of_doctors");
-      String uri = "&token=${AppConstants.token}&public_key=$publicKey";
+      String uri = "&public_key=$publicKey";
       if (isDoctor) {
         uri += "&nwp_request=msgs_get_convo&patient_id=$recieverId";
       } else {
@@ -33,7 +33,7 @@ class ChatApi {
       String message, String chatKey, String receiverId, bool isDoctor) async {
     try {
       String publicKey = AppUtil.generateMd5ForApiAuth("msg_save_msg");
-      String uri = "&token=${AppConstants.token}&public_key=$publicKey";
+      String uri = "&public_key=$publicKey";
       if (isDoctor) {
         uri += "&nwp_request=msg_save_d_msg";
       } else {
@@ -66,8 +66,7 @@ class ChatApi {
       {required Map<String, dynamic> files, receiverId}) async {
     try {
       String publicKey = AppUtil.generateMd5ForApiAuth("file_upload");
-      String uri =
-          "&nwp_request=file_upload&token=${AppConstants.token}&public_key=$publicKey";
+      String uri = "&nwp_request=file_upload&public_key=$publicKey";
       Map<String, String> params = {
         'expiry_in_minutes': "30",
         'readonly': '1',
@@ -92,7 +91,7 @@ class ChatApi {
     try {
       String publicKey = AppUtil.generateMd5ForApiAuth("app_list_of_doctors");
       String uri =
-          "&nwp_request=msg_del&token=${AppConstants.token}&public_key=$publicKey&chat_key=$chatKey";
+          "&nwp_request=msg_del&public_key=$publicKey&chat_key=$chatKey";
       var response = await HttpUtil().post(uri);
       return print("Deleting $chatKey response: $response===============");
     } catch (e) {

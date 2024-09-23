@@ -12,8 +12,7 @@ class MsgContactApi {
         ? "&nwp_request=msgs_read&patient_id=$receiverId"
         : "&nwp_request=msg_read&doctor_id=$receiverId";
 
-    uri +=
-        "&token=${AppConstants.token}&public_key=$publicKey&chat_key=$chatKey";
+    uri += "&public_key=$publicKey&chat_key=$chatKey";
     print(uri);
 
     return await HttpUtil().post(uri);
@@ -23,8 +22,7 @@ class MsgContactApi {
   Future<MsgContactListResponse?> getContactList() async {
     try {
       String publicKey = AppUtil.generateMd5ForApiAuth("app_list_of_doctors");
-      String uri =
-          "&nwp_request=msg_contact_list&token=${AppConstants.token}&public_key=$publicKey";
+      String uri = "&nwp_request=msg_contact_list&public_key=$publicKey";
       var response = await HttpUtil().post(uri);
       return MsgContactListResponse.fromJson(response);
     } catch (e) {

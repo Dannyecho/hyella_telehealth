@@ -316,6 +316,7 @@ class Service {
     required this.menuKey,
     required this.appointmentLabel,
     required this.picture,
+    required this.endpoint,
   });
 
   final String? key;
@@ -325,6 +326,7 @@ class Service {
   final String? menuKey;
   final String? appointmentLabel;
   final String? picture;
+  final String? endpoint;
 
   Service copyWith({
     String? key,
@@ -334,6 +336,7 @@ class Service {
     String? menuKey,
     String? appointmentLabel,
     String? picture,
+    String? endpoint,
   }) {
     return Service(
       key: key ?? this.key,
@@ -343,6 +346,7 @@ class Service {
       menuKey: menuKey ?? this.menuKey,
       appointmentLabel: appointmentLabel ?? this.appointmentLabel,
       picture: picture ?? this.picture,
+      endpoint: endpoint ?? this.endpoint,
     );
   }
 
@@ -355,6 +359,7 @@ class Service {
       menuKey: json["menu_key"],
       appointmentLabel: json["appointment_label"],
       picture: json["picture"],
+      endpoint: json["endpoint"],
     );
   }
 
@@ -366,11 +371,12 @@ class Service {
         "menu_key": menuKey,
         "appointment_label": appointmentLabel,
         "picture": picture,
+        "endpoint": endpoint,
       };
 
   @override
   String toString() {
-    return "$key, $icon, $title, $subTitle, $menuKey, $appointmentLabel, $picture, ";
+    return "$key, $icon, $title, $subTitle, $menuKey, $appointmentLabel, $picture, $endpoint, ";
   }
 }
 
@@ -704,6 +710,8 @@ class WebViews {
     required this.schedule,
     required this.home,
     required this.videoChat,
+    required this.bookAppointment,
+    required this.rescheduleAppointment,
   });
 
   final AppBook? chat;
@@ -715,6 +723,8 @@ class WebViews {
   final AppBook? schedule;
   final AppBook? home;
   final AppBook? videoChat;
+  final AppBook? bookAppointment;
+  final AppBook? rescheduleAppointment;
 
   WebViews copyWith({
     AppBook? chat,
@@ -726,6 +736,8 @@ class WebViews {
     AppBook? schedule,
     AppBook? home,
     AppBook? videoChat,
+    AppBook? bookAppointment,
+    AppBook? rescheduleAppointment,
   }) {
     return WebViews(
       chat: chat ?? this.chat,
@@ -737,6 +749,9 @@ class WebViews {
       schedule: schedule ?? this.schedule,
       home: home ?? this.home,
       videoChat: videoChat ?? this.videoChat,
+      bookAppointment: bookAppointment ?? this.bookAppointment,
+      rescheduleAppointment:
+          rescheduleAppointment ?? this.rescheduleAppointment,
     );
   }
 
@@ -758,6 +773,12 @@ class WebViews {
       videoChat: json["video_chat"] == null
           ? null
           : AppBook.fromJson(json["video_chat"]),
+      bookAppointment: json["book_appointment"] == null
+          ? null
+          : AppBook.fromJson(json["book_appointment"]),
+      rescheduleAppointment: json["reschedule_appointment"] == null
+          ? null
+          : AppBook.fromJson(json["reschedule_appointment"]),
     );
   }
 
@@ -771,11 +792,13 @@ class WebViews {
         "schedule": schedule?.toJson(),
         "home": home?.toJson(),
         "video_chat": videoChat?.toJson(),
+        "book_appointment": bookAppointment?.toJson(),
+        "reschedule_appointment": rescheduleAppointment?.toJson(),
       };
 
   @override
   String toString() {
-    return "$chat, $chatMsg, $appBook, $services, $more, $profile, $schedule, $home, $videoChat, ";
+    return "$chat, $chatMsg, $appBook, $services, $more, $profile, $schedule, $home, $videoChat, $bookAppointment, $rescheduleAppointment, ";
   }
 }
 

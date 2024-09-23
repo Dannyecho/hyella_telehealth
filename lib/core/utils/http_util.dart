@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
 import 'package:hyella_telehealth/core/global.dart';
+import 'package:hyella_telehealth/core/utils/app_util.dart';
 
 class HttpUtil {
   late final Dio _dio;
@@ -52,16 +53,22 @@ class HttpUtil {
     var authorization = getAuthorizationHeader();
     String? pidParam = '&pid=';
     String? cidParam = '&cid=';
+    String? token = AppConstants.token;
+    String? hash = AppUtil.getHashKey(token);
+
     pidParam += Global.storageService.getUserToken() ?? '';
     cidParam += Global.storageService.getClientId() ?? '';
+
+    token = "&token=$token";
+    hash = "&hash=$hash";
 
     if (authorization != null) {
       requestOptions.headers!.addAll(authorization);
     }
 
-    // print(path + pidParam + cidParam + '--------------Path');
+    print(path + pidParam + cidParam + token + hash + '--------------Path');
     Response response = await _dio.post(
-      path + pidParam + cidParam,
+      path + pidParam + cidParam + token + hash,
       data: data,
       queryParameters: queryParameters,
     );

@@ -6,8 +6,7 @@ class ScheduleApi {
   Future<Map<String, dynamic>> fetchUpComingSchedules() async {
     try {
       String publicKey = AppUtil.generateMd5ForApiAuth("app_l_upcoming");
-      String uri =
-          "&nwp_request=app_l_upcoming&token=${AppConstants.token}&public_key=$publicKey";
+      String uri = "&nwp_request=app_l_upcoming&public_key=$publicKey";
       var response = await HttpUtil().post(uri) as Map<String, dynamic>;
       return response;
     } catch (e) {
@@ -18,8 +17,7 @@ class ScheduleApi {
   Future<Map<String, dynamic>> fetchCompletedSchedules() async {
     try {
       String publicKey = AppUtil.generateMd5ForApiAuth("app_l_upcoming");
-      String uri =
-          "&nwp_request=app_l_completed&token=${AppConstants.token}&public_key=$publicKey";
+      String uri = "&nwp_request=app_l_completed&public_key=$publicKey";
       var response = await HttpUtil().post(uri) as Map<String, dynamic>;
       return response;
     } catch (e) {
@@ -30,8 +28,7 @@ class ScheduleApi {
   Future<Map<String, dynamic>> fetchCancelledSchedules() async {
     try {
       String publicKey = AppUtil.generateMd5ForApiAuth("app_l_upcoming");
-      String uri =
-          "&nwp_request=app_l_cancelled&token=${AppConstants.token}&public_key=$publicKey";
+      String uri = "&nwp_request=app_l_cancelled&public_key=$publicKey";
       var response = await HttpUtil().post(uri) as Map<String, dynamic>;
       return response;
     } catch (e) {
@@ -44,7 +41,7 @@ class ScheduleApi {
       String publicKey = AppUtil.generateMd5ForApiAuth("app_list_cancel");
 
       String uri =
-          "&nwp_request=app_list_cancel&token=${AppConstants.token}&public_key=$publicKey&appointment_ref=$appRef";
+          "&nwp_request=app_list_cancel&public_key=$publicKey&appointment_ref=$appRef";
 
       var response = await HttpUtil().post(uri);
       return response;

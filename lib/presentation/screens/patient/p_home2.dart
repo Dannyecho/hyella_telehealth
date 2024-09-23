@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
+import 'package:hyella_telehealth/core/global.dart';
+import 'package:hyella_telehealth/data/repository/entities/endpoint_entity.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
@@ -20,10 +22,12 @@ class _PHome2State extends State<PHome2> {
   late User appUser;
   late Home appServices;
   late Cards appCards;
+  EndPointEntityData? endpointData = Global.storageService.getEndpoints();
   @override
   void initState() {
     super.initState();
     appData = context.read<AppBloc>().state.appData;
+
     if (appData?.user != null) {
       appUser = appData!.user!;
     }
@@ -82,7 +86,7 @@ class _PHome2State extends State<PHome2> {
                       child: DashboardHeader(
                         balance: appUser.userNameSubtitle ?? "",
                         context: context,
-                        name: appUser.initial ?? "",
+                        name: endpointData!.client!.name ?? "",
                         logoUri: (appUser.dp == null || appUser.dp!.isEmpty)
                             ? null
                             : appUser.dp,
@@ -98,11 +102,13 @@ class _PHome2State extends State<PHome2> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              if (appData!.webViews?.appBook?.webview == 1) {
+                              if (appData!.webViews?.bookAppointment?.webview ==
+                                  1) {
                                 Navigator.of(context)
                                     .pushNamed(AppRoute.webView, arguments: {
-                                  'url': appData!.webViews!.appBook!.endpoint!,
-                                  'title': 'App Book',
+                                  'url': appData!
+                                      .webViews!.bookAppointment!.endpoint!,
+                                  'title': 'Book Appointment',
                                 });
                                 return;
                               }

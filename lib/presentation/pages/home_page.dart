@@ -11,8 +11,8 @@ import 'package:hyella_telehealth/presentation/screens/doctor_screen.dart';
 import 'package:hyella_telehealth/presentation/screens/patient_screen2.dart';
 
 class HomePage extends StatefulWidget {
-  int? currentScreen = 0;
-  HomePage({super.key, this.currentScreen});
+  final int? currentScreen;
+  const HomePage({super.key, this.currentScreen});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -40,32 +40,37 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _listenToConnectivity() async {
-    Connectivity()
-        .onConnectivityChanged
-        .listen((List<ConnectivityResult> result) {
-      // Received changes in available connectivity types!
-      // Display a Snackbar on connectivity change
-      if (result.contains(ConnectivityResult.none)) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(
-              _getConnectivityMessage(ConnectivityResult.none),
+    var counts = 0;
+    Future.delayed(const Duration(seconds: 3), () {
+      Connectivity()
+          .onConnectivityChanged
+          .listen((List<ConnectivityResult> result) {
+        // Received changes in available connectivity types!
+        // Display a Snackbar on connectivity change
+        if (result.contains(ConnectivityResult.none)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.red,
+              content: Text(
+                _getConnectivityMessage(ConnectivityResult.none),
+              ),
+              duration: const Duration(seconds: 2),
             ),
-            duration: const Duration(seconds: 2),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            backgroundColor: Colors.green,
-            content: Text(
-              "Connection Restored",
-            ),
-            duration: Duration(seconds: 2),
-          ),
-        );
-      }
+          );
+        } else {
+          if (counts++ > 0) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                backgroundColor: Colors.green,
+                content: Text(
+                  "Connection Restored",
+                ),
+                duration: Duration(seconds: 2),
+              ),
+            );
+          }
+        }
+      });
     });
   }
 

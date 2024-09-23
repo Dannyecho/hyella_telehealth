@@ -10,10 +10,12 @@ import 'package:hyella_telehealth/logic/bloc/appointment_step_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/chat_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/emr_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/lab_result_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/profile_edit_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/services_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/sign_in_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/web_view_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/welcome_bloc.dart';
+import 'package:hyella_telehealth/presentation/pages/404.dart';
 import 'package:hyella_telehealth/presentation/pages/chat_page.dart';
 import 'package:hyella_telehealth/presentation/pages/emr_page.dart';
 import 'package:hyella_telehealth/presentation/pages/home_page.dart';
@@ -42,9 +44,12 @@ class AppRoute {
   static const String emr = 'emr';
   static const String labResult = 'labResult';
   static const String chat = 'chat';
+  static const String page404 = 'page404';
 
   static Route? onGenerateRoute(RouteSettings rSettings) {
     switch (rSettings.name) {
+      case page404:
+        return MaterialPageRoute(builder: (context) => const Page404());
       case chat:
         var arguments = rSettings.arguments as ChatPageData;
         return MaterialPageRoute(
@@ -101,7 +106,10 @@ class AppRoute {
                 ));
       case editProfile:
         return MaterialPageRoute(
-          builder: (context) => const PEditProfile(),
+          builder: (context) => BlocProvider(
+            create: (context) => ProfileEditBloc(),
+            child: const PEditProfile(),
+          ),
         );
       case webView:
         var arguements = rSettings.arguments as Map<String, dynamic>;

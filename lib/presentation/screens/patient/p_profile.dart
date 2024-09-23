@@ -32,7 +32,7 @@ class _PProfileState extends State<PProfile> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Profile",
+          "More",
           style: TextStyle(fontSize: 16),
         ),
         centerTitle: true,

@@ -12,6 +12,7 @@ class ProfileController {
         color: AppColors2.color1,
       ),
       maskType: EasyLoadingMaskType.clear,
+      dismissOnTap: true,
     );
 
     var response = await ProfileApi().updateProfie(url, formData);

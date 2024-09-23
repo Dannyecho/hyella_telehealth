@@ -1,4 +1,4 @@
-import 'package:agora_chat_sdk/agora_chat_sdk.dart';
+// import 'package:agora_chat_sdk/agora_chat_sdk.dart';
 import 'package:bloc/bloc.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +20,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Data? appdata = Global.storageService.getAppData();
   String tempAppKey = '6e1ee3344b4344ffba2e0c4005d17c9c';
   String tempAppToken =
-      '007eJxTYJg85VKcdfutCWVc7spxTGdr9510cYjaGST5fSqX8vdX92MVGMxSDVNTjY1NTJJMgERaWlKiUapBsomBgWmKoXmyZbLblpdpDYGMDJN4zFgYGVgZGBmYGEB8BgYAgZQdZw==';
-  late ChatClient agoraChatClient;
+      '007eJxTYFgUdX3l4ldHrJ8qaWs99tgf5XyT+VVC4DtW/pBX1fl+VYsVGMxSDVNTjY1NTJJMgERaWlKiUapBsomBgWmKoXmyZXKo4fu0hkBGBr1zB5kZGVgZGBmYGEB8BgYAwtAeYg==';
+  // late ChatClient agoraChatClient;
 
   ChatBloc()
       : super(ChatState(
@@ -38,11 +38,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<InitializeChatEvent>((event, emit) {
       emit(state.copyWith(chatPageData: event.chatPageData));
       try {
-        setupChatClient(appEndpoints!.agoraApiKey!);
+        // setupChatClient(appEndpoints!.agoraApiKey!);
         // Login to Agora
-        add(JoinChatEvent());
+        // add(JoinChatEvent());
         // Setup chat listeners
-        setupListeners();
+        // setupListeners();
         // Fetch conversation from server
         add(GetChatConversationEvent());
       } catch (e) {
@@ -52,7 +52,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     on<JoinChatEvent>(
       (event, emit) async {
-        if (!state.isJoined) {
+        /* if (!state.isJoined) {
           // Log in
           try {
             await agoraChatClient.loginWithAgoraToken(
@@ -68,20 +68,22 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
               print("Error here======================");
             }
           }
-        }
+        } */
       },
     );
 
     on<LeaveChatEvent>(
       (event, emit) async {
-        // Log out
-        try {
-          await agoraChatClient.logout(true);
-          print("Logged out successfully");
-          emit(state.copyWith(isJoined: false));
-        } on ChatError catch (e) {
-          toastInfo(msg: e.description);
-        }
+        /*   // Log out
+        if (state.isJoined) {
+          try {
+            await agoraChatClient.logout(true);
+            print("Logged out successfully");
+            emit(state.copyWith(isJoined: false));
+          } on ChatError catch (e) {
+            toastInfo(msg: e.description);
+          }
+        } */
       },
     );
 
@@ -246,7 +248,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
         add(AddNewMessageEvent(key: cKey, message: message));
 
-        var msg = ChatMessage.createTxtSendMessage(
+        /* var msg = ChatMessage.createTxtSendMessage(
           targetId: receiverId,
           content: message,
         );
@@ -267,7 +269,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           ),
         );
         ChatClient.getInstance.chatManager.removeMessageEvent(chatKey);
-        agoraChatClient.chatManager.sendMessage(msg);
+        agoraChatClient.chatManager.sendMessage(msg); */
       }
     } catch (e) {
       toastInfo(msg: "Error on sending message");
@@ -315,7 +317,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         isDoctor: isDoctor));
   }
 
-  void setupChatClient(String appKey) async {
+/*   void setupChatClient(String appKey) async {
     ChatOptions options = ChatOptions(
       appKey: tempAppKey,
       autoLogin: false,
@@ -325,7 +327,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     // Notify the SDK that the Ul is ready. After the following method is executed, callbacks within ChatRoomEventHandler and ChatGroupEventHandler can be triggered.
     await ChatClient.getInstance.startCallback();
   }
-
+ */
   void scrollToBottomWithInset(double insets) {
     print("Scrolling with inset...");
     Future.delayed(
@@ -340,7 +342,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   void setupListeners() {
-    agoraChatClient.addConnectionEventHandler(
+    /* agoraChatClient.addConnectionEventHandler(
       "CONNECTION_HANDLER",
       ConnectionEventHandler(
           onConnected: onConnected,
@@ -352,11 +354,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     agoraChatClient.chatManager.addEventHandler(
       "MESSAGE_HANDLER",
       ChatEventHandler(onMessagesReceived: onMessagesReceived),
-    );
+    ); */
   }
 
-  void onMessagesReceived(List<ChatMessage> messages) {
-    /* for (var msg in messages) {
+  /*void onMessagesReceived(List<ChatMessage> messages) {
+     for (var msg in messages) {
       if (msg.body.type == MessageType.TXT) {
         ChatTextMessageBody body = msg.body as ChatTextMessageBody;
         displayMessage(body.content, false);
@@ -365,8 +367,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         String msgType = msg.body.type.name;
         showLog("Received $msgType message, from ${msg.from}");
       }
-    } */
-  }
+    } 
+  }*/
 
   void onTokenWillExpire() {
     // The token is about to expire. Get a new token

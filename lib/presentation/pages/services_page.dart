@@ -100,6 +100,16 @@ class _ServicesPageState extends State<ServicesPage> {
 
                                 return ListTile(
                                   onTap: () {
+                                    if (itemService.endpoint != null &&
+                                        itemService.endpoint!.isNotEmpty) {
+                                      Navigator.pushNamed(
+                                          context, AppRoute.webView,
+                                          arguments: {
+                                            'title': itemService.title,
+                                            'url': itemService.endpoint!
+                                          });
+                                      return;
+                                    }
                                     Navigator.pushNamed(
                                         context, AppRoute.service,
                                         arguments: {

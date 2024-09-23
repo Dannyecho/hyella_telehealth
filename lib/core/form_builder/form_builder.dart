@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hyella_telehealth/core/constants/app_colors.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/form_builder/form_widgets/checkbox_field_builder.dart';
 import 'package:hyella_telehealth/core/form_builder/form_widgets/radio_field_builder.dart';
@@ -89,7 +88,7 @@ final class FormBuilder {
         case "html":
         case "color":
         default:
-          return Text("Unsupported form field");
+          return const Text("Unsupported form field");
       }
     }).toList();
   }
@@ -97,11 +96,11 @@ final class FormBuilder {
   Map<String, dynamic>? get formData {
     var cachedData = context.read<FormBuilderBloc>().state.formData;
     Map<String, dynamic> returnData = {};
-    cachedData.entries.forEach((cd) {
+    for (var cd in cachedData.entries) {
       if (cd.value.value != null) {
         returnData[cd.key] = cd.value.value;
       }
-    });
+    }
 
     return returnData;
   }
@@ -129,8 +128,8 @@ final class FormBuilder {
               if (form.validate()) {
                 // form.save();
                 var url =
-                    "action=${formObject.action}&nwp_request=${formObject.nwpRequest}";
-                print("validated");
+                    "action=${formObject.action}&nwp_request=${formObject.action}";
+                // print("validated");
                 onSubmit(url, formData!);
               }
             },
@@ -138,10 +137,10 @@ final class FormBuilder {
               alignment: Alignment.center,
               width: double.infinity,
               padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.only(top: 60),
+              margin: const EdgeInsets.only(top: 20),
               decoration: BoxDecoration(
                 color: AppColors2.color1,
-                borderRadius: BorderRadius.all(Radius.circular(16)),
+                borderRadius: const BorderRadius.all(Radius.circular(16)),
               ),
               child: Text(
                 formObject.title!,

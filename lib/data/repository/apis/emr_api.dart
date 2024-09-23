@@ -6,8 +6,7 @@ class EmrApi {
   Future<Map<String, dynamic>> getEmrOptions() async {
     String publicKey = AppUtil.generateMd5ForApiAuth("card_menu");
     // String sid = userDetails.sessionId!;
-    String uri =
-        "nwp_request=card_menu&id=myemr&token=${AppConstants.token}&public_key=$publicKey";
+    String uri = "nwp_request=card_menu&id=myemr&public_key=$publicKey";
 
     try {
       var response = await HttpUtil().post(uri) as Map<String, dynamic>;
@@ -20,8 +19,7 @@ class EmrApi {
   Future<Map<String, dynamic>> getLabResults() async {
     String publicKey = AppUtil.generateMd5ForApiAuth("card_menu");
     // String sid = userDetails.sessionId!;
-    String uri =
-        "nwp_request=card_menu&&id=myemr&token=${AppConstants.token}&public_key=$publicKey";
+    String uri = "nwp_request=card_menu&&id=myemr&public_key=$publicKey";
 
     try {
       var response = await HttpUtil().post(uri) as Map<String, dynamic>;

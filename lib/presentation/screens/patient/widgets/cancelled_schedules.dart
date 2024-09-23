@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/data/repository/entities/schedule_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
 
@@ -69,6 +70,7 @@ class CancelledSchedule extends StatelessWidget {
                             ),
                             elevation: 3,
                             shadowColor: Colors.black38,
+                            color: (AppColors2.color5 as Color).withOpacity(.4),
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Column(
@@ -81,22 +83,36 @@ class CancelledSchedule extends StatelessWidget {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            cancelledSchedules[index].title!,
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .6,
+                                            child: Text(
+                                              cancelledSchedules[index].title!,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
                                           ),
                                           const SizedBox(
                                             height: 5,
                                           ),
-                                          Text(
-                                            cancelledSchedules[index]
-                                                    .subTitle ??
-                                                "",
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.black45,
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                .6,
+                                            child: Text(
+                                              cancelledSchedules[index]
+                                                      .subTitle ??
+                                                  "",
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black45,
+                                              ),
                                             ),
                                           )
                                         ],
@@ -117,7 +133,7 @@ class CancelledSchedule extends StatelessWidget {
                                         children: [
                                           const Icon(
                                             Icons.calendar_view_day,
-                                            color: Color(0xffA8AFBD),
+                                            color: Colors.black,
                                             size: 12,
                                           ),
                                           const SizedBox(
@@ -126,7 +142,7 @@ class CancelledSchedule extends StatelessWidget {
                                           Text(
                                             cancelledSchedules[index].date!,
                                             style: const TextStyle(
-                                                color: Color(0xff9A9A9B),
+                                                color: Colors.black,
                                                 fontSize: 12),
                                           )
                                         ],
@@ -135,7 +151,7 @@ class CancelledSchedule extends StatelessWidget {
                                         children: [
                                           const Icon(
                                             Icons.punch_clock_outlined,
-                                            color: Color(0xffA8AFBD),
+                                            color: Colors.black,
                                             size: 12,
                                           ),
                                           const SizedBox(
@@ -144,7 +160,7 @@ class CancelledSchedule extends StatelessWidget {
                                           Text(
                                             cancelledSchedules[index].time!,
                                             style: const TextStyle(
-                                              color: Color(0xff9A9A9B),
+                                              color: Colors.black,
                                               fontSize: 12,
                                             ),
                                           )

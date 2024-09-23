@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hyella_telehealth/core/utils/app_util.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
@@ -77,12 +78,17 @@ class DashboardHeader extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Hello ${name.split(" ").first} $wave",
-                    style: const TextStyle(
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * .6,
+                    child: Text(
+                      "$name $wave",
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.satisfy(
                         fontSize: 22,
                         color: Colors.white,
-                        fontWeight: FontWeight.w600),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                   const SizedBox(
                     height: 5,
@@ -169,6 +175,15 @@ Widget serviceSection(Home appServices, BuildContext context) {
               .map(
                 (e) => GestureDetector(
                   onTap: () {
+                    if (e.endpoint != null && e.endpoint!.isNotEmpty) {
+                      Navigator.pushNamed(context, AppRoute.webView,
+                          arguments: {
+                            'title': 'Booking ${e.title}',
+                            'url': e.endpoint!
+                          });
+
+                      return;
+                    }
                     Navigator.of(context).pushNamed(
                       AppRoute.service,
                       arguments: {'service': e},

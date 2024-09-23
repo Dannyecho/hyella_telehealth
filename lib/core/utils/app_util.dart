@@ -6,7 +6,9 @@ import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
+import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/data/repository/entities/chat_entity.dart';
+import 'package:hyella_telehealth/data/repository/entities/endpoint_entity.dart';
 
 class AppUtil {
   static double deviceWidth(BuildContext context) {
@@ -67,6 +69,16 @@ class AppUtil {
     }
 
     return input.trim();
+  }
+
+  static String getHashKey(token) {
+    EndPointEntityData? endpoint = Global.storageService.getEndpoints();
+    String? clientID = Global.storageService.getClientId();
+
+    print(clientID);
+    print(endpoint!.privateKey!);
+
+    return generateMd5(clientID! + endpoint!.privateKey! + token);
   }
 }
 

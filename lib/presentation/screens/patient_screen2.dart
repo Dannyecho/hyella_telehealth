@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
+import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/chat_contact_bloc.dart';
+import 'package:hyella_telehealth/presentation/route/app_route.dart';
 import 'package:hyella_telehealth/presentation/screens/widgets/patient_screen_widgets.dart';
 
 class PatientScreen2 extends StatefulWidget {
@@ -16,7 +19,6 @@ class PatientScreen2 extends StatefulWidget {
 class _PatientScreen2State extends State<PatientScreen2> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -33,10 +35,18 @@ class _PatientScreen2State extends State<PatientScreen2> {
               resizeToAvoidBottomInset: false,
               floatingActionButton: FloatingActionButton(
                 elevation: 8,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30)),
                 backgroundColor: Theme.of(context).primaryColor,
-                child: const Icon(
+                /* child: const Icon(
                   Icons.medical_services,
                   color: Colors.white,
+                ), */
+                child: Image.asset(
+                  'assets/images/logo-white.png',
+                  // color: Colors.white,
+                  width: 48,
+                  height: 48,
                 ),
                 onPressed: () {
                   context.read<AppScreenBloc>().add(SwitchScreen(index: 4));

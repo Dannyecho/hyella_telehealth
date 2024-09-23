@@ -83,6 +83,8 @@ class _UpcomingScheduleState extends State<UpcomingSchedule> {
                           ),
                           elevation: 3,
                           shadowColor: Colors.black38,
+                          color: (AppColors2.color1 as Color).withOpacity(.6),
+                          // surfaceTintColor: AppColors2.color5,
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: Column(
@@ -95,20 +97,34 @@ class _UpcomingScheduleState extends State<UpcomingSchedule> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          schedule?.title ?? "",
-                                          style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w700),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .6,
+                                          child: Text(
+                                            schedule?.title ?? "",
+                                            overflow: TextOverflow.fade,
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700),
+                                          ),
                                         ),
                                         const SizedBox(
                                           height: 5,
                                         ),
-                                        Text(
-                                          schedule?.subTitle ?? "",
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.black45),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .6,
+                                          child: Text(
+                                            schedule?.subTitle ?? "",
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black45),
+                                          ),
                                         )
                                       ],
                                     ),
@@ -128,31 +144,29 @@ class _UpcomingScheduleState extends State<UpcomingSchedule> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                      child: Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.calendar_view_day,
-                                            color: Color(0xffA8AFBD),
-                                            size: 12,
-                                          ),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            schedule!.date!,
-                                            style: const TextStyle(
-                                                color: Color(0xff9A9A9B),
-                                                fontSize: 12),
-                                          )
-                                        ],
-                                      ),
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.calendar_view_day,
+                                          color: Colors.white,
+                                          size: 12,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          schedule!.date!,
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12),
+                                        )
+                                      ],
                                     ),
                                     Row(
                                       children: [
                                         const Icon(
                                           Icons.punch_clock_outlined,
-                                          color: Color(0xffA8AFBD),
+                                          color: Colors.white,
                                           size: 12,
                                         ),
                                         const SizedBox(
@@ -161,7 +175,7 @@ class _UpcomingScheduleState extends State<UpcomingSchedule> {
                                         Text(
                                           schedule.time!,
                                           style: const TextStyle(
-                                            color: Color(0xff9A9A9B),
+                                            color: Colors.white,
                                             fontSize: 12,
                                           ),
                                         )
@@ -193,7 +207,7 @@ class _UpcomingScheduleState extends State<UpcomingSchedule> {
                                   children: [
                                     SizedBox(
                                       width: AppUtil.deviceWidth(context) * .37,
-                                      height: 50,
+                                      height: 35,
                                       child: TextButton(
                                         style: ButtonStyle(
                                           backgroundColor:
@@ -264,7 +278,7 @@ class _UpcomingScheduleState extends State<UpcomingSchedule> {
                                     ),
                                     SizedBox(
                                       width: AppUtil.deviceWidth(context) * .37,
-                                      height: 40,
+                                      height: 35,
                                       child: ElevatedButton(
                                         style: ButtonStyle(
                                           backgroundColor:
@@ -283,6 +297,25 @@ class _UpcomingScheduleState extends State<UpcomingSchedule> {
                                               return si.key ==
                                                   schedule.specialtyKey;
                                             });
+
+                                            Data appData = context
+                                                .read<AppBloc>()
+                                                .state
+                                                .appData!;
+                                            if (appData
+                                                    .webViews!
+                                                    .rescheduleAppointment!
+                                                    .webview ==
+                                                1) {
+                                              Navigator.pushNamed(
+                                                  context, AppRoute.webView,
+                                                  arguments: {
+                                                    'title': service.title,
+                                                    'url':
+                                                        '${appData.webViews!.rescheduleAppointment!.endpoint}&appointment_id=${service.key}',
+                                                  });
+                                              return;
+                                            }
 
                                             Navigator.pushNamed(
                                                 context, AppRoute.service,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
@@ -61,6 +62,7 @@ class _MyAppState extends State<MyApp> {
         builder: EasyLoading.init(),
         scaffoldMessengerKey: scaffoldMessengerKey,
         theme: ThemeData(
+          textTheme: GoogleFonts.openSansTextTheme(),
           appBarTheme: AppBarTheme(
             backgroundColor: AppColors2.color1,
             foregroundColor: Colors.white,

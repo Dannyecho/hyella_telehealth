@@ -13,7 +13,7 @@ class ScheduleAppointmentApi {
     try {
       String publicKey = AppUtil.generateMd5ForApiAuth("app_list_of_doctors");
       String uri =
-          "&nwp_request=app_list_of_doctors&token=${AppConstants.token}&public_key=$publicKey&specialty_key=$specialty";
+          "&nwp_request=app_list_of_doctors&public_key=$publicKey&specialty_key=$specialty";
 
       var response = await HttpUtil().post(uri);
       if (response is Map && response.containsKey('data')) {
@@ -33,7 +33,7 @@ class ScheduleAppointmentApi {
       String publicKey =
           AppUtil.generateMd5ForApiAuth("get_venue_and_location");
       String uri =
-          "&nwp_request=app_list_of_doctors2&token=${AppConstants.token}&public_key=$publicKey&specialty_key=$specialty&doctor_id=$doctorId&dependent_id=$dependentId&";
+          "&nwp_request=app_list_of_doctors2&public_key=$publicKey&specialty_key=$specialty&doctor_id=$doctorId&dependent_id=$dependentId&";
 
       var response = await HttpUtil().post(uri);
       if (response is Map && response.containsKey('data')) {
@@ -56,7 +56,7 @@ class ScheduleAppointmentApi {
       String publicKey = AppUtil.generateMd5ForApiAuth("get_date_time_slot");
       String formattedDate = DateFormat("yyyy-MM-dd").format(date);
       String uri =
-          "&nwp_request=app_list_of_doctors3&token=${AppConstants.token}&public_key=$publicKey&specialty_key=$specialty&doctor_id=$doctorId&dependent_id=$dependentId&date=$formattedDate&location_id=$location";
+          "&nwp_request=app_list_of_doctors3&public_key=$publicKey&specialty_key=$specialty&doctor_id=$doctorId&dependent_id=$dependentId&date=$formattedDate&location_id=$location";
 
       print(uri);
       var response = await HttpUtil().post(uri);
@@ -81,7 +81,7 @@ class ScheduleAppointmentApi {
       String publicKey = AppUtil.generateMd5ForApiAuth("get_date_time_slot");
       String formattedDate = DateFormat("yyyy-MM-dd").format(date);
       String uri =
-          "&nwp_request=app_list_of_doctors4&token=${AppConstants.token}&public_key=$publicKey&specialty_key=$specialty&doctor_id=$doctorId&dependent_id=$dependentId&date=$formattedDate&location_id=$location&time=$timeslot";
+          "&nwp_request=app_list_of_doctors4&public_key=$publicKey&specialty_key=$specialty&doctor_id=$doctorId&dependent_id=$dependentId&date=$formattedDate&location_id=$location&time=$timeslot";
 
       var response = await HttpUtil().post(uri);
       if (response is Map && response.containsKey('data')) {
@@ -98,7 +98,7 @@ class ScheduleAppointmentApi {
     try {
       String publicKey = AppUtil.generateMd5ForApiAuth("book_appointment");
       String uri =
-          "&appointment_ref=$ref&nwp_request=app_list_save&token=${AppConstants.token}&public_key=$publicKey&default=default&action=nwp_health&todo=execute&nwp_action=tele_health_connect&nwp_todo=process_request&development_mode_off=1";
+          "&appointment_ref=$ref&nwp_request=app_list_save&public_key=$publicKey&default=default&action=nwp_health&todo=execute&nwp_action=tele_health_connect&nwp_todo=process_request&development_mode_off=1";
 
       var response = await HttpUtil().post(uri);
       if (response is Map<String, dynamic> && response.containsKey('data')) {
