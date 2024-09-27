@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/form_builder/form_widgets/base_input_builder.dart';
 import 'package:hyella_telehealth/data/repository/entities/endpoint_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/form_builder_bloc.dart';
@@ -81,46 +83,60 @@ class TextInputFieldBuilder extends BaseInputBuilder {
 
   Widget get widget {
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      child: TextFormField(
-        keyboardType: textInputType,
-        autocorrect: false,
-        initialValue: initialValue,
-        // context.read<FormBuilderBloc>().state.formData[key]?.value ?? '',
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        inputFormatters: [
-          if (field.formField == 'decimal')
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
-        ],
-        decoration: InputDecoration(
-          labelText: field.fieldLabel! +
-              ((field.requiredField != null && field.requiredField! > 0)
-                  ? "*"
-                  : ''),
-          labelStyle: const TextStyle(color: AppColors.lightText2),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-          border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16)),
+      margin: const EdgeInsets.only(bottom: 25),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextFormField(
+            keyboardType: textInputType,
+            autocorrect: false,
+            initialValue: initialValue,
+            // context.read<FormBuilderBloc>().state.formData[key]?.value ?? '',
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            inputFormatters: [
+              if (field.formField == 'decimal')
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+            ],
+            decoration: InputDecoration(
+              labelText: field.fieldLabel! +
+                  ((field.requiredField != null && field.requiredField! > 0)
+                      ? "*"
+                      : ''),
+              labelStyle: const TextStyle(color: AppColors.lightText2),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16)),
+              ),
+              enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.lightText2),
+                  borderRadius: BorderRadius.all(Radius.circular(12))),
+            ),
+            validator: validator,
+            // onSaved: (str) => value = str!,
+            onChanged: (value) {
+              context
+                  .read<FormBuilderBloc>()
+                  .add(SetField(key: key, value: value.toString()));
+            },
+            onSaved: (str) {
+              value = str;
+              print("String on save = $str");
+              /* context
+                  .read<FormBuilderBloc>()
+                  .add(SetField(key: key, value: str.toString())); */
+            },
+            obscureText: obscure,
           ),
-          enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.lightText2),
-              borderRadius: BorderRadius.all(Radius.circular(12))),
-        ),
-        validator: validator,
-        // onSaved: (str) => value = str!,
-        onChanged: (value) {
-          context
-              .read<FormBuilderBloc>()
-              .add(SetField(key: key, value: value.toString()));
-        },
-        onSaved: (str) {
-          value = str;
-          print("String on save = $str");
-          /* context
-              .read<FormBuilderBloc>()
-              .add(SetField(key: key, value: str.toString())); */
-        },
-        obscureText: obscure,
+          field.note == null || field.note!.isEmpty
+              ? const SizedBox()
+              : Text(
+                  field.note!,
+                  style: GoogleFonts.robotoSlab(
+                    fontSize: 10,
+                    color: AppColors2.color1,
+                  ),
+                ),
+        ],
       ),
     );
   }

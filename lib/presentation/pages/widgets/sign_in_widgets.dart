@@ -1,5 +1,3 @@
-part of '../sign_in_page.dart';
-
 /* 
 Center buildThirdPartyLogin(BuildContext context) {
   return Center(
@@ -21,6 +19,12 @@ Center buildThirdPartyLogin(BuildContext context) {
   );
 }
  */
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hyella_telehealth/core/constants/app_colors.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
+import 'package:hyella_telehealth/presentation/route/app_route.dart';
+
 IconButton reuseableIconButton(String IconName) {
   return IconButton(
     onPressed: () {},
@@ -34,9 +38,11 @@ IconButton reuseableIconButton(String IconName) {
   );
 }
 
-TextButton forgotPassword() {
+TextButton forgotPassword(BuildContext context) {
   return TextButton(
-    onPressed: () {},
+    onPressed: () {
+      Navigator.pushNamed(context, AppRoute.forgetPassword);
+    },
     child: const Text(
       "Forgot password?",
       style: TextStyle(
@@ -100,13 +106,13 @@ AppBar buildAppBar({required String title}) {
           height: 1.0,
           color: Colors.white,
         )),
-    centerTitle: true,
+    // centerTitle: true,
     title: Text(
       title,
-      textAlign: TextAlign.center,
-      style: TextStyle(
+      // textAlign: TextAlign.center,
+      style: GoogleFonts.satisfy(
         color: AppColors2.color1,
-        fontSize: 16.0,
+        fontSize: 20.0,
         fontWeight: FontWeight.bold,
       ),
     ),

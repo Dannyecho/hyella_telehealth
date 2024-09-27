@@ -142,6 +142,7 @@ class EndPointEntityDataFormsProfileUpdateFields extends EndpointFormFields {
   String? formField;
   int? requiredField;
   String? validationMessage;
+  String? note;
   dynamic value;
   List<FormFieldOption?>? formFieldOptions;
 
@@ -151,6 +152,7 @@ class EndPointEntityDataFormsProfileUpdateFields extends EndpointFormFields {
     this.formField,
     this.requiredField,
     this.validationMessage,
+    this.note,
     this.value,
     this.formFieldOptions,
   });
@@ -161,6 +163,7 @@ class EndPointEntityDataFormsProfileUpdateFields extends EndpointFormFields {
     formField = json['form_field']?.toString();
     requiredField = json['required_field']?.toInt();
     validationMessage = json['validation_message']?.toString();
+    note = json['note']?.toString();
     value = json['value']?.toString();
     formFieldOptions = (json['form_field_options'] as Map?)
         ?.entries
@@ -174,6 +177,7 @@ class EndPointEntityDataFormsProfileUpdateFields extends EndpointFormFields {
     data['form_field'] = formField;
     data['required_field'] = requiredField;
     data['validation_message'] = validationMessage;
+    data['note'] = note;
     data['value'] = value;
     return data;
   }
@@ -426,6 +430,7 @@ class EndPointEntityDataFormsSignUpFields extends EndpointFormFields {
     formField = json['form_field']?.toString();
     requiredField = json['required_field']?.toInt();
     validationMessage = json['validation_message']?.toString();
+    note = json['note']?.toString();
     value = json['value']?.toString();
     formFieldOptions = (json['form_field_options'] as Map?)
         ?.entries
@@ -439,6 +444,7 @@ class EndPointEntityDataFormsSignUpFields extends EndpointFormFields {
     data['form_field'] = formField;
     data['required_field'] = requiredField;
     data['validation_message'] = validationMessage;
+    data['note'] = note;
     data['value'] = value;
     // data['form_field_option'] = formFieldOptions;
     return data;
@@ -1096,6 +1102,7 @@ abstract class EndpointFormFields {
   int? requiredField;
   dynamic value;
   String? validationMessage;
+  String? note;
   List<FormFieldOption?>? formFieldOptions;
   EndpointFormFields({
     this.name,
@@ -1103,6 +1110,7 @@ abstract class EndpointFormFields {
     this.formField,
     this.requiredField,
     this.validationMessage,
+    this.note,
     this.value,
     this.formFieldOptions,
   });

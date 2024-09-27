@@ -74,8 +74,11 @@ class AppUtil {
   static String getHashKey(token) {
     EndPointEntityData? endpoint = Global.storageService.getEndpoints();
     String? clientID = Global.storageService.getClientId();
+    if (clientID == null || endpoint == null) {
+      return '';
+    }
 
-    return generateMd5(clientID! + endpoint!.privateKey! + token);
+    return generateMd5(clientID + endpoint.privateKey! + token);
   }
 }
 

@@ -24,8 +24,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
-    Future.delayed(const Duration(seconds: 0), () => getAppResources(context));
+    if (context.mounted) {
+      Future.delayed(
+          const Duration(seconds: 0), () => getAppResources(context));
+    }
   }
 
   void getAppResources(BuildContext context,
@@ -43,33 +45,52 @@ class _SplashScreenState extends State<SplashScreen> {
 
       EndPointEntity? result = await InitializeAppApi().fetchAppResource();
       if (result.data != null && result.data?.endPoint1 != null) {
-        HttpUtil().setBaseUrl =
-            "${result.data!.endPoint1!}?cid=${result.data!.client!.id!}&";
-        Global.storageService.setString(
-            AppConstants.STORAGE_CLIENT_ID, result.data?.client?.id ?? '');
-        AppColors2.instance.registerInstance(result.data!.client!);
-
-        if (context.mounted) {
-          context
-              .read<EndpointBloc>()
-              .add(TriggerEndpoint(endPointEntity: result));
-          Navigator.pushReplacementNamed(
-            context,
-            AppRoute.initialRoute,
-            // (e) => true,
-          );
-        }
+        setupResources(context, result.data!);
       } else {
         toastInfo(msg: "App encountered network error");
       }
     } catch (e) {
-      toastInfo(
-        msg: "Connection loss",
-        backgroundColor: Colors.red[400]!,
-        length: Toast.LENGTH_LONG,
+      bool hasOpenedApp = Global.storageService
+          .getBool(AppConstants.STORAGE_DEVICE_FOR_THE_FIRST_TIME);
+      EndPointEntityData? endPointEntityData =
+          Global.storageService.getEndpoints();
+
+      if (!hasOpenedApp && endPointEntityData == null) {
+        toastInfo(
+          msg: "Connection loss",
+          backgroundColor: Colors.red[400]!,
+          length: Toast.LENGTH_LONG,
+        );
+
+        Future.delayed(
+            const Duration(seconds: 6), () => getAppResources(context));
+        return;
+      }
+
+      setupResources(context, endPointEntityData!);
+    }
+  }
+
+  void setupResources(BuildContext context, EndPointEntityData data) {
+    HttpUtil().setBaseUrl = "${data.endPoint1}?cid=${data.client!.id}&";
+    Global.storageService
+        .setString(AppConstants.STORAGE_CLIENT_ID, data.client?.id ?? '');
+    AppColors2.instance.registerInstance(data.client!);
+
+    if (context.mounted) {
+      context.read<EndpointBloc>().add(
+            TriggerEndpoint(
+              endPointEntity: EndPointEntity(
+                data: data,
+                type: 1,
+              ),
+            ),
+          );
+      Navigator.pushReplacementNamed(
+        context,
+        AppRoute.initialRoute,
+        // (e) => true,
       );
-      Future.delayed(
-          const Duration(seconds: 6), () => getAppResources(context));
     }
   }
 

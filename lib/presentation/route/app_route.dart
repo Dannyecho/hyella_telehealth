@@ -15,7 +15,8 @@ import 'package:hyella_telehealth/logic/bloc/services_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/sign_in_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/web_view_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/welcome_bloc.dart';
-import 'package:hyella_telehealth/presentation/pages/404.dart';
+import 'package:hyella_telehealth/presentation/pages/forget_password_page.dart';
+import 'package:hyella_telehealth/presentation/pages/page404.dart';
 import 'package:hyella_telehealth/presentation/pages/chat_page.dart';
 import 'package:hyella_telehealth/presentation/pages/emr_page.dart';
 import 'package:hyella_telehealth/presentation/pages/home_page.dart';
@@ -34,6 +35,7 @@ class AppRoute {
   static const String home = 'home';
   static const String welcome = 'welcome';
   static const String signIn = 'signIn';
+  static const String forgetPassword = 'forgetPassword';
   static const String register = 'register';
   static const String profile = 'profile';
   static const String editProfile = 'editProfile';
@@ -147,13 +149,22 @@ class AppRoute {
                 ));
       case register:
         return MaterialPageRoute(builder: (context) => const RegisterPage());
+      case forgetPassword:
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider(
+                  create: (context) => SignInBloc(),
+                  child: const ForgetPasswordPage(),
+                ));
       case signIn:
-      default:
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => SignInBloc(),
             child: const SignInPage(),
           ),
+        );
+      default:
+        return MaterialPageRoute(
+          builder: (context) => const Page404(),
         );
     }
   }

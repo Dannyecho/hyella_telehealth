@@ -10,7 +10,7 @@ class InitializeAppApi {
   static const String requestType = 'initialize_ss';
   static const String hospitalId = '100';
   static const String appSecretKey = '55b6b3ffb7889de4d24d9761fc773f81';
-  static const String appName = 'com.hyella.telehealth';
+  static const String appName = 'com.example.hyella_telehealth';
 
   InitializeAppApi() {
     initialRequestUrl = Uri.parse(

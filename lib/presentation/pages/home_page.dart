@@ -6,6 +6,7 @@ import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/core/services/notification_service.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/network_connectivity_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
 import 'package:hyella_telehealth/presentation/screens/doctor_screen.dart';
 import 'package:hyella_telehealth/presentation/screens/patient_screen2.dart';
@@ -23,7 +24,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     initApp();
-    _listenToConnectivity();
   }
 
   void initApp() async {
@@ -39,15 +39,12 @@ class _HomePageState extends State<HomePage> {
     await Global.initAppDataEvents(context);
   }
 
-  Future<void> _listenToConnectivity() async {
-    var counts = 0;
-    Future.delayed(const Duration(seconds: 3), () {
-      Connectivity()
-          .onConnectivityChanged
-          .listen((List<ConnectivityResult> result) {
-        // Received changes in available connectivity types!
-        // Display a Snackbar on connectivity change
-        if (result.contains(ConnectivityResult.none)) {
+  @override
+  Widget build(BuildContext context) {
+    // Global.storageService.remove(AppConstants.STORAGE_USER_TOKEN_KEY);
+    return BlocConsumer<NetworkConnectivityBloc, NetworkConnectivityState>(
+      listener: (context, state) {
+        if (state.connectivity.contains(ConnectivityResult.none)) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               backgroundColor: Colors.red,
@@ -58,20 +55,35 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         } else {
-          if (counts++ > 0) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                backgroundColor: Colors.green,
-                content: Text(
-                  "Connection Restored",
-                ),
-                duration: Duration(seconds: 2),
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              backgroundColor: Colors.green,
+              content: Text(
+                "Connection Restored",
+              ),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        return BlocBuilder<AppBloc, AppBlocState>(builder: (context, state) {
+          if (state.appData == null) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: AppColors2.color1,
               ),
             );
           }
-        }
-      });
-    });
+          if (state.appData!.user!.isPatient == 0) {
+            return const DoctorScreen();
+          }
+          return PatientScreen2(
+            index: widget.currentScreen ?? 0,
+          );
+        });
+      },
+    );
   }
 
   String _getConnectivityMessage(ConnectivityResult result) {
@@ -87,25 +99,5 @@ class _HomePageState extends State<HomePage> {
       default:
         return 'Unknown connectivity';
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Global.storageService.remove(AppConstants.STORAGE_USER_TOKEN_KEY);
-    return BlocBuilder<AppBloc, AppBlocState>(builder: (context, state) {
-      if (state.appData == null) {
-        return Center(
-          child: CircularProgressIndicator(
-            color: AppColors2.color1,
-          ),
-        );
-      }
-      if (state.appData!.user!.isPatient == 0) {
-        return const DoctorScreen();
-      }
-      return PatientScreen2(
-        index: widget.currentScreen ?? 0,
-      );
-    });
   }
 }

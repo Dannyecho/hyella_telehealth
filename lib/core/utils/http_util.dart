@@ -97,8 +97,12 @@ class HttpUtil {
     var authorization = getAuthorizationHeader();
     String? pidParam = '&pid=';
     String? cidParam = '&cid=';
+    String? hash = AppUtil.getHashKey(AppConstants.token);
+
     pidParam += Global.storageService.getUserToken() ?? '';
     cidParam += Global.storageService.getClientId() ?? '';
+    hash = "&hash=$hash";
+
     List formFiles = [];
 
     files.forEach((key, value) {
@@ -119,6 +123,44 @@ class HttpUtil {
 
     final Response response = await _dio.post(
       path + pidParam + cidParam,
+      data: formData,
+      queryParameters: queryParameters,
+    );
+
+    return parseFormData(response.data);
+  }
+
+  sendFile(path, String file,
+      {Map<String, dynamic>? queryParameters, Options? options}) async {
+    Options requestOptions = options ?? Options();
+    requestOptions.headers = requestOptions.headers ?? {};
+    var authorization = getAuthorizationHeader();
+    String? pidParam = '&pid=';
+    String? cidParam = '&cid=';
+    String? hash = AppUtil.getHashKey(AppConstants.token);
+
+    pidParam += Global.storageService.getUserToken() ?? '';
+    cidParam += Global.storageService.getClientId() ?? '';
+    hash = "&hash=$hash";
+
+    if (authorization != null) {
+      requestOptions.headers!.addAll(authorization);
+    }
+
+    if (queryParameters != null) {
+      queryParameters['display_picture'] =
+          MultipartFile.fromFile(file, filename: 'user_mgt_update_photo');
+    } else {
+      queryParameters = {
+        'display_picture':
+            MultipartFile.fromFile(file, filename: 'user_mgt_update_photo')
+      };
+    }
+
+    final formData = FormData.fromMap(queryParameters);
+
+    final Response response = await _dio.post(
+      path + pidParam + cidParam + hash,
       data: formData,
       queryParameters: queryParameters,
     );

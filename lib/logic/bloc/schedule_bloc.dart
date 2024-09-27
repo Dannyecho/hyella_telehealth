@@ -18,7 +18,7 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
     on<LoadUpComingScheduleEvent>((event, emit) async {
       emit(ScheduleLoading());
       var response = await ScheduleApi().fetchUpComingSchedules();
-      if (response['type'] == 'error') {
+      if (response['type'] == 0) {
         toastInfo(msg: response['msg'], backgroundColor: Colors.red);
         emit(ScheduleLoaded(
           hasError: true,

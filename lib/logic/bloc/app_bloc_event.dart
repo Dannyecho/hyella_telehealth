@@ -11,3 +11,5 @@ class SetUserEvent extends AppBlocEvent {
   final User user;
   SetUserEvent({required this.user});
 }
+
+class UpdateUserInfoEvent extends AppBlocEvent {}

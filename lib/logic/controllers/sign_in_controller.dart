@@ -18,6 +18,39 @@ class SignInController {
   final BuildContext context;
   const SignInController(this.context);
 
+  handleForgetPassword() async {
+    EasyLoading.show(
+      dismissOnTap: true,
+      maskType: EasyLoadingMaskType.clear,
+      indicator: const CircularProgressIndicator(),
+    );
+    final state = context.read<SignInBloc>().state;
+    String emailAddress = state.email.trim();
+    bool isDoctor = state.isStaff;
+
+    if (emailAddress.isEmpty) {
+      EasyLoading.dismiss();
+      toastInfo(
+          msg: 'Please provide your email address',
+          backgroundColor: Colors.red);
+      return;
+    }
+
+    var response = await AuthApi().resetPassword(emailAddress, isDoctor);
+    if (response.type == 0) {
+      EasyLoading.dismiss();
+      toastInfo(msg: response.msg, backgroundColor: Colors.red);
+      return;
+    }
+
+    EasyLoading.dismiss();
+    toastInfo(msg: response.msg, backgroundColor: Colors.green);
+    if (context.mounted) {
+      Navigator.pushNamedAndRemoveUntil(
+          context, AppRoute.signIn, (predicate) => false);
+    }
+  }
+
   void handleSignIn() async {
     try {
       EasyLoading.show(
@@ -26,7 +59,7 @@ class SignInController {
         dismissOnTap: true,
       );
       final state = context.read<SignInBloc>().state;
-      String emailAddress = state.email;
+      String emailAddress = state.email.trim();
       String password = state.password;
 
       bool error = false;

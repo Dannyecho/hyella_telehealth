@@ -49,11 +49,12 @@ class _PEditProfileState extends State<PEditProfile> {
       },
     );
 
-    print(userDetails.dp);
     if (userDetails.dp != null && userDetails.dp!.isNotEmpty) {
       context.read<ProfileEditBloc>().add(
             SetProfileImageEvent(
-                imagePath: userDetails.dp!, source: ProfileImageSource.web),
+              imagePath: userDetails.dp!,
+              source: ProfileImageSource.web,
+            ),
           );
     }
   }
@@ -103,11 +104,12 @@ class _PEditProfileState extends State<PEditProfile> {
                               leading: const Icon(Icons.camera_alt),
                               onTap: () async {
                                 var file = await takePhoto(ImageSource.camera);
-                                if (file != null) {
+                                if (file != null && context.mounted) {
                                   profileEditBloc.add(
-                                    SetProfileImageEvent(
+                                    UpdateProfileImageEvent(
                                       imagePath: file.path,
                                       source: ProfileImageSource.file,
+                                      context: context,
                                     ),
                                   );
                                 }
@@ -122,11 +124,12 @@ class _PEditProfileState extends State<PEditProfile> {
                               leading: const Icon(Icons.photo),
                               onTap: () async {
                                 var file = await takePhoto(ImageSource.gallery);
-                                if (file != null) {
+                                if (file != null && context.mounted) {
                                   profileEditBloc.add(
-                                    SetProfileImageEvent(
+                                    UpdateProfileImageEvent(
                                       imagePath: file.path,
                                       source: ProfileImageSource.file,
+                                      context: context,
                                     ),
                                   );
                                 }
@@ -198,7 +201,18 @@ class _PEditProfileState extends State<PEditProfile> {
                                   Icons.camera_alt_rounded,
                                   color: Colors.white,
                                 ),
-                              )
+                              ),
+                              state.isLoading
+                                  ? Container(
+                                      height: 100,
+                                      width: 100,
+                                      decoration: const BoxDecoration(
+                                          color: Colors.white),
+                                      child: const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                    )
+                                  : const SizedBox()
                             ],
                           ),
                         ),

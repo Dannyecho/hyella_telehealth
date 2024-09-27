@@ -52,12 +52,15 @@ class StorageService {
 
   EndPointEntityData? getEndpoints() {
     try {
-      var endpoint = _prefs.getString(AppConstants.ENDPOINT_ENTITY_KEY)!;
+      var endpoint = _prefs.getString(AppConstants.ENDPOINT_ENTITY_KEY);
+      if (endpoint == null) {
+        print("Endpoint is null----------------------------------");
+        return null;
+      }
       var entity = EndPointEntity.fromJson(jsonDecode(endpoint));
-
       return entity.data;
     } catch (e) {
-      print("Unable to retieve app enpoints");
+      print("Unable to retieve app enpoints------------------");
     }
     return null;
   }
