@@ -8,18 +8,37 @@ part 'emr_state.dart';
 
 class EmrBloc extends Bloc<EmrEvent, EmrState> {
   late final EmrOptions options;
-  EmrBloc() : super(EmrState(emrOptions: [])) {
+  Map<String, List<EmrOptionsDatum>?> allEmrOptions = {};
+
+  EmrBloc() : super(EmrState(loading: true, emrOptions: [])) {
     on<FetchingEmrOptionsEvent>((event, emit) async {
-      var response = await EmrApi().getEmrOptions();
+      emit(state.copyWith(loading: true));
+      var response = await EmrApi().getEmrOptions(event.pageKey ?? 'myemr');
 
       if (response['type'] == 0) {
         toastInfo(msg: response['msg']);
-        emit(state.copyWith(emrOptions: []));
+        emit(state.copyWith(
+          emrOptions: [],
+          loading: false,
+        ));
       } else {
         EmrOptions options = EmrOptions.fromJson(response['data']);
         List<EmrOptionsDatum> emrOptions = options.data;
-        emit(EmrState(emrOptions: emrOptions));
+
+        allEmrOptions[event.pageKey] = emrOptions;
+        emit(state.copyWith(loading: false, emrOptions: emrOptions));
       }
     });
+    on<SetEmrOptionsEvent>(
+      (event, emit) {
+        emit(state.copyWith(emrOptions: event.options));
+      },
+    );
+
+    on<EmptyAllEmrOptionsEvent>(
+      (event, emit) {
+        allEmrOptions = {};
+      },
+    );
   }
 }

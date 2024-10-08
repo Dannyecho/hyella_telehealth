@@ -13,10 +13,14 @@ part 'app_bloc_state.dart';
 class AppBloc extends Bloc<AppBlocEvent, AppBlocState> {
   AppBloc() : super(const AppBlocState(appData: null)) {
     on<SetAppDataEvent>((event, emit) {
+      Global.storageService.setString(
+          AppConstants.STORAGE_APP_DATA, jsonEncode(event.appData.toJson()));
       emit(state.copyWith(appData: event.appData));
     });
 
     on<SetUserEvent>((event, emit) {
+      Global.storageService.setString(AppConstants.STORAGE_USER_PROFILE_KEY,
+          jsonEncode(event.user.toJson()));
       emit(state.copyWith(user: event.user));
     });
 
@@ -28,9 +32,8 @@ class AppBloc extends Bloc<AppBlocEvent, AppBlocState> {
           return;
         }
 
+        add(SetAppDataEvent(appData: response.data!));
         add(SetUserEvent(user: response.data!.user!));
-        Global.storageService.setString(AppConstants.STORAGE_USER_PROFILE_KEY,
-            jsonEncode(response.data?.user?.toJson()));
       },
     );
   }

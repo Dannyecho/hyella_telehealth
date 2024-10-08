@@ -17,6 +17,7 @@ class ServicesBloc extends Bloc<ServicesEvent, ServicesState> {
       emit(ServicesLoading());
       if (event.query.isEmpty) {
         emit(ServicesLoadedState(services: services, query: event.query));
+        return;
       }
 
       // for (serv in currentStata.s

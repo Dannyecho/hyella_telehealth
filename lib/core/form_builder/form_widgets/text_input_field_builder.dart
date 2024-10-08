@@ -129,11 +129,14 @@ class TextInputFieldBuilder extends BaseInputBuilder {
           ),
           field.note == null || field.note!.isEmpty
               ? const SizedBox()
-              : Text(
-                  field.note!,
-                  style: GoogleFonts.robotoSlab(
-                    fontSize: 10,
-                    color: AppColors2.color1,
+              : Padding(
+                  padding: const EdgeInsets.only(left: 18.0),
+                  child: Text(
+                    field.note!,
+                    style: GoogleFonts.openSans(
+                      fontSize: 10,
+                      color: AppColors.lightText2,
+                    ),
                   ),
                 ),
         ],

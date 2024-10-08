@@ -8,6 +8,7 @@ import 'package:hyella_telehealth/data/repository/entities/endpoint_entity.dart'
 import 'package:hyella_telehealth/logic/bloc/endpoint_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/form_builder_bloc.dart';
 import 'package:hyella_telehealth/logic/controllers/register_controller.dart';
+import 'package:hyella_telehealth/presentation/route/app_route.dart';
 import 'package:hyella_telehealth/presentation/widgets/reuseable.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -114,6 +115,37 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
           ),
+        ),
+        bottomSheet: Container(
+          height: 60,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(topRight: Radius.circular(60))),
+          child: Column(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Already have an account? ",
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pushNamed(
+                    context,
+                    AppRoute.signIn,
+                  ),
+                  child: Text(
+                    "SIGN IN",
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
+          ]),
         ),
       ),
     );

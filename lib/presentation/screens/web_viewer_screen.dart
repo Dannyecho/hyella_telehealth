@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
+import 'package:hyella_telehealth/logic/bloc/emr_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/web_view_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -79,14 +80,18 @@ class _WebViewerScreenState extends State<WebViewerScreen> {
               debugPrint('blocking navigation to ${request.url}');
               return NavigationDecision.prevent;
             }
-            if (widget.webViewScreenType == WebViewScreenType.appointment &&
-                request.url.contains("&nwp_mobile_reload_chat=1")) {
+            /* if (widget.webViewScreenType == WebViewScreenType.appointment &&
+                request.url.contains("&nwp_mobile_reload_chat=1")) { */
+            if (request.url.contains("&nwp_mobile_reload_chat=1")) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text("Appointment Booked Successfully!"),
                   backgroundColor: Colors.green,
                 ),
               );
+
+              // Empty Cached EmrOptions
+              context.read<EmrBloc>().add(EmptyAllEmrOptionsEvent());
               Navigator.pushNamedAndRemoveUntil(
                   context, AppRoute.home, (predicate) => false,
                   arguments: 0);

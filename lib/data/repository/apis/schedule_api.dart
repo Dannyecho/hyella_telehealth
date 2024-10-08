@@ -6,7 +6,7 @@ class ScheduleApi {
     try {
       String publicKey = AppUtil.generateMd5ForApiAuth("app_l_upcoming");
       String uri = "&nwp_request=app_l_upcoming&public_key=$publicKey";
-      var response = await HttpUtil().post(uri) as Map<String, dynamic>;
+      var response = await HttpUtil().post(uri);
       return response;
     } catch (e) {
       return {'type': 0, 'msg': 'Error fetching upcoming schedules'};

@@ -27,7 +27,7 @@ class _ServicesPageState extends State<ServicesPage> {
       appServices = appData!.menu!.home!;
     } */
     services = widget.services;
-    services.removeAt(0);
+    // services.removeAt(0);
     context.read<ServicesBloc>().add(SetServicesEvent(services: services));
   }
 
@@ -58,39 +58,54 @@ class _ServicesPageState extends State<ServicesPage> {
 
                 return Column(children: [
                   Container(
-                    color: AppColors2.color1,
-                    padding: const EdgeInsets.all(20),
+                    margin: const EdgeInsets.only(
+                        top: 20.0, bottom: 10, left: 20, right: 20),
+                    // height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     child: TextFormField(
-                      autocorrect: true,
                       initialValue: query,
-                      style: const TextStyle(color: Colors.white),
                       onChanged: (value) {
                         context
                             .read<ServicesBloc>()
                             .add(FetchServicesEvent(query: value));
                       },
+                      cursorColor: const Color(0XF757575),
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 0),
-                        hintText: "Search Services",
-                        hintStyle: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.normal,
-                          fontStyle: FontStyle.italic,
+                        contentPadding: const EdgeInsets.all(0),
+                        fillColor: Colors.white,
+                        labelText: "Search",
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        labelStyle: TextStyle(
+                          color: Theme.of(context).primaryColor,
                         ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.white,
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(15),
                           ),
-                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              width: 1.5,
+                              color: Theme.of(context).primaryColor),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(15),
+                          ),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).primaryColor,
+                              width: 1.5),
                         ),
                       ),
                     ),
                   ),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(20.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Builder(
                         builder: <ServicesState>(context) {
                           if (services.isNotEmpty) {

@@ -63,11 +63,9 @@ class AppRoute {
           ),
         );
       case emr:
+        Map<String, dynamic> data = rSettings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => EmrBloc(),
-            child: const EmrPage(),
-          ),
+          builder: (context) => EmrPage(data: data),
         );
       case labResult:
         String? arguments = rSettings.arguments as String;

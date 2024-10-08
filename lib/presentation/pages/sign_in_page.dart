@@ -37,163 +37,218 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: SafeArea(
-          child: Scaffold(
-        /* appBar: buildAppBar(
-          title: "Sign In",
-        ), */
-        body: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  'assets/images/6.jpg',
-                ),
-                fit: BoxFit.fitHeight,
-                // opacity: .2,
-                alignment: Alignment.bottomLeft,
-                colorFilter: ColorFilter.linearToSrgbGamma(),
+    return SafeArea(
+        child: Scaffold(
+      /* appBar: buildAppBar(
+        title: "Sign In",
+      ), */
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height - 60,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                'assets/images/med.png',
               ),
+              fit: BoxFit.fitWidth,
+              // opacity: .2,
+              alignment: Alignment.bottomLeft,
+              // colorFilter: ColorFilter.linearToSrgbGamma(),
             ),
-            child: BlocBuilder<SignInBloc, SignInState>(
-              builder: (context, state) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  decoration:
-                      BoxDecoration(color: Colors.white.withOpacity(.85)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      /* buildThirdPartyLogin(context),
-                      Center(
-                        child: reuseableText("Or login with your email account"),
-                      ), */
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      Text(
-                        endpoint?.client?.name ?? "Sign In",
-                        // textAlign: TextAlign.center,
-                        style: GoogleFonts.satisfy(
-                          color: AppColors2.color1,
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      CachedNetworkImage(
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) =>
-                                CircularProgressIndicator(
-                                    value: downloadProgress.progress),
-                        imageUrl: context
-                            .read<EndpointBloc>()
-                            .state
-                            .endPointEntity!
-                            .data!
-                            .client!
-                            .logo!,
-                      ),
-                      const Text(
-                        "Welcome",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      reuseableText("Please provide your login details"),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      Form(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            reuseableText('Email'),
-                            buildTextField(
-                              focusNode: _emailFocusNode,
-                              type: 'text',
-                              hintText: 'Enter your email address',
-                              icon: 'user',
-                              onChange: (value) {
-                                context.read<SignInBloc>().add(
-                                      EmailEvent(email: value),
-                                    );
-                              },
-                              onSubmitted: (value) {
-                                if (value.isNotEmpty) {
-                                  _passWordFocusNode.requestFocus();
-                                } else {
-                                  _emailFocusNode.requestFocus();
-                                }
-                              },
-                            ),
-                            reuseableText('Password'),
-                            buildTextField(
-                              focusNode: _passWordFocusNode,
-                              type: 'password',
-                              hintText: 'Enter your password',
-                              icon: 'lock',
-                              onChange: (value) {
-                                context.read<SignInBloc>().add(
-                                      PasswordEvent(password: value),
-                                    );
-                              },
-                              onSubmitted: (p0) {
-                                final signInController =
-                                    SignInController(context);
-                                signInController.handleSignIn();
-                              },
-                            ),
-                            CheckboxListTile(
-                              contentPadding: const EdgeInsets.all(0),
-                              title: Text(
-                                "I'm a health provider",
-                                style: TextStyle(
+          ),
+          child: BlocBuilder<SignInBloc, SignInState>(
+            builder: (context, state) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * .1,
+                    ),
+                    alignment: Alignment.center,
+                    decoration:
+                        BoxDecoration(color: Colors.white.withOpacity(.15)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /* buildThirdPartyLogin(context),
+                        Center(
+                          child: reuseableText("Or login with your email account"),
+                        ), */
+                        Center(
+                          child: Column(
+                            children: [
+                              Text(
+                                endpoint?.client?.name ?? "Sign In",
+                                // textAlign: TextAlign.center,
+                                style: GoogleFonts.satisfy(
                                   color: AppColors2.color1,
+                                  fontSize: 30.0,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              value: state.isStaff,
-                              onChanged: (value) {
-                                context
-                                    .read<SignInBloc>()
-                                    .add(IsStaffEvent(isStaff: value!));
-                              },
-                            ),
-                            forgotPassword(context),
-                            loginAndRegisterButton(
-                                text: "Login",
-                                type: 'login',
-                                onTap: () {
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              CachedNetworkImage(
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) =>
+                                        CircularProgressIndicator(
+                                            value: downloadProgress.progress),
+                                imageUrl: context
+                                    .read<EndpointBloc>()
+                                    .state
+                                    .endPointEntity!
+                                    .data!
+                                    .client!
+                                    .logo!,
+                              ),
+                              const Text(
+                                "Welcome",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              reuseableText(
+                                "Please provide your login details",
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Form(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // reuseableText('Email'),
+                              buildTextField(
+                                focusNode: _emailFocusNode,
+                                type: 'text',
+                                hintText: 'Email Address',
+                                icon: Icon(
+                                  Icons.email_outlined,
+                                  color: AppColors2.color1,
+                                ),
+                                onChange: (value) {
+                                  context.read<SignInBloc>().add(
+                                        EmailEvent(email: value),
+                                      );
+                                },
+                                onSubmitted: (value) {
+                                  if (value.isNotEmpty) {
+                                    _passWordFocusNode.requestFocus();
+                                  } else {
+                                    _emailFocusNode.requestFocus();
+                                  }
+                                },
+                              ),
+                              // reuseableText('Password'),
+                              buildTextField(
+                                focusNode: _passWordFocusNode,
+                                type: 'password',
+                                hintText: 'Password',
+                                icon: Icon(
+                                  Icons.lock_outline,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onChange: (value) {
+                                  context.read<SignInBloc>().add(
+                                        PasswordEvent(password: value),
+                                      );
+                                },
+                                onSubmitted: (p0) {
                                   final signInController =
                                       SignInController(context);
                                   signInController.handleSignIn();
-                                }),
-                            loginAndRegisterButton(
-                                text: "Register",
-                                type: 'register',
-                                onTap: () {
-                                  Navigator.of(context)
-                                      .pushNamed(AppRoute.register);
-                                }),
-                          ],
+                                },
+                              ),
+                              Row(
+                                children: [
+                                  Checkbox(
+                                    value: state.isStaff,
+                                    checkColor: Theme.of(context).primaryColor,
+                                    activeColor: Colors.white,
+                                    onChanged: (value) {
+                                      context
+                                          .read<SignInBloc>()
+                                          .add(IsStaffEvent(isStaff: value!));
+                                    },
+                                  ),
+                                  const Text(
+                                    "I am a health service provider",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+
+                              forgotPassword(context),
+                              loginAndRegisterButton(
+                                  text: "Login",
+                                  type: 'login',
+                                  onTap: () {
+                                    final signInController =
+                                        SignInController(context);
+                                    signInController.handleSignIn();
+                                  }),
+
+                              /* loginAndRegisterButton(
+                                  text: "Register",
+                                  type: 'register',
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .pushNamed(AppRoute.register);
+                                  }), */
+                            ],
+                          ),
                         ),
-                      ),
-                      // const Spacer(),
-                    ],
+                        // const Spacer(),
+                      ],
+                    ),
                   ),
-                );
-              },
-            ),
+                ],
+              );
+            },
           ),
         ),
-      )),
-    );
+      ),
+      bottomSheet: Container(
+        height: 60,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(topRight: Radius.circular(60))),
+        child: Column(children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Don't have an account yet? ",
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pushNamed(
+                  context,
+                  AppRoute.register,
+                ),
+                child: Text(
+                  "REGISTER",
+                  style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
+              ),
+            ],
+          ),
+        ]),
+      ),
+    ));
   }
 }

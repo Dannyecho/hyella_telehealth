@@ -10,30 +10,37 @@ part 'schedule_state.dart';
 
 class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
   late ScheduleEntity scheduleEntity;
-  List<ScheduleEntityData>? upcoming;
-  List<ScheduleEntityData>? completed;
-  List<ScheduleEntityData>? cancelled;
+  ScheduleLoaded loadedState = ScheduleLoaded(
+    hasError: false,
+    upComingSchedules: [],
+    cancelledSchedules: [],
+    completedSchedules: [],
+  );
+  /* List<ScheduleEntityData>? upcoming = [];
+  List<ScheduleEntityData>? completed = [];
+  List<ScheduleEntityData>? cancelled = []; */
 
   ScheduleBloc() : super(ScheduleLoading()) {
     on<LoadUpComingScheduleEvent>((event, emit) async {
       emit(ScheduleLoading());
       var response = await ScheduleApi().fetchUpComingSchedules();
       if (response['type'] == 0) {
-        toastInfo(msg: response['msg'], backgroundColor: Colors.red);
-        emit(ScheduleLoaded(
-          hasError: true,
-        ));
+        toastInfo(msg: response['msg']);
+        if ((response['data'] as Map).containsKey('app_list') &&
+            (response['data']['app_list']['upcoming'] as Map).isEmpty) {
+          emit(
+            loadedState.copyWith(hasError: false),
+          );
+        } else {
+          emit(loadedState.copyWith(hasError: true));
+        }
       } else {
         scheduleEntity = ScheduleEntity.fromJson(response['data']);
-        upcoming = scheduleEntity.appList?.upcoming?.values.toList();
-        emit(
-          ScheduleLoaded(
-            hasError: false,
-            upComingSchedules: upcoming,
-            completedSchedules: completed,
-            cancelledSchedules: cancelled,
-          ),
+        loadedState = loadedState.copyWith(
+          upComingSchedules: scheduleEntity.appList?.upcoming?.values.toList(),
         );
+
+        emit(loadedState);
 
         add(LoadCompletedScheduleEvent());
         add(LoadCancelledScheduleEvent());
@@ -44,28 +51,27 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       (event, emit) async {
         emit(ScheduleLoading());
         var response = await ScheduleApi().fetchCompletedSchedules();
-        if (response['type'] == 'error') {
-          toastInfo(msg: response['msg'], backgroundColor: Colors.red);
-          emit(ScheduleLoaded(
-            hasError: true,
-          ));
+        if (response['type'] == 0) {
+          toastInfo(msg: response['msg']);
+          if ((response['data'] as Map).containsKey('app_list') &&
+              (response['data']['app_list']['completed'] as Map).isEmpty) {
+            emit(
+              loadedState.copyWith(hasError: false),
+            );
+          } else {
+            emit(loadedState.copyWith(hasError: true));
+          }
         } else {
           try {
             scheduleEntity = ScheduleEntity.fromJson(response['data']);
-            completed = scheduleEntity.appList?.completed?.values.toList();
-            emit(
-              ScheduleLoaded(
+            loadedState = loadedState.copyWith(
                 hasError: false,
-                upComingSchedules: upcoming,
-                completedSchedules: completed,
-                cancelledSchedules: cancelled,
-              ),
-            );
+                completedSchedules:
+                    scheduleEntity.appList?.completed?.values.toList());
+            emit(loadedState);
           } catch (e) {
             emit(
-              ScheduleLoaded(
-                hasError: true,
-              ),
+              loadedState.copyWith(hasError: true),
             );
           }
         }
@@ -76,19 +82,24 @@ class ScheduleBloc extends Bloc<ScheduleEvent, ScheduleState> {
       (event, emit) async {
         emit(ScheduleLoading());
         var response = await ScheduleApi().fetchCancelledSchedules();
-        if (response['type'] == 'error') {
-          toastInfo(msg: response['msg'], backgroundColor: Colors.red);
-          emit(ScheduleLoaded(
-            hasError: true,
-          ));
+        if (response['type'] == 0) {
+          toastInfo(msg: response['msg']);
+          if ((response['data'] as Map).containsKey('app_list') &&
+              (response['data']['app_list']['cancelled'] as Map).isEmpty) {
+            emit(
+              loadedState.copyWith(hasError: false),
+            );
+          } else {
+            emit(loadedState.copyWith(hasError: true));
+          }
         } else {
           scheduleEntity = ScheduleEntity.fromJson(response['data']);
-          cancelled = scheduleEntity.appList?.cancelled?.values.toList();
-          emit(ScheduleLoaded(
-              hasError: false,
-              upComingSchedules: upcoming,
-              completedSchedules: completed,
-              cancelledSchedules: cancelled));
+          loadedState = loadedState.copyWith(
+            cancelledSchedules:
+                scheduleEntity.appList?.cancelled?.values.toList(),
+          );
+
+          emit(loadedState);
         }
       },
     );

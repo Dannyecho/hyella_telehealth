@@ -35,13 +35,15 @@ Widget buildScreen(BuildContext context, int index) {
 Widget buildScreen2(BuildContext context, int index) {
   Data appData = context.read<AppBloc>().state.appData!;
   Home appServices = appData.menu!.home!;
+  List<Service> services =
+      appServices.data.where((el) => el.key != 'all_services').toList();
   List<Widget> _screens = [
     PHome2(),
     const ChatContactPage(),
     Schedule(),
     const PProfile(),
     ServicesPage(
-      services: appServices.data,
+      services: services,
     ),
   ];
 

@@ -68,6 +68,8 @@ class _PatientScreen2State extends State<PatientScreen2> {
                         children: [
                           MaterialButton(
                             minWidth: 40,
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                             onPressed: () {
                               context
                                   .read<AppScreenBloc>()
@@ -94,6 +96,8 @@ class _PatientScreen2State extends State<PatientScreen2> {
                           ),
                           MaterialButton(
                             minWidth: 40,
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                             onPressed: () {
                               context
                                   .read<AppScreenBloc>()
@@ -173,6 +177,8 @@ class _PatientScreen2State extends State<PatientScreen2> {
                         children: [
                           MaterialButton(
                             minWidth: 40,
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                             onPressed: () {
                               context
                                   .read<AppScreenBloc>()
@@ -199,6 +205,8 @@ class _PatientScreen2State extends State<PatientScreen2> {
                           ),
                           MaterialButton(
                             minWidth: 40,
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                             onPressed: () {
                               context
                                   .read<AppScreenBloc>()

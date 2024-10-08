@@ -134,7 +134,10 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                               focusNode: _emailFocusNode,
                               type: 'text',
                               hintText: 'Enter your email address',
-                              icon: 'user',
+                              icon: Icon(
+                                Icons.person,
+                                color: Theme.of(context).primaryColor,
+                              ),
                               onChange: (value) {
                                 context.read<SignInBloc>().add(
                                       EmailEvent(email: value),

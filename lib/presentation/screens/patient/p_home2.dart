@@ -26,7 +26,7 @@ class _PHome2State extends State<PHome2> {
   @override
   void initState() {
     super.initState();
-    appData = context.read<AppBloc>().state.appData;
+    appData = Global.storageService.getAppData();
 
     if (appData?.user != null) {
       appUser = appData!.user!;
@@ -51,7 +51,8 @@ class _PHome2State extends State<PHome2> {
         color: const Color(0xffF8F8F8),
         child: RefreshIndicator(
           onRefresh: () async {
-            appData = context.read<AppBloc>().state.appData;
+            context.read<AppBloc>().add(UpdateUserInfoEvent());
+            /*  appData = context.read<AppBloc>().state.appData;
             if (appData?.user != null) {
               appUser = appData!.user!;
             } else {
@@ -60,7 +61,7 @@ class _PHome2State extends State<PHome2> {
                 AppRoute.signIn,
                 (a) => false,
               );
-            }
+            } */
           },
           child: Column(
             children: [
@@ -321,30 +322,10 @@ class _PHome2State extends State<PHome2> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
-                        if (index == 0) {
-                          Navigator.pushNamed(context, AppRoute.emr);
-                          /* Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => MedicalHistory(
-                                title:
-                                    appData!.menu!.cards!.data![index].title!,
-                              ),
-                            ),
-                          ); */
-                        } else if (index == 1) {
-                          Navigator.pushNamed(context, AppRoute.labResult,
-                              arguments:
-                                  appData?.menu?.cards?.data[index].title);
-                        } else {
-                          /* Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => Tips(
-                                title:
-                                    appData!.menu!.cards!.data![index].title!,
-                              ),
-                            ),
-                          ); */
-                        }
+                        Navigator.pushNamed(context, AppRoute.emr, arguments: {
+                          'title': appData?.menu?.cards?.data[index].title,
+                          'key': appData?.menu?.cards?.data[index].key
+                        });
                       },
                       child: Container(
                         height: 80,

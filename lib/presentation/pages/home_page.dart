@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,6 +8,7 @@ import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/core/services/notification_service.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/emr_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/network_connectivity_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
 import 'package:hyella_telehealth/presentation/screens/doctor_screen.dart';
@@ -24,6 +27,18 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     initApp();
+    refreshIn30minsEvent(context);
+  }
+
+  void refreshIn30minsEvent(BuildContext context) {
+    // Function execute every 30 minutes
+    Timer.periodic(const Duration(minutes: 30), (timer) {
+      emptyEmrOptions(context);
+    });
+  }
+
+  void emptyEmrOptions(BuildContext context) {
+    context.read<EmrBloc>().add(EmptyAllEmrOptionsEvent());
   }
 
   void initApp() async {

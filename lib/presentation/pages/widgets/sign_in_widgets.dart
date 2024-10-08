@@ -43,14 +43,14 @@ TextButton forgotPassword(BuildContext context) {
     onPressed: () {
       Navigator.pushNamed(context, AppRoute.forgetPassword);
     },
-    child: const Text(
+    child: Text(
       "Forgot password?",
       style: TextStyle(
         fontSize: 16,
-        fontWeight: FontWeight.normal,
+        fontWeight: FontWeight.bold,
         decoration: TextDecoration.underline,
-        decorationColor: AppColors.lightText,
-        color: Colors.grey,
+        decorationColor: AppColors2.color1,
+        color: Colors.black,
       ),
     ),
   );

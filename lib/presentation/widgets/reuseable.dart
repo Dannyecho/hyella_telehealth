@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
+import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 
 Widget reuseableText(
   String textString, {
@@ -22,50 +23,51 @@ Widget reuseableText(
 Widget buildTextField({
   required String type,
   String? hintText,
-  String? icon,
+  Icon? icon,
   required void Function(String) onChange,
   void Function(String)? onSubmitted,
   FocusNode? focusNode,
 }) {
   return Container(
     margin: const EdgeInsets.only(bottom: 20),
-    decoration: BoxDecoration(
-      border: Border.all(
+    decoration: const BoxDecoration(
+      /* border: Border.all(
         color: AppColors.lightText2,
-      ),
-      borderRadius: const BorderRadius.all(
+      ), */
+      borderRadius: BorderRadius.all(
         Radius.circular(15),
       ),
     ),
-    child: Row(
-      children: [
-        Container(
-          margin: const EdgeInsets.only(
-            left: 16,
-            right: 8,
-          ),
-          width: 16,
-          height: 16,
-          child: Image.asset("assets/icons/$icon.png"),
+    child: TextFormField(
+      focusNode: focusNode,
+      onChanged: (value) => onChange(value),
+      keyboardType: TextInputType.text,
+      /* decoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: "$hintText",
+        hintStyle: const TextStyle(
+          color: AppColors.lightText2,
         ),
-        Expanded(
-          child: TextFormField(
-            focusNode: focusNode,
-            onChanged: (value) => onChange(value),
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: "$hintText",
-              hintStyle: const TextStyle(
-                color: AppColors.lightText2,
-              ),
-            ),
-            onFieldSubmitted: onSubmitted,
-            autocorrect: false,
-            obscureText: type == 'password' ? true : false,
-          ),
+      ), */
+      decoration: InputDecoration(
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        contentPadding: EdgeInsets.zero,
+        prefixIcon: icon,
+        focusColor: AppColors2.color1,
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors2.color1, width: 2),
         ),
-      ],
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors2.color1, width: 1.5),
+        ),
+        labelStyle: TextStyle(
+          color: AppColors2.color1,
+        ),
+        labelText: hintText,
+      ),
+      onFieldSubmitted: onSubmitted,
+      autocorrect: false,
+      obscureText: type == 'password' ? true : false,
     ),
   );
 }

@@ -49,10 +49,14 @@ class _ScheduleState extends State<Schedule>
               icon: const Icon(Icons.arrow_back)),
         ),
         backgroundColor: const Color(0xffF8F8F8),
-        body: SafeArea(
-          child: Column(
-            children: [
-              /* const SizedBox(
+        body: RefreshIndicator(
+          onRefresh: () async {
+            context.read<ScheduleBloc>().add(LoadUpComingScheduleEvent());
+          },
+          child: SafeArea(
+            child: Column(
+              children: [
+                /* const SizedBox(
                 height: 5,
               ),
               Container(
@@ -65,74 +69,75 @@ class _ScheduleState extends State<Schedule>
                   ),
                 ),
               ), */
-              /*  const SizedBox(
+                /*  const SizedBox(
                 height: 15,
               ), */
-              // give the tab bar a height [can change height to preferred height]
-              Container(
-                height: 45,
-                // width: AppUtil.deviceWidth(context) * .9,
-                decoration: BoxDecoration(
-                  color: AppColors2.color1,
-                  // borderRadius: BorderRadius.circular(10),
-                ),
-                child: TabBar(
-                  controller: _tabController,
-                  // give the indicator a decoration (color and border radius)
-                  indicator: BoxDecoration(
-                      border: const Border(
-                          bottom: BorderSide(
-                        color: Colors.white,
-                        width: 3,
-                      )),
-                      /* borderRadius: BorderRadius.circular(
+                // give the tab bar a height [can change height to preferred height]
+                Container(
+                  height: 45,
+                  // width: AppUtil.deviceWidth(context) * .9,
+                  decoration: BoxDecoration(
+                    color: AppColors2.color1,
+                    // borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: TabBar(
+                    controller: _tabController,
+                    // give the indicator a decoration (color and border radius)
+                    indicator: BoxDecoration(
+                        border: const Border(
+                            bottom: BorderSide(
+                          color: Colors.white,
+                          width: 3,
+                        )),
+                        /* borderRadius: BorderRadius.circular(
                         10.0,
                       ), */
-                      color: Theme.of(context).primaryColor),
-                  labelColor: Colors.white,
+                        color: Theme.of(context).primaryColor),
+                    labelColor: Colors.white,
 
-                  unselectedLabelColor: Colors.black45,
-                  tabs: const [
-                    // first tab [you can add an icon using the icon property]
-                    Tab(
-                      text: 'Upcoming',
-                    ),
+                    unselectedLabelColor: Colors.black45,
+                    tabs: const [
+                      // first tab [you can add an icon using the icon property]
+                      Tab(
+                        text: 'Upcoming',
+                      ),
 
-                    // second tab [you can add an icon using the icon property]
-                    Tab(
-                      text: 'Completed',
-                    ),
-                    Tab(
-                      text: 'Cancelled',
-                    ),
-                  ],
-                ),
-              ),
-              // tab bar view here
-              BlocBuilder<ScheduleBloc, ScheduleState>(
-                  builder: (context, state) {
-                return Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: AppUtil.deviceWidth(context) * .05),
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        state is ScheduleLoading
-                            ? const ScheduleShimmer()
-                            : UpcomingSchedule(),
-                        state is ScheduleLoading
-                            ? const ScheduleShimmer()
-                            : const CompletedSchedule(),
-                        state is ScheduleLoading
-                            ? const ScheduleShimmer()
-                            : CancelledSchedule(),
-                      ],
-                    ),
+                      // second tab [you can add an icon using the icon property]
+                      Tab(
+                        text: 'Completed',
+                      ),
+                      Tab(
+                        text: 'Cancelled',
+                      ),
+                    ],
                   ),
-                );
-              }),
-            ],
+                ),
+                // tab bar view here
+                BlocBuilder<ScheduleBloc, ScheduleState>(
+                    builder: (context, state) {
+                  return Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: AppUtil.deviceWidth(context) * .05),
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          state is ScheduleLoading
+                              ? const ScheduleShimmer()
+                              : UpcomingSchedule(),
+                          state is ScheduleLoading
+                              ? const ScheduleShimmer()
+                              : const CompletedSchedule(),
+                          state is ScheduleLoading
+                              ? const ScheduleShimmer()
+                              : CancelledSchedule(),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+              ],
+            ),
           ),
         ),
       ),
