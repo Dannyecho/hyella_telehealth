@@ -10,6 +10,7 @@ import 'package:hyella_telehealth/logic/bloc/emr_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/endpoint_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/form_builder_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/network_connectivity_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/revenue_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
 
@@ -64,6 +65,10 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (context) => EmrBloc(),
+          lazy: false,
+        ),
+        BlocProvider(
+          create: (context) => RevenueBloc(),
           lazy: false,
         ),
       ],

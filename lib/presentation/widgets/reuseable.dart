@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hyella_telehealth/core/constants/app_colors.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 
 Widget reuseableText(

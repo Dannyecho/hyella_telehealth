@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
+import 'package:hyella_telehealth/data/repository/entities/app_settings_entity.dart';
 import 'package:hyella_telehealth/data/repository/entities/endpoint_entity.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/presentation/widgets/toast_info.dart';
@@ -110,5 +111,12 @@ class StorageService {
 
   Future<void> remove(String key) {
     return _prefs.remove(key);
+  }
+
+  AppSettingsEntity? getAppSettings() {
+    String? settings = _prefs.getString(AppConstants.STORAGE_APP_SETTINGS);
+    if (settings != null) {
+      return AppSettingsEntity.fromJson(settings);
+    }
   }
 }

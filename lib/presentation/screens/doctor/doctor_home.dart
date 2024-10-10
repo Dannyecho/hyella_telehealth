@@ -9,8 +9,13 @@ import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/data/repository/entities/endpoint_entity.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/endpoint_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/revenue_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
+import 'package:hyella_telehealth/presentation/screens/doctor/widgets.dart';
+import 'package:shimmer/shimmer.dart';
 
 class DoctorHome extends StatefulWidget {
   const DoctorHome({super.key});
@@ -57,6 +62,7 @@ class _DoctorHomeState extends State<DoctorHome> {
           onRefresh: () async {
             context.read<EndpointBloc>().add(RefreshEndpointEvent());
             context.read<AppBloc>().add(UpdateUserInfoEvent());
+            context.read<RevenueBloc>().add(LoadRevenueEvent());
             /*  appData = context.read<AppBloc>().state.appData;
             if (appData?.user != null) {
               appUser = appData!.user!;
@@ -97,36 +103,44 @@ class _DoctorHomeState extends State<DoctorHome> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 25,
-                                backgroundColor: Colors.white,
-                                child: appUser.dp != null &&
-                                        appUser.dp!.isNotEmpty
-                                    ? CachedNetworkImage(imageUrl: appUser.dp!)
-                                    : const FaIcon(
-                                        FontAwesomeIcons.userDoctor,
-                                        size: 30,
-                                        color: AppColors.lightText2,
-                                      ),
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              SizedBox(
-                                width: 100,
-                                child: Text(
-                                  appUser.userNameSubtitle ?? '',
-                                  softWrap: true,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
+                          GestureDetector(
+                            onTap: () {
+                              context.read<AppScreenBloc>().add(
+                                    SwitchScreen(index: 3),
+                                  );
+                            },
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 25,
+                                  backgroundColor: Colors.white,
+                                  child: appUser.dp != null &&
+                                          appUser.dp!.isNotEmpty
+                                      ? CachedNetworkImage(
+                                          imageUrl: appUser.dp!)
+                                      : const FaIcon(
+                                          FontAwesomeIcons.userDoctor,
+                                          size: 30,
+                                          color: AppColors.lightText2,
+                                        ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                SizedBox(
+                                  width: 100,
+                                  child: Text(
+                                    appUser.userNameSubtitle ?? '',
+                                    softWrap: true,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                           SizedBox(
                             width: 200,
@@ -149,15 +163,25 @@ class _DoctorHomeState extends State<DoctorHome> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          homeButton(
-                            context,
-                            label: "New Appointments",
-                            icon: const FaIcon(
-                              FontAwesomeIcons.handHoldingMedical,
-                              color: Colors.white,
-                            ),
-                            iconBackground: AppColors2.color2,
-                            background: AppColors2.color3,
+                          BlocBuilder<ScheduleBloc, ScheduleState>(
+                            builder: (context, state) {
+                              return homeButton(context,
+                                  label: "New Appointments",
+                                  icon: const FaIcon(
+                                    FontAwesomeIcons.handHoldingMedical,
+                                    color: Colors.white,
+                                  ),
+                                  iconBackground: AppColors2.color2,
+                                  background: AppColors2.color3,
+                                  badge: (state is ScheduleLoaded &&
+                                          state.upComingSchedules != null)
+                                      ? state.upComingSchedules!.length
+                                      : 0, onTap: () {
+                                context
+                                    .read<AppScreenBloc>()
+                                    .add(SwitchScreen(index: 2));
+                              });
+                            },
                           ),
                           homeButton(
                             context,
@@ -168,6 +192,12 @@ class _DoctorHomeState extends State<DoctorHome> {
                             ),
                             iconBackground: AppColors2.color4,
                             background: AppColors2.color5,
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                AppRoute.revenue,
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -190,71 +220,177 @@ class _DoctorHomeState extends State<DoctorHome> {
                   ),
                   child: Column(
                     children: [
-                      Container(
-                        height: _height * .18,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(.2),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Revenue Generated in 2022",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                      ),
+                      BlocBuilder<RevenueBloc, RevenueState>(
+                        builder: (context, state) {
+                          return state is RevenueStateLoading
+                              ? Shimmer.fromColors(
+                                  baseColor: Colors.grey[300]!,
+                                  highlightColor: Colors.grey[100]!,
+                                  child: Container(
+                                    width: _width,
+                                    padding: const EdgeInsets.all(20),
+                                    height: 180,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.circular(20),
                                     ),
-                                    Text(
-                                      '₦98,0000.00',
-                                      style: TextStyle(
-                                        fontSize: 22,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: '',
+                                  ),
+                                )
+                              : state is RevenueStateLoaded
+                                  ? Container(
+                                      height: _height * .18,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                        vertical: 10,
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                IconButton(
-                                    color: Colors.white,
-                                    onPressed: () {},
-                                    icon: const FaIcon(FontAwesomeIcons.eye))
-                              ],
-                            ),
-                            const Divider(),
-                            const Text(
-                              'Forthcoming Appointments',
-                              softWrap: true,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Text(
-                              'Total: 152 in next 7 days',
-                              softWrap: true,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            )
-                          ],
-                        ),
+                                      decoration: BoxDecoration(
+                                          color: AppColors2.color1,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(.2),
+                                              offset: const Offset(0, 1),
+                                              blurRadius: 2,
+                                              spreadRadius: 1,
+                                            )
+                                          ]),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              state.openBalance
+                                                  ? Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          state.data.title!,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 16,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                            horizontal: 5,
+                                                          ),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: AppColors2
+                                                                .color5,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        20),
+                                                          ),
+                                                          child: Text(
+                                                            state.data
+                                                                .totalRevenue!,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 22,
+                                                              // color: Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily: '',
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  : Text(
+                                                      "****",
+                                                      style: TextStyle(
+                                                        // letterSpacing: 10,
+                                                        fontSize: 25,
+                                                        color:
+                                                            AppColors2.color4,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                              IconButton(
+                                                  color: Colors.white,
+                                                  onPressed: () {
+                                                    context.read<RevenueBloc>().add(
+                                                        ToggleViewBalanceEvent());
+                                                  },
+                                                  icon: state.openBalance
+                                                      ? const FaIcon(
+                                                          FontAwesomeIcons.eye)
+                                                      : const FaIcon(
+                                                          FontAwesomeIcons
+                                                              .eyeSlash,
+                                                        ))
+                                            ],
+                                          ),
+                                          Builder(builder: (context) {
+                                            return BlocBuilder<AppBloc,
+                                                AppBlocState>(
+                                              builder: (context, state) {
+                                                return Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      const Divider(
+                                                        endIndent: 100,
+                                                      ),
+                                                      Text(
+                                                        state.appData?.appChart
+                                                                ?.title ??
+                                                            '',
+                                                        softWrap: true,
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          // color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        state.appData?.appChart
+                                                                ?.subtitle ??
+                                                            '',
+                                                        softWrap: true,
+                                                        style: TextStyle(
+                                                          fontSize: 12,
+                                                          color:
+                                                              AppColors2.color3,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          }),
+                                        ],
+                                      ),
+                                    )
+                                  : const SizedBox();
+                        },
                       ),
                       const SizedBox(
                         height: 12,
@@ -362,83 +498,6 @@ class _DoctorHomeState extends State<DoctorHome> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Container homeButton(
-    BuildContext context, {
-    required String label,
-    required FaIcon icon,
-    Color? background,
-    Color? iconBackground,
-  }) {
-    final _width = MediaQuery.of(context).size.width;
-    return Container(
-      width: _width * .43,
-      // height: _width * .2,
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: const BorderRadius.all(Radius.circular(14)),
-      ),
-      child: Stack(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                alignment: Alignment.center,
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(5),
-                  ),
-                  color: iconBackground,
-                ),
-                child: icon,
-              ),
-              SizedBox(
-                width: _width * .28,
-                child: Text(
-                  label,
-                  softWrap: true,
-                  textAlign: TextAlign.start,
-                  overflow: TextOverflow.fade,
-                  maxLines: 2,
-                  style: const TextStyle(
-                    // color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          /*  Positioned(
-                                top: 0,
-                                right: 0,
-                                child: Container(
-                                  height: 20,
-                                  width: 20,
-                                  decoration: BoxDecoration(
-                                      color: AppColors2.color2,
-                                      borderRadius:
-                                          BorderRadius.circular(20)),
-                                  child: const Text(
-                                    "12",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              )
-                             */
-        ],
       ),
     );
   }

@@ -10,6 +10,7 @@ class AppConstants {
   static const String ENDPOINT_ENTITY_KEY = 'endpoint_entity';
   static const String STORAGE_APP_DATA = 'app_data';
   static const String STORAGE_CLIENT_ID = 'app_client_id';
+  static const String STORAGE_APP_SETTINGS = 'app_settings';
   static const String SERVER_API_FILES_URL =
       'http://172.20.10.5/fimi/public/files/';
   static const String SERVER_API_URL = 'http://172.20.10.5/';

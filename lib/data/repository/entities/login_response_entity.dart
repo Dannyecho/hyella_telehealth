@@ -53,6 +53,7 @@ class Data {
     required this.notice,
     required this.trends,
     required this.webViews,
+    required this.appChart,
   });
 
   final String? sessionId;
@@ -63,6 +64,7 @@ class Data {
   final List<dynamic> notice;
   final List<dynamic> trends;
   final WebViews? webViews;
+  final AppChart? appChart;
 
   Data copyWith({
     String? sessionId,
@@ -73,6 +75,7 @@ class Data {
     List<dynamic>? notice,
     List<dynamic>? trends,
     WebViews? webViews,
+    AppChart? appChart,
   }) {
     return Data(
       sessionId: sessionId ?? this.sessionId,
@@ -83,6 +86,7 @@ class Data {
       notice: notice ?? this.notice,
       trends: trends ?? this.trends,
       webViews: webViews ?? this.webViews,
+      appChart: appChart ?? this.appChart,
     );
   }
 
@@ -104,6 +108,9 @@ class Data {
       webViews: json["web_views"] == null
           ? null
           : WebViews.fromJson(json["web_views"]),
+      appChart: json["app_chart"] == null
+          ? null
+          : AppChart.fromJson(json["app_chart"]),
     );
   }
 
@@ -116,11 +123,12 @@ class Data {
         "notice": notice.map((x) => x).toList(),
         "trends": trends.map((x) => x).toList(),
         "web_views": webViews?.toJson(),
+        "app_chart": appChart?.toJson(),
       };
 
   @override
   String toString() {
-    return "$sessionId, $user, $emr, $url, $menu, $notice, $trends, $webViews, ";
+    return "$sessionId, $user, $emr, $url, $menu, $notice, $trends, $webViews, $appChart, ";
   }
 }
 
@@ -891,5 +899,94 @@ class Params {
   @override
   String toString() {
     return "$token, $nwpWebiew, $pid, $hash, ";
+  }
+}
+
+class AppChart {
+  AppChart({
+    required this.title,
+    required this.subtitle,
+    required this.data,
+  });
+
+  final String? title;
+  final String? subtitle;
+  final List<AppChartData> data;
+
+  AppChart copyWith({
+    String? title,
+    String? subtitle,
+    List<AppChartData>? data,
+  }) {
+    return AppChart(
+      title: title ?? this.title,
+      subtitle: subtitle ?? this.subtitle,
+      data: data ?? this.data,
+    );
+  }
+
+  factory AppChart.fromJson(Map<String, dynamic> json) {
+    return AppChart(
+      title: json["title"],
+      subtitle: json["subtitle"],
+      data: json["data"] == null
+          ? []
+          : List<AppChartData>.from(
+              json["data"]!.map((x) => AppChartData.fromJson(x))),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        "title": title,
+        "subtitle": subtitle,
+        "data": data.map((x) => x?.toJson()).toList(),
+      };
+
+  @override
+  String toString() {
+    return "$title, $subtitle, $data, ";
+  }
+}
+
+class AppChartData {
+  AppChartData({
+    required this.key,
+    required this.title,
+    required this.value,
+  });
+
+  final String? key;
+  final String? title;
+  final int? value;
+
+  AppChartData copyWith({
+    String? key,
+    String? title,
+    int? value,
+  }) {
+    return AppChartData(
+      key: key ?? this.key,
+      title: title ?? this.title,
+      value: value ?? this.value,
+    );
+  }
+
+  factory AppChartData.fromJson(Map<String, dynamic> json) {
+    return AppChartData(
+      key: json["key"],
+      title: json["title"],
+      value: json["value"],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        "key": key,
+        "title": title,
+        "value": value,
+      };
+
+  @override
+  String toString() {
+    return "$key, $title, $value, ";
   }
 }
