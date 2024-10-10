@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 
 Widget homeButton(
   BuildContext context, {

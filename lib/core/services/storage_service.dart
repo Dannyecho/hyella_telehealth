@@ -118,5 +118,6 @@ class StorageService {
     if (settings != null) {
       return AppSettingsEntity.fromJson(settings);
     }
+    return null;
   }
 }

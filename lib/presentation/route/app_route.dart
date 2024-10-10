@@ -10,7 +10,6 @@ import 'package:hyella_telehealth/logic/bloc/appointment_step_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/chat_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/lab_result_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/profile_edit_bloc.dart';
-import 'package:hyella_telehealth/logic/bloc/revenue_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/services_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/sign_in_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/web_view_bloc.dart';

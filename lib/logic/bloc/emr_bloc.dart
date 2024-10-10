@@ -13,7 +13,7 @@ class EmrBloc extends Bloc<EmrEvent, EmrState> {
   EmrBloc() : super(EmrState(loading: true, emrOptions: [])) {
     on<FetchingEmrOptionsEvent>((event, emit) async {
       emit(state.copyWith(loading: true));
-      var response = await EmrApi().getEmrOptions(event.pageKey ?? 'myemr');
+      var response = await EmrApi().getEmrOptions(event.pageKey);
 
       if (response['type'] == 0) {
         toastInfo(msg: response['msg']);

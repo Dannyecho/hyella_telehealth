@@ -939,7 +939,7 @@ class AppChart {
   Map<String, dynamic> toJson() => {
         "title": title,
         "subtitle": subtitle,
-        "data": data.map((x) => x?.toJson()).toList(),
+        "data": data.map((x) => x.toJson()).toList(),
       };
 
   @override
