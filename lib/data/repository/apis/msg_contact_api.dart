@@ -1,10 +1,13 @@
+import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/core/utils/app_util.dart';
 import 'package:hyella_telehealth/core/utils/http_util.dart';
 import 'package:hyella_telehealth/data/repository/entities/contact_entity.dart';
+import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 
 class MsgContactApi {
+  bool isDoctor = Global.storageService.getAppUser()!.isStaff == 1;
   Future<Map<String, dynamic>> setChatToRead(
-      String chatKey, String receiverId, bool isDoctor) async {
+      String chatKey, String receiverId) async {
     String publicKey = AppUtil.generateMd5ForApiAuth('msg_read');
 
     String uri = isDoctor
@@ -20,8 +23,14 @@ class MsgContactApi {
 
   Future<MsgContactListResponse?> getContactList() async {
     try {
+      User? user = Global.storageService.getAppUser();
+      String requestType = 'msg_contact_list';
+      if (user!.isStaff == 1) {
+        requestType = 'msgs_contact_list';
+      }
+
       String publicKey = AppUtil.generateMd5ForApiAuth("app_list_of_doctors");
-      String uri = "&nwp_request=msg_contact_list&public_key=$publicKey";
+      String uri = "&nwp_request=$requestType&public_key=$publicKey";
       var response = await HttpUtil().post(uri);
       return MsgContactListResponse.fromJson(response);
     } catch (e) {

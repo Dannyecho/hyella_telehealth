@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/core/utils/app_util.dart';
 import 'package:hyella_telehealth/core/utils/http_util.dart';
 import 'package:hyella_telehealth/data/repository/entities/chat_entity.dart';
@@ -6,8 +7,9 @@ import 'package:hyella_telehealth/data/repository/entities/upload_file_response_
 import 'package:hyella_telehealth/presentation/widgets/toast_info.dart';
 
 class ChatApi {
-  Future<ChatListResponseEntity> getConversations(
-      String recieverId, bool isDoctor) async {
+  bool isDoctor = Global.storageService.getAppUser()!.isStaff == 1;
+
+  Future<ChatListResponseEntity> getConversations(String recieverId) async {
     try {
       String publicKey = AppUtil.generateMd5ForApiAuth("app_list_of_doctors");
       String uri = "&public_key=$publicKey";
@@ -29,7 +31,7 @@ class ChatApi {
   }
 
   Future<ChatListResponseEntity> sendTextMessageToServer(
-      String message, String chatKey, String receiverId, bool isDoctor) async {
+      String message, String chatKey, String receiverId) async {
     try {
       String publicKey = AppUtil.generateMd5ForApiAuth("msg_save_msg");
       String uri = "&public_key=$publicKey";

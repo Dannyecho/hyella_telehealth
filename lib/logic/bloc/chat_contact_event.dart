@@ -13,11 +13,9 @@ class FilterContactListEvent extends ChatContactEvent {
 class SetReadCountToZeroEvent extends ChatContactEvent {
   String chatKey;
   String receiverId;
-  bool isDoctor;
 
   SetReadCountToZeroEvent({
     required this.chatKey,
     required this.receiverId,
-    required this.isDoctor,
   });
 }

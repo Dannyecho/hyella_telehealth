@@ -15,8 +15,7 @@ part 'chat_state.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   EndPointEntityData? appEndpoints = Global.storageService.getEndpoints();
-  ScrollController scrollController = ScrollController();
-
+  late ScrollController scrollController;
   Data? appdata = Global.storageService.getAppData();
   String tempAppKey = '6e1ee3344b4344ffba2e0c4005d17c9c';
   String tempAppToken =
@@ -44,7 +43,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         // Setup chat listeners
         // setupListeners();
         // Fetch conversation from server
+        scrollController = event.scrollController;
         add(GetChatConversationEvent());
+        // scrollToBottomWithInset(100);
       } catch (e) {
         emit(state.copyWith(hasError: true));
       }
@@ -90,8 +91,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<GetChatConversationEvent>(
       (event, emit) async {
         var chatPageData = state.chatPageData!;
-        ChatListResponseEntity chatListResponseEntity = await ChatApi()
-            .getConversations(chatPageData.receiverId!, chatPageData.isDoctor!);
+        ChatListResponseEntity chatListResponseEntity =
+            await ChatApi().getConversations(
+          chatPageData.receiverId!,
+        );
 
         if (chatListResponseEntity.type == 0) {
           emit(state.copyWith(hasError: true));
@@ -100,7 +103,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         }
 
         // scrollToBottom();
-        scrollToBottomWithInset(100);
+        // scrollToBottomWithInset(event.scrollController, 100);
         emit(state.copyWith(
           conversations: chatListResponseEntity.data,
           hasError: false,
@@ -119,7 +122,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       sendMessage(
         message: event.msgBody,
         receiverId: event.receiverId,
-        isDoctor: event.isDoctor,
+        isDoctor: appdata!.user!.isStaff == 1,
       );
     });
 
@@ -197,7 +200,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         newConversations!.add(msgObj);
 
         emit(state.copyWith(conversations: newConversations));
-        scrollToBottomWithInset(0);
+        scrollToBottomWithInset(event.scrollController!, 0);
+        // if (event.scrollController != null) {}
       },
     );
   }
@@ -205,12 +209,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   String get chatKey =>
       "${state.chatPageData!.channelId!}*${DateTime.now().millisecondsSinceEpoch}";
 
-  void sendMessage(
-      {required String message,
-      required String receiverId,
-      required bool isDoctor,
-      List<String>? selectedFiles,
-      List<String>? selectedImages}) async {
+  void sendMessage({
+    required String message,
+    required String receiverId,
+    required bool isDoctor,
+    List<String>? selectedFiles,
+    List<String>? selectedImages,
+  }) async {
     try {
       if (message.trim().isEmpty &&
           (selectedFiles == null || selectedFiles.isEmpty) &&
@@ -243,8 +248,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         String cKey = chatKey;
         var messageBody =
             "${message.trim()}${CustomChatType.text.getExtension()}${ChatDelimiters.chatKeyDelimeter}$cKey";
-        var sendToServer = ChatApi()
-            .sendTextMessageToServer(messageBody, cKey, receiverId, isDoctor);
+        var sendToServer =
+            ChatApi().sendTextMessageToServer(messageBody, cKey, receiverId);
 
         add(AddNewMessageEvent(key: cKey, message: message));
 
@@ -276,7 +281,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     }
   }
 
-  void scrollToBottom() {
+  void scrollToBottom(ScrollController scrollController) {
     scrollController.animateTo(
       scrollController.position.maxScrollExtent,
       duration: const Duration(milliseconds: 20),
@@ -328,7 +333,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     await ChatClient.getInstance.startCallback();
   }
  */
-  void scrollToBottomWithInset(double insets) {
+  void scrollToBottomWithInset(
+      ScrollController scrollController, double insets) {
     print("Scrolling with inset...");
     Future.delayed(
       const Duration(milliseconds: 500),

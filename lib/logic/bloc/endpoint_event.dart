@@ -6,3 +6,5 @@ class TriggerEndpoint extends EndpointEvent {
   final EndPointEntity endPointEntity;
   TriggerEndpoint({required this.endPointEntity});
 }
+
+class RefreshEndpointEvent extends EndpointEvent {}

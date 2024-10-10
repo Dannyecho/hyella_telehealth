@@ -31,7 +31,10 @@ Widget shimmerEffect(BuildContext context) {
   );
 }
 
-Widget sendMessageWidget(BuildContext context) {
+Widget sendMessageWidget(
+  BuildContext context,
+  ScrollController scrollController,
+) {
   var chatBloc = context.read<ChatBloc>();
   return Padding(
     padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 15),
@@ -126,13 +129,16 @@ Widget sendMessageWidget(BuildContext context) {
                   onTap: () async {
                     Future.delayed(const Duration(seconds: 1), () {
                       context.read<ChatBloc>().scrollToBottomWithInset(
-                          MediaQuery.of(context).viewInsets.bottom);
+                            scrollController,
+                            MediaQuery.of(context).viewInsets.bottom,
+                          );
                     });
                   },
                   onChanged: (value) {
-                    context
-                        .read<ChatBloc>()
-                        .add(TypingMessageEvent(text: value));
+                    context.read<ChatBloc>().add(TypingMessageEvent(
+                          text: value,
+                          scrollController: scrollController,
+                        ));
                   },
                   decoration: const InputDecoration(
                     hintText: 'Message...',

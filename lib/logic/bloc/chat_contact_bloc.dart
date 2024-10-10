@@ -82,7 +82,7 @@ class ChatContactBloc extends Bloc<ChatContactEvent, ChatContactState> {
         }
 
         var response = await MsgContactApi()
-            .setChatToRead(event.chatKey, event.receiverId, event.isDoctor);
+            .setChatToRead(event.chatKey, event.receiverId);
 
         if (response['type'] == 0) {
           toastInfo(msg: response['msg']);

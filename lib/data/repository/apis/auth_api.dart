@@ -5,9 +5,12 @@ import 'package:hyella_telehealth/data/repository/entities/login_request_entity.
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 
 class AuthApi {
-  Future<LoginResponseEntity> updateUserInfo() async {
+  Future<LoginResponseEntity> updateUserInfo(isDoctor) async {
     try {
       String requestType = 'user_mgt_home_info';
+      if (isDoctor) {
+        requestType = 'user_mgts_home_info';
+      }
       String publicKey = AppUtil.generateMd5ForApiAuth(requestType);
       String uri = 'nwp_request=$requestType&public_key=$publicKey';
       var response = await HttpUtil().post(uri);
@@ -25,7 +28,8 @@ class AuthApi {
   Future<LoginResponseEntity> loginUser(LoginRequestEntity request) async {
     String? requestType = request.uType;
     String publicKey = AppUtil.generateMd5ForApiAuth(requestType!);
-    String uri = 'nwp_request=$requestType&public_key=$publicKey';
+    String uri =
+        'nwp_request=$requestType&fmc_token=${request.fcmToken}&u_type=${request.uType}&public_key=$publicKey';
     var response = await HttpUtil().post(uri, data: request.toMap())
         as Map<String, dynamic>;
 

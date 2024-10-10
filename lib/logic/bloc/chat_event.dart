@@ -5,12 +5,16 @@ abstract class ChatEvent {}
 
 class InitializeChatEvent extends ChatEvent {
   ChatPageData chatPageData;
+  final ScrollController scrollController;
   InitializeChatEvent({
     required this.chatPageData,
+    required this.scrollController,
   });
 }
 
-class GetChatConversationEvent extends ChatEvent {}
+class GetChatConversationEvent extends ChatEvent {
+  GetChatConversationEvent();
+}
 
 class JoinChatEvent extends ChatEvent {}
 
@@ -67,16 +71,23 @@ class RemoveFileEvent extends ChatEvent {
 
 class TypingMessageEvent extends ChatEvent {
   final String text;
+  final ScrollController scrollController;
   TypingMessageEvent({
     required this.text,
+    required this.scrollController,
   });
 }
 
 class AddNewMessageEvent extends ChatEvent {
   final String key;
   final String message;
+  ScrollController? scrollController;
 
-  AddNewMessageEvent({required this.key, required this.message});
+  AddNewMessageEvent({
+    required this.key,
+    required this.message,
+    this.scrollController,
+  });
 }
 
 class ClearAllMsgEvent extends ChatEvent {}

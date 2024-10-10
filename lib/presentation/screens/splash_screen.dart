@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     if (context.mounted) {
       Future.delayed(
-          const Duration(seconds: 0), () => getAppResources(context));
+          const Duration(seconds: 3), () => getAppResources(context));
     }
   }
 

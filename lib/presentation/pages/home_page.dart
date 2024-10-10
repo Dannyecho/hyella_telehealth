@@ -43,11 +43,11 @@ class _HomePageState extends State<HomePage> {
 
   void initApp() async {
     Data? appData = Global.storageService.getAppData();
-    if (appData == null) {
+    if (appData?.user == null) {
       Navigator.pushNamedAndRemoveUntil(context, AppRoute.signIn, (e) => false);
       return;
     }
-    context.read<AppBloc>().add(SetAppDataEvent(appData: appData));
+    context.read<AppBloc>().add(SetAppDataEvent(appData: appData!));
     context.read<AppBloc>().add(SetUserEvent(user: appData.user!));
     NotificationService.instance.initForegroundMessaging();
 

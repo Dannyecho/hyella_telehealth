@@ -26,14 +26,14 @@ class AppBloc extends Bloc<AppBlocEvent, AppBlocState> {
 
     on<UpdateUserInfoEvent>(
       (event, emit) async {
-        var response = await AuthApi().updateUserInfo();
+        var response = await AuthApi().updateUserInfo(state.user!.isStaff == 1);
         if (response.type == 0) {
           toastInfo(msg: response.msg!);
           return;
         }
 
         add(SetAppDataEvent(appData: response.data!));
-        add(SetUserEvent(user: response.data!.user!));
+        // add(SetUserEvent(user: response.data!.user!));
       },
     );
   }

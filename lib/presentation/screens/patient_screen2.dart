@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/chat_contact_bloc.dart';
-import 'package:hyella_telehealth/presentation/screens/widgets/patient_screen_widgets.dart';
+import 'package:hyella_telehealth/presentation/screens/widgets/screen_widgets.dart';
 
 class PatientScreen2 extends StatefulWidget {
   final int? index;

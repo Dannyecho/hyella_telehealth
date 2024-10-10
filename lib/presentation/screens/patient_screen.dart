@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
-import 'package:hyella_telehealth/presentation/screens/widgets/patient_screen_widgets.dart';
+import 'package:hyella_telehealth/presentation/screens/widgets/screen_widgets.dart';
 
 class PatientScreen extends StatefulWidget {
   const PatientScreen({super.key});

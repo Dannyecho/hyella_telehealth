@@ -23,12 +23,37 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   DateFormat dateFormat = DateFormat('dd MMM yyyy');
+  ScrollController scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
-    context
-        .read<ChatBloc>()
-        .add(InitializeChatEvent(chatPageData: widget.data));
+    context.read<ChatBloc>().add(InitializeChatEvent(
+          chatPageData: widget.data,
+          scrollController: scrollController,
+        ));
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // This code will run after the ListView.builder is built
+      // scrollToBottomWithInset(insets)
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: const Duration(microseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  void scrollToBottomWithInset(double insets) {
+    print("Scrolling with inset...");
+    Future.delayed(
+      const Duration(milliseconds: 500),
+      (() {
+        scrollController.jumpTo(
+          scrollController.position.maxScrollExtent + insets,
+        );
+      }),
+    );
+    print("Scrolling with inset ended....");
   }
 
   @override
@@ -42,10 +67,14 @@ class _ChatPageState extends State<ChatPage> {
           SetReadCountToZeroEvent(
             chatKey: widget.data.key!,
             receiverId: widget.data.receiverId!,
-            isDoctor: widget.data.isDoctor!,
           ),
         );
     // context.read<ChatBloc>().scrollToBottomWithInset(100);
+  }
+
+  Future<void> buildListView() async {
+    // Simulate a future that resolves after the ListView is built
+    await Future.delayed(const Duration(seconds: 2));
   }
 
   @override
@@ -123,8 +152,10 @@ class _ChatPageState extends State<ChatPage> {
                         ElevatedButton(
                           onPressed: () {
                             print("Refresh pressed");
-                            context.read<ChatBloc>().add(
-                                InitializeChatEvent(chatPageData: widget.data));
+                            context.read<ChatBloc>().add(InitializeChatEvent(
+                                  chatPageData: widget.data,
+                                  scrollController: scrollController,
+                                ));
                           },
                           child: const Text("Tap to retry"),
                         )
@@ -143,76 +174,97 @@ class _ChatPageState extends State<ChatPage> {
                         return Column(
                           children: [
                             Expanded(
-                              child: ListView.builder(
-                                  physics: const ClampingScrollPhysics(),
-                                  controller:
-                                      context.read<ChatBloc>().scrollController,
-                                  itemCount: groupMsgKeys.length,
-                                  padding: const EdgeInsets.only(top: 20),
-                                  itemBuilder: (context, index) {
-                                    String groupDate = groupMsgKeys[index];
-                                    List<MsgConversation> groupMsgs =
-                                        groupMsgValues[index];
+                              child: FutureBuilder(
+                                  future: buildListView(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<void> snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      scrollController.animateTo(
+                                        scrollController
+                                            .position.maxScrollExtent,
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        curve: Curves.easeInOut,
+                                      );
+                                    }
+                                    return ListView.builder(
+                                        // physics: const ClampingScrollPhysics(),
+                                        controller: scrollController,
+                                        itemCount: groupMsgKeys.length,
+                                        padding: const EdgeInsets.only(top: 20),
+                                        itemBuilder: (context, index) {
+                                          String groupDate =
+                                              groupMsgKeys[index];
+                                          List<MsgConversation> groupMsgs =
+                                              groupMsgValues[index];
 
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Center(
-                                          child: Container(
-                                            alignment: Alignment.center,
-                                            constraints: const BoxConstraints(
-                                                maxWidth: 100),
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 3, horizontal: 8),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                            child: Text(
-                                              (groupDate ==
-                                                      dateFormat.format(
-                                                          DateTime.now())
-                                                  ? "Today"
-                                                  : groupDate),
-                                              style: const TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 10,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Builder(builder: (context) {
-                                          MsgConversation? prevChat;
                                           return Column(
-                                            children: groupMsgs.map((e) {
-                                              bool newLine = false;
-                                              if (prevChat != null) {
-                                                newLine = prevChat!.source !=
-                                                    e.source;
-                                              }
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Center(
+                                                child: Container(
+                                                  alignment: Alignment.center,
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                          maxWidth: 100),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      vertical: 3,
+                                                      horizontal: 8),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
+                                                  child: Text(
+                                                    (groupDate ==
+                                                            dateFormat.format(
+                                                                DateTime.now())
+                                                        ? "Today"
+                                                        : groupDate),
+                                                    style: const TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 10,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Builder(builder: (context) {
+                                                MsgConversation? prevChat;
+                                                return Column(
+                                                  children: groupMsgs.map((e) {
+                                                    bool newLine = false;
+                                                    if (prevChat != null) {
+                                                      newLine =
+                                                          prevChat!.source !=
+                                                              e.source;
+                                                    }
 
-                                              prevChat = e;
-                                              return ChatItem(
-                                                chatModel: e,
-                                                pid: state.chatPageData!.pid!,
-                                                newLine: newLine,
-                                              );
-                                            }).toList(),
+                                                    prevChat = e;
+                                                    return ChatItem(
+                                                      chatModel: e,
+                                                      pid: state
+                                                          .chatPageData!.pid!,
+                                                      newLine: newLine,
+                                                    );
+                                                  }).toList(),
+                                                );
+                                              }),
+                                              const SizedBox(
+                                                height: 10,
+                                              )
+                                            ],
                                           );
-                                        }),
-                                        const SizedBox(
-                                          height: 10,
-                                        )
-                                      ],
-                                    );
+                                        });
                                   }),
                             ),
-                            sendMessageWidget(context),
+                            sendMessageWidget(context, scrollController),
                             Wrap(
                               children: state.selectedImages
                                   .map(

@@ -8,6 +8,7 @@ import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/web_view_bloc.dart';
 import 'package:hyella_telehealth/presentation/pages/chat_contact_page.dart';
 import 'package:hyella_telehealth/presentation/pages/services_page.dart';
+import 'package:hyella_telehealth/presentation/screens/doctor/doctor_home.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/p_home.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/p_home2.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/p_profile.dart';
@@ -16,29 +17,33 @@ import 'package:hyella_telehealth/presentation/screens/web_viewer_screen.dart';
 
 Widget buildScreen(BuildContext context, int index) {
   Data appData = context.read<AppBloc>().state.appData!;
-  List<Widget> _screens = [
+  List<Widget> screens = [
     const PHome(),
-    Center(child: Text('Chat')),
-    Center(child: Text('Schedule')),
+    const Center(child: Text('Chat')),
+    const Center(child: Text('Schedule')),
     BlocProvider(
       create: (context) => WebViewBloc(),
-      child: Builder(builder: (context) {
-        return WebViewerScreen(title: "My Wallet", url: appData.url);
-      }),
+      child: Builder(
+        builder: (context) {
+          return WebViewerScreen(title: "My Wallet", url: appData.url);
+        },
+      ),
     ),
     const PProfile(),
   ];
 
-  return _screens[index];
+  return screens[index];
 }
 
 Widget buildScreen2(BuildContext context, int index) {
   Data appData = context.read<AppBloc>().state.appData!;
+  User user = appData.user!;
   Home appServices = appData.menu!.home!;
   List<Service> services =
       appServices.data.where((el) => el.key != 'all_services').toList();
-  List<Widget> _screens = [
-    PHome2(),
+
+  List<Widget> screens = [
+    user.isStaff == 1 ? const DoctorHome() : PHome2(),
     const ChatContactPage(),
     Schedule(),
     const PProfile(),
@@ -47,7 +52,7 @@ Widget buildScreen2(BuildContext context, int index) {
     ),
   ];
 
-  return _screens[index];
+  return screens[index];
 }
 
 List<BottomNavigationBarItem> buttonNavigatigationBarItem() {

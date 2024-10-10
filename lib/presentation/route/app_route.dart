@@ -8,7 +8,6 @@ import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/appointment_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/appointment_step_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/chat_bloc.dart';
-import 'package:hyella_telehealth/logic/bloc/emr_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/lab_result_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/profile_edit_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/services_bloc.dart';
@@ -175,8 +174,8 @@ class AppRoute {
       return welcome;
     }
 
-    bool isLoggedIn = Global.storageService.getIsUserLoggedIn();
-    if (isLoggedIn) {
+    User? appUser = Global.storageService.getAppUser();
+    if (appUser != null) {
       return home;
     }
 
