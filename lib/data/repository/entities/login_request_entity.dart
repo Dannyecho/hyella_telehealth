@@ -5,17 +5,24 @@ class LoginRequestEntity {
   final String? email;
   final String? password;
   final String? fcmToken;
+  final String? requestType;
   final String? uType;
   final String? deviceUUID;
 
   LoginRequestEntity(
-      {this.email, this.password, this.fcmToken, this.uType, this.deviceUUID});
+      {this.email,
+      this.password,
+      this.fcmToken,
+      this.uType,
+      this.requestType,
+      this.deviceUUID});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'email': email,
       'password': password,
       'fcm_token': fcmToken,
+      'nwp_request': requestType,
       'u_type': uType,
       'device_uuid': deviceUUID,
     };
@@ -27,6 +34,8 @@ class LoginRequestEntity {
       password: map['password'] != null ? map['password'] as String : null,
       fcmToken: map['fcm_token'] != null ? map['fcm_token'] as String : null,
       uType: map['u_type'] != null ? map['u_type'] as String : null,
+      requestType:
+          map['nwp_request'] != null ? map['nwp_request'] as String : null,
       deviceUUID:
           map['device_uuid'] != null ? map['device_uuid'] as String : null,
     );

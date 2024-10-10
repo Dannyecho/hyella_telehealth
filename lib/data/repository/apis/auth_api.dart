@@ -29,7 +29,7 @@ class AuthApi {
     String? requestType = request.uType;
     String publicKey = AppUtil.generateMd5ForApiAuth(requestType!);
     String uri =
-        'nwp_request=$requestType&fmc_token=${request.fcmToken}&u_type=${request.uType}&public_key=$publicKey';
+        'nwp_request=${request.requestType}&fmc_token=${request.fcmToken}&u_type=${request.uType}&public_key=$publicKey';
     var response = await HttpUtil().post(uri, data: request.toMap())
         as Map<String, dynamic>;
 

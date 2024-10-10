@@ -92,7 +92,8 @@ class SignInController {
         var loginRequest = LoginRequestEntity(
           email: emailAddress,
           password: password,
-          uType: state.userType,
+          requestType: state.userType,
+          uType: state.isStaff ? 'staff' : 'patient',
           fcmToken: fcmToken,
         );
 
