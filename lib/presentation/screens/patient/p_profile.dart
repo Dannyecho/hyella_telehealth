@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/constants/app_constants.dart';
 import 'package:hyella_telehealth/core/global.dart';
@@ -66,12 +66,21 @@ class _PProfileState extends State<PProfile> {
                         Container(
                           height: 100,
                           width: 100,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            /* image: DecorationImage(
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 3),
+                              boxShadow: const [
+                                BoxShadow(
+                                  offset: Offset(0, 1),
+                                  color: Colors.white,
+                                  spreadRadius: 1,
+                                  blurRadius: 5,
+                                )
+                              ]
+                              /* image: DecorationImage(
                               image: AssetImage("assets/images/1.jpg"),
                             ), */
-                          ),
+                              ),
                           child:
                               userDetails.dp == null || userDetails.dp!.isEmpty
                                   ? CircleAvatar(
@@ -83,12 +92,10 @@ class _PProfileState extends State<PProfile> {
                                         size: 90,
                                       ),
                                     )
-                                  : CachedNetworkImage(
-                                      imageUrl: userDetails.dp!,
-                                      progressIndicatorBuilder:
-                                          (context, url, progress) =>
-                                              CircularProgressIndicator(
-                                        value: progress.progress,
+                                  : CircleAvatar(
+                                      radius: 20,
+                                      backgroundImage: NetworkImage(
+                                        userDetails.dp!,
                                       ),
                                     ),
                         ),
@@ -96,18 +103,24 @@ class _PProfileState extends State<PProfile> {
                           bottom: 0,
                           right: 0,
                           child: Container(
-                            height: 40,
-                            width: 40,
+                            height: 35,
+                            width: 35,
+                            alignment: Alignment.center,
                             decoration: const BoxDecoration(
                               color: Colors.white,
                               shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: Offset(0, 1),
+                                  color: Colors.white,
+                                  spreadRadius: 1,
+                                  blurRadius: 5,
+                                )
+                              ],
                             ),
-                            child: SvgPicture.asset(
-                              'assets/svg/pencil.svg',
-                              width: 10,
-                              height: 10,
-                              colorFilter: ColorFilter.mode(
-                                  AppColors2.color1, BlendMode.srcIn),
+                            child: FaIcon(
+                              FontAwesomeIcons.penToSquare,
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                         ),

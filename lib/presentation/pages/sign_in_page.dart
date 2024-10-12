@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/data/repository/entities/endpoint_entity.dart';
@@ -131,7 +132,7 @@ class _SignInPageState extends State<SignInPage> {
                                 focusNode: _emailFocusNode,
                                 type: 'text',
                                 hintText: 'Email Address',
-                                icon: Icon(
+                                prefixIcon: Icon(
                                   Icons.email_outlined,
                                   color: AppColors2.color1,
                                 ),
@@ -153,9 +154,22 @@ class _SignInPageState extends State<SignInPage> {
                                 focusNode: _passWordFocusNode,
                                 type: 'password',
                                 hintText: 'Password',
-                                icon: Icon(
-                                  Icons.lock_outline,
+                                prefixIcon: Icon(
+                                  Icons.lock,
                                   color: Theme.of(context).primaryColor,
+                                ),
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    context
+                                        .read<SignInBloc>()
+                                        .add(TogglePeakEvent());
+                                  },
+                                  icon: FaIcon(
+                                    state.peak
+                                        ? FontAwesomeIcons.eyeSlash
+                                        : FontAwesomeIcons.eye,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                 ),
                                 onChange: (value) {
                                   context.read<SignInBloc>().add(
@@ -167,6 +181,7 @@ class _SignInPageState extends State<SignInPage> {
                                       SignInController(context);
                                   signInController.handleSignIn();
                                 },
+                                obscure: state.peak,
                               ),
                               Row(
                                 children: [

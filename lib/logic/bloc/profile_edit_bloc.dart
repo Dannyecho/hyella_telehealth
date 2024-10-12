@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/data/repository/apis/profile_api.dart';
@@ -24,6 +23,7 @@ class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
       },
     );
     on<UpdateProfileImageEvent>((event, emit) async {
+      var prevSource = event.source;
       emit(state.copyWith(
         profileImage: event.imagePath,
         source: event.source,
@@ -36,7 +36,7 @@ class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
         emit(
           state.copyWith(
             isLoading: false,
-            source: ProfileImageSource.none,
+            source: prevSource,
           ),
         );
         toastInfo(msg: response.msg);
@@ -44,11 +44,11 @@ class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
       }
 
       if (event.context.mounted) {
-        print("Adding profile image");
+        // print("Adding profile image");
         event.context.read<AppBloc>().add(UpdateUserInfoEvent());
       }
-
-      emit(state.copyWith(isLoading: false));
+      toastInfo(msg: response.msg);
+      emit(state.copyWith(isLoading: false, source: ProfileImageSource.web));
     });
 
     on<SetProfileSource>((event, emit) {

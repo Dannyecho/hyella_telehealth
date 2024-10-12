@@ -1,14 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/global.dart';
 import 'package:hyella_telehealth/data/repository/entities/endpoint_entity.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/endpoint_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/revenue_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/widgets/p_home_widgets.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PHome2 extends StatefulWidget {
   PHome2({Key? key}) : super(key: key);
@@ -22,6 +26,7 @@ class _PHome2State extends State<PHome2> {
   late User appUser;
   late Home appServices;
   late Cards appCards;
+  late final bool isDoctor;
   EndPointEntityData? endpointData = Global.storageService.getEndpoints();
   @override
   void initState() {
@@ -39,6 +44,12 @@ class _PHome2State extends State<PHome2> {
     if (appData?.menu?.cards != null) {
       appCards = appData!.menu!.cards!;
     }
+
+    if (appUser.isStaff == 1) {
+      isDoctor = true;
+    } else {
+      isDoctor = false;
+    }
   }
 
   @override
@@ -52,6 +63,10 @@ class _PHome2State extends State<PHome2> {
         child: RefreshIndicator(
           onRefresh: () async {
             context.read<AppBloc>().add(UpdateUserInfoEvent());
+            context.read<EndpointBloc>().add(RefreshEndpointEvent());
+            if (appUser.isStaff == 1) {
+              context.read<RevenueBloc>().add(LoadRevenueEvent());
+            }
             /*  appData = context.read<AppBloc>().state.appData;
             if (appData?.user != null) {
               appUser = appData!.user!;
@@ -109,8 +124,15 @@ class _PHome2State extends State<PHome2> {
                                     .pushNamed(AppRoute.webView, arguments: {
                                   'url': appData!
                                       .webViews!.bookAppointment!.endpoint!,
-                                  'title': 'Book Appointment',
+                                  'title': appData!.user!.bookAppointment!,
                                 });
+                                return;
+                              }
+
+                              if (isDoctor) {
+                                context
+                                    .read<AppScreenBloc>()
+                                    .add(SwitchScreen(index: 2));
                                 return;
                               }
                               context
@@ -208,6 +230,10 @@ class _PHome2State extends State<PHome2> {
                           GestureDetector(
                             behavior: HitTestBehavior.translucent,
                             onTap: () {
+                              if (isDoctor) {
+                                Navigator.pushNamed(context, AppRoute.revenue);
+                                return;
+                              }
                               Navigator.of(context).pushNamed(
                                 AppRoute.webView,
                                 arguments: {
@@ -308,10 +334,183 @@ class _PHome2State extends State<PHome2> {
                   ],
                 ),
               ),
-              serviceSection(
-                appServices,
-                context,
-              ),
+              appUser.isStaff == 1
+                  ? BlocBuilder<RevenueBloc, RevenueState>(
+                      builder: (context, state) {
+                        return state is RevenueStateLoading
+                            ? Shimmer.fromColors(
+                                baseColor: Colors.grey[300]!,
+                                highlightColor: Colors.grey[100]!,
+                                child: Container(
+                                  width: _width,
+                                  margin: const EdgeInsets.all(20),
+                                  padding: const EdgeInsets.all(20),
+                                  height: 120,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                              )
+                            : state is RevenueStateLoaded
+                                ? Container(
+                                    height: _height * .18,
+                                    margin: EdgeInsets.only(
+                                      // bottom: 10,
+                                      left: _width * .05,
+                                      right: _width * .05,
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 15,
+                                      vertical: 10,
+                                    ),
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xffe4e5e9),
+                                        // color: AppColors2.color1,
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(.2),
+                                            offset: const Offset(0, 1),
+                                            blurRadius: 2,
+                                            spreadRadius: 1,
+                                          )
+                                        ]),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            state.openBalance
+                                                ? Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        state.data.title!,
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          // color: Colors.white,
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          horizontal: 5,
+                                                        ),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color:
+                                                              AppColors2.color1,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                        ),
+                                                        child: Text(
+                                                          state.data
+                                                              .totalRevenue!,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 22,
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily: '',
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : Text(
+                                                    "****",
+                                                    style: TextStyle(
+                                                      // letterSpacing: 10,
+                                                      fontSize: 25,
+                                                      color: AppColors2.color1,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                            IconButton(
+                                                color: AppColors2.color1,
+                                                onPressed: () {
+                                                  context.read<RevenueBloc>().add(
+                                                      ToggleViewBalanceEvent());
+                                                },
+                                                icon: state.openBalance
+                                                    ? const FaIcon(
+                                                        FontAwesomeIcons.eye)
+                                                    : const FaIcon(
+                                                        FontAwesomeIcons
+                                                            .eyeSlash,
+                                                      ))
+                                          ],
+                                        ),
+                                        Builder(builder: (context) {
+                                          return BlocBuilder<AppBloc,
+                                              AppBlocState>(
+                                            builder: (context, state) {
+                                              return Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Divider(
+                                                      endIndent: 100,
+                                                      color: AppColors2.color1,
+                                                    ),
+                                                    Text(
+                                                      state.appData?.appChart
+                                                              ?.title ??
+                                                          '',
+                                                      softWrap: true,
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        // color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      state.appData?.appChart
+                                                              ?.subtitle ??
+                                                          '',
+                                                      softWrap: true,
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        color:
+                                                            AppColors2.color1,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        }),
+                                      ],
+                                    ),
+                                  )
+                                : const SizedBox();
+                      },
+                    )
+                  : serviceSection(
+                      appServices,
+                      context,
+                    ),
               const SizedBox(
                 height: 30,
               ),

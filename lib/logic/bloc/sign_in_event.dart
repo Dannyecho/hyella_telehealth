@@ -30,3 +30,5 @@ class FcmTokenEvent extends SignInEvent {
     required this.fcmToken,
   });
 }
+
+class TogglePeakEvent extends SignInEvent {}

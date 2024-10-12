@@ -3,11 +3,24 @@ import 'package:hyella_telehealth/logic/bloc/sign_in_event.dart';
 import 'package:hyella_telehealth/logic/bloc/sign_in_state.dart';
 
 class SignInBloc extends Bloc<SignInEvent, SignInState> {
-  SignInBloc() : super(SignInState(userType: 'user_mgt_login')) {
+  SignInBloc()
+      : super(SignInState(
+          email: '',
+          password: '',
+          userType: 'user_mgt_login',
+          isStaff: false,
+          fcmToken: '',
+          peak: true,
+        )) {
     on<EmailEvent>(_emailEvent);
     on<PasswordEvent>(_passwordEvent);
     on<IsStaffEvent>(_isStaffEvent);
     on<FcmTokenEvent>(_fcmTokenEvent);
+    on<TogglePeakEvent>(
+      (event, emit) {
+        emit(state.copyWith(peak: !state.peak));
+      },
+    );
   }
 
   void _emailEvent(EmailEvent event, Emitter<SignInState> emit) {

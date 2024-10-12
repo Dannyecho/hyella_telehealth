@@ -15,6 +15,7 @@ import 'package:hyella_telehealth/logic/bloc/revenue_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
 import 'package:hyella_telehealth/presentation/screens/doctor/widgets.dart';
+import 'package:hyella_telehealth/presentation/screens/patient/widgets/p_home_widgets.dart';
 import 'package:shimmer/shimmer.dart';
 
 class DoctorHome extends StatefulWidget {
@@ -56,13 +57,15 @@ class _DoctorHomeState extends State<DoctorHome> {
 
     return Scaffold(
       body: Container(
-        // color: const Color(0xffF8F8F8),
-        color: AppColors2.color1,
+        color: const Color(0xffF8F8F8),
+        // color: AppColors2.color1,
         child: RefreshIndicator(
           onRefresh: () async {
-            context.read<EndpointBloc>().add(RefreshEndpointEvent());
             context.read<AppBloc>().add(UpdateUserInfoEvent());
-            context.read<RevenueBloc>().add(LoadRevenueEvent());
+            context.read<EndpointBloc>().add(RefreshEndpointEvent());
+            if (appUser.isStaff == 1) {
+              context.read<RevenueBloc>().add(LoadRevenueEvent());
+            }
             /*  appData = context.read<AppBloc>().state.appData;
             if (appData?.user != null) {
               appUser = appData!.user!;
@@ -76,6 +79,234 @@ class _DoctorHomeState extends State<DoctorHome> {
           },
           child: Column(
             children: [
+              SizedBox(
+                height: _height * .35,
+                child: Stack(
+                  children: [
+                    Container(
+                      height: _height * .25,
+                      margin: const EdgeInsets.only(bottom: 25),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.elliptical(500, _height * .05),
+                          bottomRight: Radius.elliptical(500, _height * .05),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: _width * .05,
+                      top: _width * .05,
+                      right: 20,
+                      child: DashboardHeader(
+                        balance: appUser.userNameSubtitle ?? "",
+                        context: context,
+                        name: endpointData!.client!.name ?? "",
+                        logoUri: (appUser.dp == null || appUser.dp!.isEmpty)
+                            ? null
+                            : appUser.dp,
+                        isFirstTime: appUser.isFirstUse == 1,
+                      ),
+                    ),
+                    Positioned(
+                      left: _width * .045,
+                      right: _width * .045,
+                      top: _height * .15,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              context
+                                  .read<AppScreenBloc>()
+                                  .add(SwitchScreen(index: 2));
+                            },
+                            child: Card(
+                              shadowColor: Colors.black45,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              color: AppColors2.color3,
+                              elevation: 15,
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                width: _width * .427,
+                                height: _width * .35,
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      left: -10,
+                                      top: -10,
+                                      child: Container(
+                                        height: _width * .2,
+                                        width: _width * .2,
+                                        decoration: BoxDecoration(
+                                          color: AppColors2.color3,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(_width),
+                                            topRight:
+                                                Radius.circular(_width * .8),
+                                            bottomLeft:
+                                                Radius.circular(_width * .8),
+                                            bottomRight:
+                                                Radius.circular(_width * .8),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      // padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            height: 40,
+                                            width: 40,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                  Radius.circular(5),
+                                                ),
+                                                color: AppColors2.color2),
+                                            child: const Icon(
+                                              Icons.calendar_today,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            appData!.user!.bookAppointment!,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(
+                                            height: 2,
+                                          ),
+                                          Text(
+                                            appData!
+                                                .user!.bookAppointmentSubtitle!,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black87),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onTap: () {
+                              Navigator.of(context).pushNamed(AppRoute.revenue);
+                            },
+                            child: Card(
+                              shadowColor: Colors.black45,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              color: AppColors2.color5,
+                              elevation: 15,
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                width: _width * .427,
+                                height: _width * .35,
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      left: -10,
+                                      top: -10,
+                                      child: Container(
+                                        height: _width * .2,
+                                        width: _width * .2,
+                                        decoration: BoxDecoration(
+                                          color: AppColors2.color5,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(_width),
+                                            topRight:
+                                                Radius.circular(_width * .8),
+                                            bottomLeft:
+                                                Radius.circular(_width * .8),
+                                            bottomRight:
+                                                Radius.circular(_width * .8),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      alignment: Alignment.center,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            height: 40,
+                                            width: 40,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                  Radius.circular(5),
+                                                ),
+                                                color: AppColors2.color4),
+                                            child: const Icon(
+                                              Icons.wallet,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(
+                                            appData!.user!.accBalance!,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(
+                                            height: 2,
+                                          ),
+                                          Text(
+                                            appData!.user!.accBalanceSubtitle!,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black87),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // ################################################
               Container(
                 height: MediaQuery.of(context).size.height * .25,
                 decoration: const BoxDecoration(

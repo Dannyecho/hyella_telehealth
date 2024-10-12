@@ -109,9 +109,12 @@ class DashboardHeader extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.of(context).pushNamed(
+                  /* Navigator.of(context).pushNamed(
                     AppRoute.editProfile,
-                  );
+                  ); */
+                  context.read<AppScreenBloc>().add(
+                        SwitchScreen(index: 3),
+                      );
                 },
                 child: (logoUri == null)
                     ? CircleAvatar(
@@ -123,10 +126,23 @@ class DashboardHeader extends StatelessWidget {
                           size: 30,
                         ),
                       )
-                    : CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Colors.white,
-                        backgroundImage: NetworkImage(logoUri!),
+                    : Container(
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
+                            boxShadow: const [
+                              BoxShadow(
+                                offset: Offset(0, 1),
+                                color: Colors.white,
+                                spreadRadius: 1,
+                                blurRadius: 5,
+                              )
+                            ]),
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.white,
+                          backgroundImage: NetworkImage(logoUri!),
+                        ),
                       ),
               ),
             ),

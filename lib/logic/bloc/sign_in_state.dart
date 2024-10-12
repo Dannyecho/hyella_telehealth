@@ -5,13 +5,15 @@ class SignInState {
   final String userType;
   final bool isStaff;
   final String fcmToken;
+  final bool peak;
 
   SignInState({
-    this.email = '',
-    this.password = '',
-    this.userType = '',
-    this.isStaff = false,
-    this.fcmToken = '',
+    required this.email,
+    required this.password,
+    required this.userType,
+    required this.isStaff,
+    required this.fcmToken,
+    required this.peak,
   });
 
   SignInState copyWith({
@@ -20,6 +22,7 @@ class SignInState {
     String? userType,
     bool? isStaff,
     String? fcmToken,
+    bool? peak,
   }) {
     return SignInState(
       email: email ?? this.email,
@@ -27,6 +30,7 @@ class SignInState {
       userType: userType ?? this.userType,
       isStaff: isStaff ?? this.isStaff,
       fcmToken: fcmToken ?? this.fcmToken,
+      peak: peak ?? this.peak,
     );
   }
 }

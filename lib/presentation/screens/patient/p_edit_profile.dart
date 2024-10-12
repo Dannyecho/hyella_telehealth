@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
@@ -103,7 +102,11 @@ class _PEditProfileState extends State<PEditProfile> {
                               title: const Text("Take a Photo"),
                               leading: const Icon(Icons.camera_alt),
                               onTap: () async {
-                                var file = await takePhoto(ImageSource.camera);
+                                var file = await takePhoto(
+                                  ImageSource.camera,
+                                  maxWidth: 100,
+                                  maxHeight: 100,
+                                );
                                 if (file != null && context.mounted) {
                                   profileEditBloc.add(
                                     UpdateProfileImageEvent(
@@ -156,12 +159,24 @@ class _PEditProfileState extends State<PEditProfile> {
                               Container(
                                 height: 100,
                                 width: 100,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 3,
+                                  ),
+                                  borderRadius: BorderRadius.circular(60),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      offset: Offset(0, 1),
+                                      color: Colors.white,
+                                      spreadRadius: 1,
+                                      blurRadius: 5,
+                                    )
+                                  ],
                                 ),
                                 child: state.source == ProfileImageSource.none
                                     ? CircleAvatar(
-                                        radius: 20,
+                                        radius: 30,
                                         backgroundColor: Colors.white,
                                         child: Icon(
                                           Icons.person,
@@ -170,13 +185,15 @@ class _PEditProfileState extends State<PEditProfile> {
                                         ),
                                       )
                                     : (state.source == ProfileImageSource.web
-                                        ? CachedNetworkImage(
-                                            imageUrl: state.profileImage,
-                                            progressIndicatorBuilder:
-                                                (context, url, progress) =>
-                                                    CircularProgressIndicator(
-                                              value: progress.progress,
-                                            ),
+                                        ? BlocBuilder<AppBloc, AppBlocState>(
+                                            builder: (context, state) {
+                                              return CircleAvatar(
+                                                radius: 50,
+                                                backgroundImage: NetworkImage(
+                                                  state.appData?.user?.dp ?? '',
+                                                ),
+                                              );
+                                            },
                                           )
                                         : Image.file(
                                             File(state.profileImage),
@@ -240,7 +257,12 @@ class _PEditProfileState extends State<PEditProfile> {
   }
 
   final ImagePicker _picker = ImagePicker();
-  Future<XFile?> takePhoto(ImageSource source) async {
-    return await _picker.pickImage(source: source);
+  Future<XFile?> takePhoto(ImageSource source,
+      {double? maxWidth, double? maxHeight}) async {
+    return await _picker.pickImage(
+      source: source,
+      maxWidth: maxWidth,
+      maxHeight: maxHeight,
+    );
   }
 }

@@ -134,7 +134,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                               focusNode: _emailFocusNode,
                               type: 'text',
                               hintText: 'Enter your email address',
-                              icon: Icon(
+                              prefixIcon: Icon(
                                 Icons.person,
                                 color: Theme.of(context).primaryColor,
                               ),

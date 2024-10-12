@@ -8,7 +8,6 @@ import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/web_view_bloc.dart';
 import 'package:hyella_telehealth/presentation/pages/chat_contact_page.dart';
 import 'package:hyella_telehealth/presentation/pages/services_page.dart';
-import 'package:hyella_telehealth/presentation/screens/doctor/doctor_home.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/p_home.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/p_home2.dart';
 import 'package:hyella_telehealth/presentation/screens/patient/p_profile.dart';
@@ -37,13 +36,14 @@ Widget buildScreen(BuildContext context, int index) {
 
 Widget buildScreen2(BuildContext context, int index) {
   Data appData = context.read<AppBloc>().state.appData!;
-  User user = appData.user!;
+  // User user = appData.user!;
   Home appServices = appData.menu!.home!;
   List<Service> services =
       appServices.data.where((el) => el.key != 'all_services').toList();
 
   List<Widget> screens = [
-    user.isStaff == 1 ? const DoctorHome() : PHome2(),
+    // user.isStaff == 1 ? const DoctorHome() : PHome2(),
+    PHome2(),
     const ChatContactPage(),
     Schedule(),
     const PProfile(),

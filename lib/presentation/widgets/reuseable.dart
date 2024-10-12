@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 
 Widget reuseableText(
@@ -22,10 +23,12 @@ Widget reuseableText(
 Widget buildTextField({
   required String type,
   String? hintText,
-  Icon? icon,
+  Icon? prefixIcon,
+  Widget? suffixIcon,
   required void Function(String) onChange,
   void Function(String)? onSubmitted,
   FocusNode? focusNode,
+  bool? obscure,
 }) {
   return Container(
     margin: const EdgeInsets.only(bottom: 20),
@@ -51,7 +54,8 @@ Widget buildTextField({
       decoration: InputDecoration(
         floatingLabelBehavior: FloatingLabelBehavior.never,
         contentPadding: EdgeInsets.zero,
-        prefixIcon: icon,
+        prefixIcon: prefixIcon,
+        suffix: suffixIcon,
         focusColor: AppColors2.color1,
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: AppColors2.color1, width: 2),
@@ -66,7 +70,7 @@ Widget buildTextField({
       ),
       onFieldSubmitted: onSubmitted,
       autocorrect: false,
-      obscureText: type == 'password' ? true : false,
+      obscureText: obscure != null && obscure ? true : false,
     ),
   );
 }
