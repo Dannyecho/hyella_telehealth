@@ -7,7 +7,7 @@ import 'package:hyella_telehealth/core/utils/app_util.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
-import 'package:hyella_telehealth/presentation/screens/patient/widgets/p_home_widgets.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/widgets/p_home_widgets.dart';
 
 class PHome extends StatefulWidget {
   const PHome({super.key});

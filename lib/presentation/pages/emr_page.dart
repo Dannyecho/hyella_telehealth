@@ -4,7 +4,7 @@ import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/data/repository/entities/emr_options.dart';
 import 'package:hyella_telehealth/logic/bloc/emr_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
-import 'package:hyella_telehealth/presentation/screens/patient/widgets/shedule_shimmer.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/widgets/shedule_shimmer.dart';
 
 class EmrPage extends StatefulWidget {
   final Map<String, dynamic> data;

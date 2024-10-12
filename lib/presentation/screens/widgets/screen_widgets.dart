@@ -8,10 +8,10 @@ import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/web_view_bloc.dart';
 import 'package:hyella_telehealth/presentation/pages/chat_contact_page.dart';
 import 'package:hyella_telehealth/presentation/pages/services_page.dart';
-import 'package:hyella_telehealth/presentation/screens/patient/p_home.dart';
-import 'package:hyella_telehealth/presentation/screens/patient/p_home2.dart';
-import 'package:hyella_telehealth/presentation/screens/patient/p_profile.dart';
-import 'package:hyella_telehealth/presentation/screens/patient/schedule.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/p_home.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/p_home2.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/p_profile.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/schedule.dart';
 import 'package:hyella_telehealth/presentation/screens/web_viewer_screen.dart';
 
 Widget buildScreen(BuildContext context, int index) {

@@ -4,10 +4,10 @@ import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/core/utils/app_util.dart';
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
-import 'package:hyella_telehealth/presentation/screens/patient/widgets/cancelled_schedules.dart';
-import 'package:hyella_telehealth/presentation/screens/patient/widgets/completed_schedules.dart';
-import 'package:hyella_telehealth/presentation/screens/patient/widgets/shedule_shimmer.dart';
-import 'package:hyella_telehealth/presentation/screens/patient/widgets/upcoming_schedule.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/widgets/cancelled_schedules.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/widgets/completed_schedules.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/widgets/shedule_shimmer.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/widgets/upcoming_schedule.dart';
 
 class Schedule extends StatefulWidget {
   Schedule({Key? key}) : super(key: key);

@@ -7,7 +7,7 @@ import 'package:hyella_telehealth/data/repository/entities/schedule_entity.dart'
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
-import 'package:hyella_telehealth/presentation/screens/patient/widgets/shedule_shimmer.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/widgets/shedule_shimmer.dart';
 
 class UpcomingSchedule extends StatefulWidget {
   UpcomingSchedule({Key? key}) : super(key: key);

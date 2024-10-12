@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/data/repository/entities/lab_result_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/lab_result_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
-import 'package:hyella_telehealth/presentation/screens/patient/widgets/shedule_shimmer.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/widgets/shedule_shimmer.dart';
 
 class LabResultPage extends StatefulWidget {
   final String title;

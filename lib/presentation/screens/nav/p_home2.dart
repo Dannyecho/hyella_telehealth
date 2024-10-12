@@ -11,7 +11,7 @@ import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/endpoint_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/revenue_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
-import 'package:hyella_telehealth/presentation/screens/patient/widgets/p_home_widgets.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/widgets/p_home_widgets.dart';
 import 'package:shimmer/shimmer.dart';
 
 class PHome2 extends StatefulWidget {

@@ -3,41 +3,32 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
 import 'package:hyella_telehealth/data/repository/entities/schedule_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
-import 'package:hyella_telehealth/presentation/screens/patient/widgets/shedule_shimmer.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/widgets/shedule_shimmer.dart';
 
-class CompletedSchedule extends StatefulWidget {
-  const CompletedSchedule({Key? key}) : super(key: key);
-
-  @override
-  State<CompletedSchedule> createState() => _CompletedScheduleState();
-}
-
-class _CompletedScheduleState extends State<CompletedSchedule> {
-  late List<ScheduleEntityData>? completedSchedules;
+// ignore: must_be_immutable
+class CancelledSchedule extends StatelessWidget {
+  CancelledSchedule({super.key});
   bool hasError = false;
-
+  late List<ScheduleEntityData> cancelledSchedules;
   @override
-  void initState() {
-    super.initState();
-
+  Widget build(BuildContext context) {
     ScheduleLoaded loaded =
         context.read<ScheduleBloc>().state as ScheduleLoaded;
     if (loaded.hasError) {
       hasError = true;
     } else {
-      completedSchedules = loaded.completedSchedules;
+      cancelledSchedules =
+          (context.read<ScheduleBloc>().state as ScheduleLoaded)
+              .cancelledSchedules!;
     }
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return BlocBuilder<ScheduleBloc, ScheduleState>(
       builder: (context, state) {
         return RefreshIndicator(
           onRefresh: () async {
-            context.read<ScheduleBloc>().add(LoadCompletedScheduleEvent());
+            context.read<ScheduleBloc>().add(LoadCancelledScheduleEvent());
           },
-          child: state is ScheduleLoading
+          child: (state is ScheduleLoading)
               ? const ScheduleShimmer()
               : (state as ScheduleLoaded).hasError == true
                   ? Center(
@@ -45,18 +36,17 @@ class _CompletedScheduleState extends State<CompletedSchedule> {
                         onPressed: () {
                           context
                               .read<ScheduleBloc>()
-                              .add(LoadCompletedScheduleEvent());
+                              .add(LoadCancelledScheduleEvent());
                         },
                         child: const Text("Refresh"),
                       ),
                     )
-                  : state.completedSchedules!.isEmpty
+                  : state.cancelledSchedules!.isEmpty
                       ? Center(
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "You do not have any completed appointment\nin your schedule",
+                                "You do not have any cancelled appointment\nin your schedule",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(color: AppColors2.color1),
                               ),
@@ -64,17 +54,16 @@ class _CompletedScheduleState extends State<CompletedSchedule> {
                                 onPressed: () {
                                   context
                                       .read<ScheduleBloc>()
-                                      .add(LoadCompletedScheduleEvent());
+                                      .add(LoadCancelledScheduleEvent());
                                 },
                                 child: const Text("Refresh"),
-                              )
+                              ),
                             ],
                           ),
                         )
                       : ListView.builder(
                           itemBuilder: (context, index) {
-                            ScheduleEntityData schedule =
-                                state.completedSchedules![index];
+                            var schedule = state.cancelledSchedules![index];
                             return Container(
                               margin: const EdgeInsets.only(top: 15),
                               child: Card(
@@ -96,10 +85,10 @@ class _CompletedScheduleState extends State<CompletedSchedule> {
                                 ),
                                 elevation: 3,
                                 shadowColor: Colors.black38,
-                                color: (AppColors2.color3 as Color)
+                                color: (AppColors2.color5 as Color)
                                     .withOpacity(.4),
                                 child: Padding(
-                                  padding: const EdgeInsets.all(20.0),
+                                  padding: const EdgeInsets.all(10.0),
                                   child: Column(
                                     children: [
                                       Row(
@@ -138,8 +127,9 @@ class _CompletedScheduleState extends State<CompletedSchedule> {
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   style: const TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.black45),
+                                                    fontSize: 14,
+                                                    color: Colors.black45,
+                                                  ),
                                                 ),
                                               )
                                             ],
@@ -152,9 +142,6 @@ class _CompletedScheduleState extends State<CompletedSchedule> {
                                         ],
                                       ),
                                       const Divider(),
-                                      const SizedBox(
-                                        height: 15,
-                                      ),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
@@ -163,7 +150,7 @@ class _CompletedScheduleState extends State<CompletedSchedule> {
                                             children: [
                                               const Icon(
                                                 Icons.calendar_view_day,
-                                                color: Color(0xffA8AFBD),
+                                                color: Colors.black,
                                                 size: 12,
                                               ),
                                               const SizedBox(
@@ -172,9 +159,8 @@ class _CompletedScheduleState extends State<CompletedSchedule> {
                                               Text(
                                                 schedule.date!,
                                                 style: const TextStyle(
-                                                  color: Color(0xff9A9A9B),
-                                                  fontSize: 12,
-                                                ),
+                                                    color: Colors.black,
+                                                    fontSize: 12),
                                               )
                                             ],
                                           ),
@@ -182,7 +168,7 @@ class _CompletedScheduleState extends State<CompletedSchedule> {
                                             children: [
                                               const Icon(
                                                 Icons.punch_clock_outlined,
-                                                color: Color(0xffA8AFBD),
+                                                color: Colors.black,
                                                 size: 12,
                                               ),
                                               const SizedBox(
@@ -191,15 +177,13 @@ class _CompletedScheduleState extends State<CompletedSchedule> {
                                               Text(
                                                 schedule.time!,
                                                 style: const TextStyle(
-                                                    color: Color(0xff9A9A9B),
-                                                    fontSize: 12),
+                                                  color: Colors.black,
+                                                  fontSize: 12,
+                                                ),
                                               )
                                             ],
                                           ),
                                         ],
-                                      ),
-                                      const SizedBox(
-                                        height: 15,
                                       ),
                                     ],
                                   ),
@@ -207,7 +191,7 @@ class _CompletedScheduleState extends State<CompletedSchedule> {
                               ),
                             );
                           },
-                          itemCount: state.completedSchedules!.length,
+                          itemCount: state.cancelledSchedules!.length,
                         ),
         );
       },

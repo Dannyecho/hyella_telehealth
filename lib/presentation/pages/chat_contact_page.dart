@@ -6,7 +6,7 @@ import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/chat_contact_bloc.dart';
 import 'package:hyella_telehealth/presentation/pages/widgets/chat_contact_page_widgets.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
-import 'package:hyella_telehealth/presentation/screens/patient/widgets/shedule_shimmer.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/widgets/shedule_shimmer.dart';
 
 class ChatContactPage extends StatefulWidget {
   const ChatContactPage({super.key});
