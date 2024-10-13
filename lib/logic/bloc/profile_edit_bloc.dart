@@ -1,8 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/data/repository/apis/profile_api.dart';
-import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/presentation/widgets/toast_info.dart';
 part 'profile_edit_event.dart';
 part 'profile_edit_state.dart';
@@ -13,6 +12,7 @@ class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
           profileImage: '',
           source: ProfileImageSource.none,
           isLoading: false,
+          refreshApp: false,
         )) {
     on<SetProfileImageEvent>(
       (event, emit) {
@@ -31,7 +31,6 @@ class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
       ));
 
       var response = await ProfileApi().updateProfilePhoto(event.imagePath);
-
       if (response.type == 0) {
         emit(
           state.copyWith(
@@ -43,12 +42,19 @@ class ProfileEditBloc extends Bloc<ProfileEditEvent, ProfileEditState> {
         return;
       }
 
-      if (event.context.mounted) {
-        // print("Adding profile image");
-        event.context.read<AppBloc>().add(UpdateUserInfoEvent());
+      // Clear cache if not empty
+      if (event.currentImgUrl.isNotEmpty) {
+        await CachedNetworkImage.evictFromCache(event.currentImgUrl);
       }
+
+      emit(state.copyWith(refreshApp: true));
+
       toastInfo(msg: response.msg);
-      emit(state.copyWith(isLoading: false, source: ProfileImageSource.web));
+      emit(state.copyWith(
+        isLoading: false,
+        source: ProfileImageSource.web,
+        refreshApp: false,
+      ));
     });
 
     on<SetProfileSource>((event, emit) {

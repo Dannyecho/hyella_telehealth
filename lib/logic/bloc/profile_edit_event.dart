@@ -15,11 +15,11 @@ class SetProfileImageEvent extends ProfileEditEvent {
 class UpdateProfileImageEvent extends ProfileEditEvent {
   final String imagePath;
   final ProfileImageSource source;
-  final BuildContext context;
+  final String currentImgUrl;
   UpdateProfileImageEvent({
     required this.imagePath,
     required this.source,
-    required this.context,
+    required this.currentImgUrl,
   });
 }
 

@@ -102,7 +102,7 @@ class _PHome2State extends State<PHome2> {
                       child: DashboardHeader(
                         balance: appUser.userNameSubtitle ?? "",
                         context: context,
-                        name: endpointData!.client!.name ?? "",
+                        name: endpointData?.client?.name ?? "",
                         logoUri: (appUser.dp == null || appUser.dp!.isEmpty)
                             ? null
                             : appUser.dp,

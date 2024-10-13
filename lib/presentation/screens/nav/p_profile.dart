@@ -92,11 +92,16 @@ class _PProfileState extends State<PProfile> {
                                         size: 90,
                                       ),
                                     )
-                                  : CircleAvatar(
-                                      radius: 20,
-                                      backgroundImage: NetworkImage(
-                                        userDetails.dp!,
-                                      ),
+                                  : BlocBuilder<AppBloc, AppBlocState>(
+                                      builder: (context, state) {
+                                        return CircleAvatar(
+                                          radius: 20,
+                                          backgroundImage:
+                                              CachedNetworkImageProvider(
+                                            userDetails.dp!,
+                                          ),
+                                        );
+                                      },
                                     ),
                         ),
                         Positioned(

@@ -141,7 +141,9 @@ class DashboardHeader extends StatelessWidget {
                         child: CircleAvatar(
                           radius: 20,
                           backgroundColor: Colors.white,
-                          backgroundImage: NetworkImage(logoUri!),
+                          backgroundImage: CachedNetworkImageProvider(
+                            logoUri!,
+                          ),
                         ),
                       ),
               ),

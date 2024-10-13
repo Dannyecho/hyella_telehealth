@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyella_telehealth/core/constants/app_colors2.dart';
@@ -71,7 +72,13 @@ class _PEditProfileState extends State<PEditProfile> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            BlocBuilder<ProfileEditBloc, ProfileEditState>(
+            BlocConsumer<ProfileEditBloc, ProfileEditState>(
+              listener: (context, state) {
+                if (state.refreshApp) {
+                  print("Refreshing App...........................");
+                  context.read<AppBloc>().add(UpdateUserInfoEvent());
+                }
+              },
               builder: (context, state) {
                 final profileEditBloc = context.read<ProfileEditBloc>();
                 return Container(
@@ -112,7 +119,12 @@ class _PEditProfileState extends State<PEditProfile> {
                                     UpdateProfileImageEvent(
                                       imagePath: file.path,
                                       source: ProfileImageSource.file,
-                                      context: context,
+                                      currentImgUrl: context
+                                          .read<AppBloc>()
+                                          .state
+                                          .appData!
+                                          .user!
+                                          .dp!,
                                     ),
                                   );
                                 }
@@ -132,7 +144,12 @@ class _PEditProfileState extends State<PEditProfile> {
                                     UpdateProfileImageEvent(
                                       imagePath: file.path,
                                       source: ProfileImageSource.file,
-                                      context: context,
+                                      currentImgUrl: context
+                                          .read<AppBloc>()
+                                          .state
+                                          .appData!
+                                          .user!
+                                          .dp!,
                                     ),
                                   );
                                 }
@@ -189,7 +206,8 @@ class _PEditProfileState extends State<PEditProfile> {
                                             builder: (context, state) {
                                               return CircleAvatar(
                                                 radius: 50,
-                                                backgroundImage: NetworkImage(
+                                                backgroundImage:
+                                                    CachedNetworkImageProvider(
                                                   state.appData?.user?.dp ?? '',
                                                 ),
                                               );
