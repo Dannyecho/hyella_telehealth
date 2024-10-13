@@ -10,6 +10,7 @@ import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/endpoint_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/revenue_bloc.dart';
+import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
 import 'package:hyella_telehealth/presentation/screens/nav/widgets/p_home_widgets.dart';
 import 'package:shimmer/shimmer.dart';
@@ -222,6 +223,37 @@ class _PHome2State extends State<PHome2> {
                                         ],
                                       ),
                                     ),
+                                    Positioned(
+                                      top: 0,
+                                      right: 0,
+                                      child: Builder(
+                                        builder: (context) {
+                                          var upcomingSchedules = context
+                                              .read<ScheduleBloc>()
+                                              .loadedState
+                                              .upComingSchedules;
+                                          if (upcomingSchedules != null &&
+                                              upcomingSchedules.isNotEmpty) {
+                                            return CircleAvatar(
+                                              backgroundColor:
+                                                  AppColors2.color2,
+                                              maxRadius: 15,
+                                              minRadius: 10,
+                                              child: Text(
+                                                upcomingSchedules.length
+                                                    .toString(),
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            );
+                                          }
+
+                                          return const SizedBox();
+                                        },
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),
