@@ -7,16 +7,16 @@ import 'package:hyella_telehealth/core/utils/app_util.dart';
 import 'package:hyella_telehealth/data/repository/entities/login_response_entity.dart';
 import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
-import 'package:hyella_telehealth/presentation/screens/nav/widgets/p_home_widgets.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/widgets/home_widgets.dart';
 
-class PHome extends StatefulWidget {
-  const PHome({super.key});
+class HomeNav extends StatefulWidget {
+  const HomeNav({super.key});
 
   @override
-  State<PHome> createState() => _PHomeState();
+  State<HomeNav> createState() => _HomeNavState();
 }
 
-class _PHomeState extends State<PHome> {
+class _HomeNavState extends State<HomeNav> {
   late final Data? appData;
   late final User appUser;
   late final Home appServices;
@@ -61,7 +61,7 @@ class _PHomeState extends State<PHome> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                pHomeHeader(appUser),
+                homeHeader(appUser),
                 Container(
                   margin: const EdgeInsets.only(top: 20),
                   child: Text(

@@ -12,17 +12,17 @@ import 'package:hyella_telehealth/logic/bloc/endpoint_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/revenue_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/schedule_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
-import 'package:hyella_telehealth/presentation/screens/nav/widgets/p_home_widgets.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/widgets/home_widgets.dart';
 import 'package:shimmer/shimmer.dart';
 
-class PHome2 extends StatefulWidget {
-  PHome2({Key? key}) : super(key: key);
+class HomeNav2 extends StatefulWidget {
+  HomeNav2({Key? key}) : super(key: key);
 
   @override
-  State<PHome2> createState() => _PHome2State();
+  State<HomeNav2> createState() => _HomeNav2State();
 }
 
-class _PHome2State extends State<PHome2> {
+class _HomeNav2State extends State<HomeNav2> {
   late Data? appData;
   late User appUser;
   late Home appServices;
@@ -119,7 +119,7 @@ class _PHome2State extends State<PHome2> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              if (appData!.webViews?.bookAppointment?.webview ==
+                              /* if (appData!.webViews?.bookAppointment?.webview ==
                                   1) {
                                 Navigator.of(context)
                                     .pushNamed(AppRoute.webView, arguments: {
@@ -128,7 +128,7 @@ class _PHome2State extends State<PHome2> {
                                   'title': appData!.user!.bookAppointment!,
                                 });
                                 return;
-                              }
+                              } */
 
                               if (isDoctor) {
                                 context

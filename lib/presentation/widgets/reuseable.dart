@@ -6,6 +6,7 @@ Widget reuseableText(
   Color color = Colors.black,
   double fontSize = 14,
   FontWeight fontWeight = FontWeight.normal,
+  TextAlign textAlign = TextAlign.left,
 }) {
   return Container(
     margin: const EdgeInsets.only(
@@ -13,6 +14,7 @@ Widget reuseableText(
     ),
     child: Text(
       textString,
+      textAlign: textAlign,
       style:
           TextStyle(color: color, fontWeight: fontWeight, fontSize: fontSize),
     ),

@@ -10,14 +10,14 @@ import 'package:hyella_telehealth/logic/bloc/app_bloc.dart';
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
 
-class PProfile extends StatefulWidget {
-  const PProfile({super.key});
+class Profile extends StatefulWidget {
+  const Profile({super.key});
 
   @override
-  State<PProfile> createState() => _PProfileState();
+  State<Profile> createState() => _ProfileState();
 }
 
-class _PProfileState extends State<PProfile> {
+class _ProfileState extends State<Profile> {
   late User userDetails;
   late More moreData;
   @override

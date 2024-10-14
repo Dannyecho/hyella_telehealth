@@ -111,6 +111,9 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                     ),
                   ),
+                  const SizedBox(
+                    height: 60,
+                  )
                 ],
               ),
             ),
@@ -121,7 +124,15 @@ class _RegisterPageState extends State<RegisterPage> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           decoration: const BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.only(topRight: Radius.circular(60))),
+              borderRadius: BorderRadius.only(topRight: Radius.circular(60)),
+              boxShadow: [
+                BoxShadow(
+                  color: Color.fromARGB(33, 158, 158, 158),
+                  offset: Offset(1, -1),
+                  blurRadius: 1,
+                  spreadRadius: 2,
+                )
+              ]),
           child: Column(children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -131,9 +142,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 TextButton(
-                  onPressed: () => Navigator.pushNamed(
+                  onPressed: () => Navigator.pushNamedAndRemoveUntil(
                     context,
                     AppRoute.signIn,
+                    (predicate) => false,
                   ),
                   child: Text(
                     "SIGN IN",

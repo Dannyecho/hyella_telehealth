@@ -237,8 +237,17 @@ class _SignInPageState extends State<SignInPage> {
         height: 60,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(topRight: Radius.circular(60))),
+          color: Colors.white,
+          borderRadius: BorderRadius.only(topRight: Radius.circular(60)),
+          boxShadow: [
+            BoxShadow(
+              color: Color.fromARGB(33, 158, 158, 158),
+              offset: Offset(1, -1),
+              blurRadius: 1,
+              spreadRadius: 2,
+            )
+          ],
+        ),
         child: Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

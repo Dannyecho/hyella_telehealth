@@ -26,7 +26,7 @@ import 'package:hyella_telehealth/presentation/pages/schedule_appointment.dart';
 import 'package:hyella_telehealth/presentation/pages/services_page.dart';
 import 'package:hyella_telehealth/presentation/pages/sign_in_page.dart';
 import 'package:hyella_telehealth/presentation/pages/welcome_page.dart';
-import 'package:hyella_telehealth/presentation/screens/nav/p_edit_profile.dart';
+import 'package:hyella_telehealth/presentation/screens/nav/edit_profile.dart';
 import 'package:hyella_telehealth/presentation/screens/splash_screen.dart';
 import 'package:hyella_telehealth/presentation/screens/web_viewer_screen.dart';
 

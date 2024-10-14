@@ -8,7 +8,7 @@ import 'package:hyella_telehealth/data/repository/entities/login_response_entity
 import 'package:hyella_telehealth/logic/bloc/app_screen_bloc.dart';
 import 'package:hyella_telehealth/presentation/route/app_route.dart';
 
-Row pHomeHeader(User? appUser) {
+Row homeHeader(User? appUser) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
